@@ -5,6 +5,7 @@ struct ContentView: View {
     @State private var searchText = ""
     @State private var isLoading = false
     @State private var loadError: String?
+    @State private var showsSettings = false
 
     private var filteredPosts: [Post] {
         guard !searchText.isEmpty else { return posts }
@@ -55,11 +56,29 @@ struct ContentView: View {
                     .background(Color.pptnzBackground)
                 }
             }
-            .navigationTitle("PPTNZ 블로그")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("BLOG")
+                        .font(.system(.title2, design: .default, weight: .heavy))
+                        .foregroundStyle(Color.pptnzYellow)
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        showsSettings = true
+                    } label: {
+                        Image(systemName: "gearshape")
+                            .foregroundStyle(Color.pptnzCoral)
+                    }
+                }
+            }
             .tint(Color.pptnzCoral)
             .searchable(text: $searchText, prompt: "제목·본문 검색")
             .navigationDestination(for: Post.self) { post in
                 PostDetailView(post: post)
+            }
+            .sheet(isPresented: $showsSettings) {
+                SettingsView()
             }
             .refreshable { await load() }
             .task { await load() }

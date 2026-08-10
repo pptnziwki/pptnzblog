@@ -6,6 +6,7 @@ struct PostDetailView: View {
     @State private var detail: PostDetail?
     @State private var isLoading = true
     @State private var loadFailed = false
+    @State private var showsAllComments = false
 
     var body: some View {
         ScrollView {
@@ -35,11 +36,19 @@ struct PostDetailView: View {
                     commentsSection(detail.comments)
                 }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
             .padding()
         }
         .background(Color.pptnzBackground)
-        .navigationTitle(post.yearLabel)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                Image("Logo")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 28)
+            }
+        }
         .task { await load() }
     }
 
@@ -104,7 +113,9 @@ struct PostDetailView: View {
     }
 
     private func commentsSection(_ comments: [PostComment]) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
+        let visibleComments = showsAllComments ? comments : Array(comments.prefix(3))
+
+        return VStack(alignment: .leading, spacing: 12) {
             Text("댓글 \(comments.count)개")
                 .font(.headline)
                 .foregroundStyle(Color.pptnzPink)
@@ -114,7 +125,7 @@ struct PostDetailView: View {
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             } else {
-                ForEach(comments) { comment in
+                ForEach(visibleComments) { comment in
                     VStack(alignment: .leading, spacing: 4) {
                         HStack {
                             Text(comment.author)
@@ -131,6 +142,16 @@ struct PostDetailView: View {
                             .foregroundStyle(Color.pptnzInk)
                     }
                     .padding(.vertical, 4)
+                }
+
+                if comments.count > 3 {
+                    Button {
+                        showsAllComments.toggle()
+                    } label: {
+                        Text(showsAllComments ? "댓글 접기" : "댓글 \(comments.count - 3)개 더보기")
+                            .font(.footnote.bold())
+                            .foregroundStyle(Color.pptnzCoral)
+                    }
                 }
             }
         }

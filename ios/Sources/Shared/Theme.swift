@@ -13,4 +13,6 @@ extension Color {
     static let pptnzTeal = Color(red: 122.0 / 255.0, green: 170.0 / 255.0, blue: 170.0 / 255.0)
     /// 섹션 제목류 (#F6BBB7)
     static let pptnzPink = Color(red: 246.0 / 255.0, green: 187.0 / 255.0, blue: 183.0 / 255.0)
+    /// 헤더 "BLOG" 로고 텍스트용 크림 옐로우
+    static let pptnzYellow = Color(red: 240.0 / 255.0, green: 239.0 / 255.0, blue: 163.0 / 255.0)
 }

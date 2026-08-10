@@ -85,16 +85,17 @@ final class PostDetailLoader {
     }
 
     // MARK: - 댓글
-    // Textcube 댓글 마크업이 정확히 어떤 모양인지(실제 댓글이 달린 글을 못 봐서) 확정되지 않아,
-    // 여러 형태를 방어적으로 시도한다. 못 찾으면 빈 배열을 돌려주고 화면에서 "댓글 없음"으로 처리한다.
+    // 실제 마크업: <div class="commentList"><ol><li class="rp_general">...</li>...</ol></div>
+    // commentList의 직계 자식은 <ol> 하나뿐이라 거기서 바로 순회하면 댓글이 1개로만 잡힌다.
+    // 댓글 각각을 감싸는 .rp_general을 직접 찾아야 전체 댓글이 다 나온다.
     private func parseComments(from doc: Document, postID: String) throws -> [PostComment] {
         guard let commentBox = try doc.select("#entry\(postID)Comment .commentList").first() else {
             return []
         }
 
         var comments: [PostComment] = []
-        for item in commentBox.children().array() {
-            let text = firstText(in: item, selector: ".re, .content, .text, p") ?? (try? item.text()) ?? ""
+        for item in try commentBox.select(".rp_general").array() {
+            let text = firstText(in: item, selector: "p, .re, .content, .text") ?? (try? item.text()) ?? ""
             let trimmedText = text.trimmingCharacters(in: .whitespacesAndNewlines)
             guard !trimmedText.isEmpty else { continue }
 
