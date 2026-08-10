@@ -7,6 +7,7 @@ struct PostDetailView: View {
     @State private var isLoading = true
     @State private var loadFailed = false
     @State private var showsAllComments = false
+    @ObservedObject private var bookmarks = BookmarksStore.shared
 
     var body: some View {
         ScrollView {
@@ -47,6 +48,15 @@ struct PostDetailView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(height: 28)
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    bookmarks.toggle(post)
+                } label: {
+                    Image(systemName: bookmarks.isBookmarked(post) ? "bookmark.fill" : "bookmark")
+                        .foregroundStyle(Color.pptnzCoral)
+                }
+                .buttonStyle(.plain)
             }
         }
         .task { await load() }

@@ -42,6 +42,26 @@ def fetch_page(page: int = 1) -> BeautifulSoup:
     return BeautifulSoup(resp.text, "html.parser")
 
 
+def extract_content(content_el) -> str:
+    """본문 공백/줄바꿈을 원문 그대로 살려서 텍스트로 추출.
+
+    이 블로그는 한 줄이 <div>(또는 <font> 안에 <br/>만 있는 빈 줄) 하나씩으로
+    되어 있는 글이 많다. 최상위 자식 각각의 텍스트를 그대로 모아 "\n"으로
+    이어붙이면, 빈 줄(div)은 빈 문자열을 하나 기여해서 원문의 줄바꿈/공백
+    줄이 그대로 재현된다. (get_text(strip=True) 등을 쓰면 빈 줄이 통째로
+    사라져서 문단 구분이 뭉개진다.)
+    """
+    if content_el is None:
+        return ""
+    lines = [
+        child.get_text() if hasattr(child, "get_text") else str(child)
+        for child in content_el.children
+    ]
+    text = "\n".join(lines).replace("\xa0", " ")
+    text = "\n".join(line.rstrip() for line in text.split("\n"))
+    return text.strip("\n")
+
+
 def parse_entries(soup: BeautifulSoup) -> list[dict]:
     posts = []
     for entry in soup.select("div.entry"):
@@ -59,7 +79,7 @@ def parse_entries(soup: BeautifulSoup) -> list[dict]:
         date_text = next((d for d in date_spans if d), "")
 
         content_el = entry.select_one("div.article")
-        content = content_el.get_text("\n", strip=True) if content_el else ""
+        content = extract_content(content_el)
 
         raw_title = title_link.get_text(strip=True)
         # 제목 없는 글이 많음("-"). 원본 블로그처럼 그런 글은 제목을 비워둔다.
