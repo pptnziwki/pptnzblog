@@ -5,10 +5,10 @@ import WebKit
 /// 원문 글은 옛날 Flash `<object>/<embed>` 방식으로 영상을 삽입하지만,
 /// 실제 재생은 유튜브가 공식 지원하는 `youtube.com/embed/{id}` 페이지를 로드해서 처리한다.
 ///
-/// `webView.load(URLRequest(url:))`로 embed URL을 직접 열면 WKWebView가 올바른
-/// Referer/Origin 헤더를 보내지 않아 유튜브 쪽에서 "오류 153(Video player configuration
-/// error)"을 내며 재생을 거부한다. iframe을 담은 HTML을 `referrerpolicy`와 함께
-/// youtube.com을 baseURL로 직접 로드해 이를 우회한다.
+/// WKWebView는 `load(URLRequest)`로 직접 열든 `loadHTMLString`으로 iframe을 감싸든
+/// 커스텀 스킴/로컬 콘텐츠에는 origin이 없어서 `Referer` 헤더를 자동으로 안 보낸다.
+/// 유튜브 서버가 이 헤더로 임베드 출처를 검증하기 때문에, 헤더가 없으면 오류 153/152-4로
+/// 재생을 거부한다. 그래서 요청에 `Referer`를 명시적으로 붙여서 로드해야 한다.
 struct YouTubePlayerView: UIViewRepresentable {
     let videoID: String
 
@@ -22,24 +22,9 @@ struct YouTubePlayerView: UIViewRepresentable {
     }
 
     func updateUIView(_ webView: WKWebView, context: Context) {
-        let html = """
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <style>html, body { margin: 0; padding: 0; background: #000; }
-            iframe { width: 100%; height: 100%; border: 0; }</style>
-        </head>
-        <body>
-            <iframe
-                src="https://www.youtube.com/embed/\(videoID)?playsinline=1"
-                referrerpolicy="strict-origin-when-cross-origin"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen>
-            </iframe>
-        </body>
-        </html>
-        """
-        webView.loadHTMLString(html, baseURL: URL(string: "https://www.youtube.com"))
+        guard let url = URL(string: "https://www.youtube.com/embed/\(videoID)?playsinline=1") else { return }
+        var request = URLRequest(url: url)
+        request.setValue("https://www.youtube.com/", forHTTPHeaderField: "Referer")
+        webView.load(request)
     }
 }
