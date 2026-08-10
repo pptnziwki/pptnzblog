@@ -5,44 +5,55 @@ import SwiftUI
 struct PostShareCard: View {
     let post: Post
 
-    /// 3:4 비율. `ImageRenderer.scale`을 곱해 최종 픽셀 크기가 결정된다.
-    static let size = CGSize(width: 360, height: 480)
+    /// 실제로 눈에 보이는 카드 영역(3:4 비율).
+    static let cardSize = CGSize(width: 320, height: 427)
+    /// 그림자가 잘리지 않도록 카드 바깥에 투명 여백을 둔다.
+    private static let shadowPadding: CGFloat = 24
+    /// `ImageRenderer`가 렌더링할 전체 캔버스 크기(카드 + 그림자 여백).
+    static var size: CGSize {
+        CGSize(
+            width: cardSize.width + shadowPadding * 2,
+            height: cardSize.height + shadowPadding * 2
+        )
+    }
 
     var body: some View {
-        ZStack(alignment: .topLeading) {
-            Color.pptnzBackground
+        ZStack {
+            Color.clear
 
-            VStack(alignment: .leading, spacing: 20) {
+            VStack(alignment: .leading, spacing: 14) {
                 Image("Logo")
                     .resizable()
                     .scaledToFit()
-                    .frame(height: 28)
-
-                Spacer()
+                    .frame(height: 26)
 
                 Text(post.title)
-                    .font(.system(size: 26, weight: .bold))
+                    .font(.system(size: 24, weight: .bold))
                     .foregroundStyle(Color.pptnzPink)
-                    .lineLimit(4)
+                    .lineLimit(3)
 
                 Text(post.content)
-                    .font(.system(size: 15))
+                    .font(.system(size: 14))
                     .foregroundStyle(Color.pptnzInk)
-                    .lineLimit(6)
+                    .lineLimit(14)
 
-                Spacer()
+                Spacer(minLength: 0)
 
                 HStack {
                     Text(post.date)
-                        .font(.system(size: 12))
+                        .font(.system(size: 11))
                         .foregroundStyle(Color.pptnzInk.opacity(0.6))
                     Spacer()
                     Text("pptnz.net")
-                        .font(.system(size: 12, weight: .bold))
+                        .font(.system(size: 11, weight: .bold))
                         .foregroundStyle(Color.pptnzCoral)
                 }
             }
             .padding(24)
+            .frame(width: Self.cardSize.width, height: Self.cardSize.height, alignment: .topLeading)
+            .background(Color.pptnzBackground)
+            .clipShape(RoundedRectangle(cornerRadius: 28))
+            .shadow(color: .black.opacity(0.18), radius: 16, y: 6)
         }
         .frame(width: Self.size.width, height: Self.size.height)
     }
@@ -50,10 +61,11 @@ struct PostShareCard: View {
 
 @MainActor
 enum PostShareCardRenderer {
-    /// SwiftUI 카드를 고해상도 PNG `UIImage`로 렌더링한다.
+    /// SwiftUI 카드를 고해상도 PNG `UIImage`로 렌더링한다. 카드 밖 배경은 투명 처리된다.
     static func render(post: Post) -> UIImage? {
         let renderer = ImageRenderer(content: PostShareCard(post: post))
         renderer.scale = 3
+        renderer.isOpaque = false
         return renderer.uiImage
     }
 }

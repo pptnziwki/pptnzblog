@@ -25,7 +25,7 @@ enum InstagramStorySharer {
         let pasteboardItems: [String: Any] = [
             "com.instagram.sharedSticker.stickerImage": imageData,
             "com.instagram.sharedSticker.backgroundTopColor": "#FFFFFA",
-            "com.instagram.sharedSticker.backgroundBottomColor": "#F6BBB7",
+            "com.instagram.sharedSticker.backgroundBottomColor": "#FFFFFA",
         ]
         let options = [UIPasteboard.OptionsKey.expirationDate: Date().addingTimeInterval(60 * 5)]
         UIPasteboard.general.setItems([pasteboardItems], options: options)
