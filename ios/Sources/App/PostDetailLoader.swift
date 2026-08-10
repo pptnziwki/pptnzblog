@@ -117,7 +117,12 @@ final class PostDetailLoader {
             }
 
             if tag == "p" || tag == "div" {
+                // <P>/<DIV>는 문단 경계지만, <FONT> 같은 감싸는 태그 없이
+                // 텍스트가 바로 그 안에 들어있는 경우도 있다. continue로 건너뛰면
+                // 그 텍스트가 통째로 사라지므로, 이전 문단을 flush한 뒤 이 요소의
+                // own text도 새 문단에 이어붙여야 한다.
                 flushParagraph()
+                appendOwnText(element.ownText())
                 continue
             }
 
