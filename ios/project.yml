@@ -46,6 +46,8 @@ targets:
         CFBundleURLTypes:
           - CFBundleURLSchemes:
               - pptnzblog
+        LSApplicationQueriesSchemes:
+          - instagram-stories
     entitlements:
       path: Sources/App/PPTNZBlog.entitlements
       properties:

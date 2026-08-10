@@ -7,6 +7,7 @@ struct PostDetailView: View {
     @State private var isLoading = true
     @State private var loadFailed = false
     @State private var showsAllComments = false
+    @State private var shareItems: [Any]?
     @ObservedObject private var bookmarks = BookmarksStore.shared
 
     var body: some View {
@@ -56,8 +57,38 @@ struct PostDetailView: View {
                 }
                 .buttonStyle(.plain)
             }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    share()
+                } label: {
+                    Image(systemName: "square.and.arrow.up")
+                        .foregroundStyle(Color.pptnzCoral)
+                }
+                .buttonStyle(.plain)
+            }
         }
         .task { await load() }
+        .sheet(isPresented: Binding(
+            get: { shareItems != nil },
+            set: { if !$0 { shareItems = nil } }
+        )) {
+            if let shareItems {
+                ShareSheet(items: shareItems)
+            }
+        }
+    }
+
+    /// 3:4 카드를 렌더링해 인스타그램 스토리로 바로 공유하고,
+    /// 인스타그램이 없으면 카드 이미지 + 글 링크로 일반 공유 시트를 띄운다.
+    private func share() {
+        guard let image = PostShareCardRenderer.render(post: post) else { return }
+        if InstagramStorySharer.share(image: image) { return }
+
+        var items: [Any] = [image]
+        if let url = URL(string: post.link) {
+            items.append(url)
+        }
+        shareItems = items
     }
 
     @ViewBuilder
