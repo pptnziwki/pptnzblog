@@ -92,7 +92,7 @@ struct PPTNZBlogWidgetEntryView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(10)
-            .widgetURL(URL(string: post.link))
+            .widgetURL(URL(string: "pptnzblog://post/\(post.id)"))
         } else {
             VStack(alignment: .leading, spacing: 6) {
                 Image(systemName: "text.bubble")

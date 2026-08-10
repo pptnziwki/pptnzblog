@@ -66,6 +66,7 @@ struct ContentView: View {
                             .listStyle(.insetGrouped)
                             .scrollContentBackground(.hidden)
                             .background(Color.pptnzBackground)
+                            .contentMargins(.top, 0, for: .scrollContent)
 
                             scrollButtons(proxy: proxy)
                         }

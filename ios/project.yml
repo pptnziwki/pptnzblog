@@ -43,6 +43,9 @@ targets:
             peppertones.host.whoisweb.net:
               NSExceptionAllowsInsecureHTTPLoads: true
               NSIncludesSubdomains: true
+        CFBundleURLTypes:
+          - CFBundleURLSchemes:
+              - pptnzblog
     entitlements:
       path: Sources/App/PPTNZBlog.entitlements
       properties:
