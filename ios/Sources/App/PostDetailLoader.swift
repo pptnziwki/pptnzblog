@@ -43,15 +43,37 @@ final class PostDetailLoader {
 
     private func parseBlocks(from article: Element) throws -> [PostContentBlock] {
         var blocks: [PostContentBlock] = []
-        var buffer = ""
+        var paragraphs: [String] = []
+        var currentParagraph = ""
         var seenVideoIDs = Set<String>()
 
-        func flushText() {
-            let trimmed = buffer.trimmingCharacters(in: .whitespacesAndNewlines)
-            if !trimmed.isEmpty {
-                blocks.append(.text(trimmed))
+        // <P>/<DIV> 자체는 텍스트가 없고 그 안의 <FONT>/<A>/<B> 같은 인라인 태그가
+        // 실제 텍스트를 담고 있는 경우가 많다. 모든 요소마다 무조건 줄바꿈을 넣으면
+        // 문단 안 인라인 태그 때문에 문장이 뚝뚝 끊겨 나오므로, <BR>은 줄바꿈 한 번,
+        // <P>/<DIV>는 문단 구분(빈 줄)으로만 처리하고 나머지는 이어 붙인다.
+        func appendOwnText(_ text: String) {
+            guard !text.isEmpty else { return }
+            if let last = currentParagraph.unicodeScalars.last,
+               !CharacterSet.whitespacesAndNewlines.contains(last) {
+                currentParagraph += " "
             }
-            buffer = ""
+            currentParagraph += text
+        }
+
+        func flushParagraph() {
+            let trimmed = currentParagraph.trimmingCharacters(in: .whitespacesAndNewlines)
+            if !trimmed.isEmpty {
+                paragraphs.append(trimmed)
+            }
+            currentParagraph = ""
+        }
+
+        func flushText() {
+            flushParagraph()
+            if !paragraphs.isEmpty {
+                blocks.append(.text(paragraphs.joined(separator: "\n\n")))
+                paragraphs = []
+            }
         }
 
         for element in try article.getAllElements().array() {
@@ -76,10 +98,17 @@ final class PostDetailLoader {
                 continue
             }
 
-            let ownText = element.ownText()
-            if !ownText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                buffer += ownText + "\n"
+            if tag == "br" {
+                currentParagraph += "\n"
+                continue
             }
+
+            if tag == "p" || tag == "div" {
+                flushParagraph()
+                continue
+            }
+
+            appendOwnText(element.ownText())
         }
         flushText()
         return blocks
