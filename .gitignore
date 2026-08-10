@@ -1,3 +1,9 @@
 __pycache__/
 *.pyc
 .venv/
+
+# Xcode / xcodegen — project.yml만 커밋하고 생성된 .xcodeproj는 각자 로컬에서 생성
+ios/*.xcodeproj/
+ios/.build/
+ios/DerivedData/
+**/xcuserdata/
