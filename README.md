@@ -1,11 +1,7 @@
 # pptnzblog
 
-페퍼톤스(PPTNZ) 공식 블로그(Textcube, `peppertones.host.whoisweb.net/blog`) 새 글을
+페퍼톤스(PPTNZ) 공식 블로그(peppertones.net) 새 글을
 감지해서 알려주고, iOS 앱/위젯으로 모아 볼 수 있게 하는 개인 프로젝트.
-
-블로그 RSS(`/blog/rss`)는 항목이 비어있어서(의도적 설정으로 추정) 목록 페이지 HTML을
-직접 파싱하는 방식을 씁니다. 크롤링은 신재평님께 사전에 허락받았고, User-Agent에
-연락처를 명시해 트래픽 출처를 알 수 있게 해뒀습니다.
 
 ## 구성
 
