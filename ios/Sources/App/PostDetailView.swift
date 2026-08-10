@@ -71,18 +71,36 @@ struct PostDetailView: View {
                             .font(.body)
                             .foregroundStyle(Color.pptnzInk)
                     case .image(let url):
-                        AsyncImage(url: url) { phase in
-                            switch phase {
-                            case .success(let image):
-                                image
-                                    .resizable()
-                                    .scaledToFit()
-                                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                            case .failure:
-                                EmptyView()
-                            default:
-                                ProgressView()
-                                    .frame(maxWidth: .infinity, minHeight: 120)
+                        if url.pathExtension.lowercased() == "gif" {
+                            AnimatedGIFView(url: url)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 220)
+                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                        } else {
+                            AsyncImage(url: url) { phase in
+                                switch phase {
+                                case .success(let image):
+                                    image
+                                        .resizable()
+                                        .scaledToFit()
+                                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                                case .failure:
+                                    EmptyView()
+                                default:
+                                    ProgressView()
+                                        .frame(maxWidth: .infinity, minHeight: 120)
+                                }
+                            }
+                        }
+                    case .youtube(let videoID):
+                        VStack(alignment: .leading, spacing: 6) {
+                            YouTubePlayerView(videoID: videoID)
+                                .aspectRatio(16.0 / 9.0, contentMode: .fit)
+                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                            if let url = URL(string: "https://www.youtube.com/watch?v=\(videoID)") {
+                                Link("유튜브에서 보기", destination: url)
+                                    .font(.footnote.bold())
+                                    .foregroundStyle(Color.pptnzCoral)
                             }
                         }
                     }

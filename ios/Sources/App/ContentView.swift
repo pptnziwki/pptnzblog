@@ -8,6 +8,7 @@ struct ContentView: View {
     @State private var showsSettings = false
     @State private var showsBookmarks = false
     @State private var navigationPath = NavigationPath()
+    @State private var collapsedYears: Set<String> = []
     @ObservedObject private var bookmarks = BookmarksStore.shared
     @ObservedObject private var notificationDelegate = NotificationDelegate.shared
 
@@ -48,22 +49,40 @@ struct ContentView: View {
                     } else {
                         ZStack(alignment: .bottomTrailing) {
                             List {
-                                Color.clear.frame(height: 0).id(Self.topAnchor)
+                                Color.clear.frame(height: 0)
+                                    .listRowInsets(EdgeInsets())
+                                    .listRowSeparator(.hidden)
+                                    .id(Self.topAnchor)
                                 ForEach(groupedByYear, id: \.year) { group in
                                     Section {
-                                        ForEach(group.posts) { post in
-                                            NavigationLink(value: post) {
-                                                PostRowView(post: post)
+                                        if !collapsedYears.contains(group.year) {
+                                            ForEach(group.posts) { post in
+                                                NavigationLink(value: post) {
+                                                    PostRowView(post: post)
+                                                }
                                             }
                                         }
                                     } header: {
-                                        Text(group.year)
-                                            .foregroundStyle(Color.pptnzPink)
+                                        Button {
+                                            withAnimation { toggleYear(group.year) }
+                                        } label: {
+                                            HStack {
+                                                Text(group.year)
+                                                    .foregroundStyle(Color.pptnzPink)
+                                                Spacer()
+                                                Image(systemName: collapsedYears.contains(group.year) ? "chevron.right" : "chevron.down")
+                                                    .foregroundStyle(Color.pptnzPink)
+                                            }
+                                        }
+                                        .buttonStyle(.plain)
                                     }
                                 }
-                                Color.clear.frame(height: 0).id(Self.bottomAnchor)
+                                Color.clear.frame(height: 0)
+                                    .listRowInsets(EdgeInsets())
+                                    .listRowSeparator(.hidden)
+                                    .id(Self.bottomAnchor)
                             }
-                            .listStyle(.insetGrouped)
+                            .listStyle(.plain)
                             .scrollContentBackground(.hidden)
                             .background(Color.pptnzBackground)
                             .contentMargins(.top, 0, for: .scrollContent)
@@ -128,6 +147,14 @@ struct ContentView: View {
         showsBookmarks = false
         navigationPath.append(post)
         notificationDelegate.pendingPostID = nil
+    }
+
+    private func toggleYear(_ year: String) {
+        if collapsedYears.contains(year) {
+            collapsedYears.remove(year)
+        } else {
+            collapsedYears.insert(year)
+        }
     }
 
     private static let topAnchor = "top"

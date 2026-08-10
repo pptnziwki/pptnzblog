@@ -44,6 +44,7 @@ final class PostDetailLoader {
     private func parseBlocks(from article: Element) throws -> [PostContentBlock] {
         var blocks: [PostContentBlock] = []
         var buffer = ""
+        var seenVideoIDs = Set<String>()
 
         func flushText() {
             let trimmed = buffer.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -54,13 +55,27 @@ final class PostDetailLoader {
         }
 
         for element in try article.getAllElements().array() {
-            if element.tagName().lowercased() == "img" {
+            let tag = element.tagName().lowercased()
+
+            if tag == "img" {
                 if let src = try? element.attr("abs:src"), let url = URL(string: src), !src.isEmpty {
                     flushText()
                     blocks.append(.image(url))
                 }
                 continue
             }
+
+            // 옛 글들은 유튜브 영상을 <iframe>이 아니라 구형 Flash <object>/<embed>로 삽입했다.
+            // (예: <object><param name="movie" value="http://www.youtube.com/v/{id}&..."></object>)
+            if tag == "object" || tag == "embed" || tag == "iframe" {
+                if let videoID = youTubeVideoID(in: element), !seenVideoIDs.contains(videoID) {
+                    seenVideoIDs.insert(videoID)
+                    flushText()
+                    blocks.append(.youtube(videoID))
+                }
+                continue
+            }
+
             let ownText = element.ownText()
             if !ownText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                 buffer += ownText + "\n"
@@ -68,6 +83,34 @@ final class PostDetailLoader {
         }
         flushText()
         return blocks
+    }
+
+    private func youTubeVideoID(in element: Element) -> String? {
+        var candidates: [String] = []
+        if let src = try? element.attr("src"), !src.isEmpty {
+            candidates.append(src)
+        }
+        if let movie = try? element.select("param[name=movie]").first()?.attr("value"), !movie.isEmpty {
+            candidates.append(movie)
+        }
+        for candidate in candidates {
+            if let id = Self.extractYouTubeID(from: candidate) {
+                return id
+            }
+        }
+        return nil
+    }
+
+    private static let youTubeIDPattern = try! NSRegularExpression(
+        pattern: #"(?:youtube\.com/(?:v|embed)/|youtube\.com/watch\?v=|youtu\.be/)([A-Za-z0-9_-]{6,})"#
+    )
+
+    private static func extractYouTubeID(from urlString: String) -> String? {
+        let decoded = urlString.replacingOccurrences(of: "&amp;", with: "&")
+        let range = NSRange(decoded.startIndex..., in: decoded)
+        guard let match = youTubeIDPattern.firstMatch(in: decoded, range: range),
+              let idRange = Range(match.range(at: 1), in: decoded) else { return nil }
+        return String(decoded[idRange])
     }
 
     // MARK: - 첨부/참고 링크

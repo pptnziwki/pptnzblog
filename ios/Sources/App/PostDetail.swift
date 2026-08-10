@@ -4,6 +4,8 @@ import Foundation
 enum PostContentBlock: Hashable {
     case text(String)
     case image(URL)
+    /// 구형 Flash `<object>/<embed>` 방식으로 삽입된 유튜브 영상. 값은 유튜브 동영상 ID.
+    case youtube(String)
 }
 
 /// 원문 페이지에서 파싱한 댓글 한 개.
