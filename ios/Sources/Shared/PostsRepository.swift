@@ -10,6 +10,9 @@ final class PostsRepository {
     /// 등록한 값과 반드시 동일해야 한다. (기본값은 project.yml의 entitlements와 일치)
     static let appGroupID = "group.com.wooyxxng.pptnzblog"
 
+    /// WidgetKit이 타임라인을 갱신할 때 쓰는 위젯 kind. 위젯 정의와 문자열이 반드시 일치해야 한다.
+    static let widgetKind = "PPTNZBlogWidget"
+
     /// crawl.yml이 posts.json을 main 브랜치에 커밋하므로 그걸 그대로 읽는다.
     private let remoteURL = URL(
         string: "https://raw.githubusercontent.com/wooyxxng-Jang/pptnzblog/main/posts.json"

@@ -17,11 +17,12 @@ enum BackgroundRefresh {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { _, _ in }
     }
 
-    /// 다음 백그라운드 새로고침을 예약한다. iOS가 배터리/사용 패턴을 보고 실제 실행 시점을 정하므로
-    /// earliestBeginDate는 어디까지나 힌트일 뿐, 정확히 그 시각에 실행된다는 보장은 없다.
+    /// 다음 백그라운드 새로고침을 예약한다. "1시간 간격"을 힌트로 주지만, iOS가 배터리/사용
+    /// 패턴을 보고 실제 실행 시점을 정하므로 earliestBeginDate는 어디까지나 힌트일 뿐,
+    /// 정확히 정각/그 시각에 실행된다는 보장은 없다(서버 push 없이 로컬에서 할 수 있는 최선).
     static func scheduleNext() {
         let request = BGAppRefreshTaskRequest(identifier: taskIdentifier)
-        request.earliestBeginDate = Calendar.current.date(byAdding: .minute, value: 30, to: .now)
+        request.earliestBeginDate = Calendar.current.date(byAdding: .hour, value: 1, to: .now)
         try? BGTaskScheduler.shared.submit(request)
     }
 
@@ -29,6 +30,7 @@ enum BackgroundRefresh {
     static func run() async {
         scheduleNext()
         await checkForNewPosts()
+        await DailyPostNotifier.rescheduleIfNeeded()
     }
 
     private static func checkForNewPosts() async {
@@ -46,20 +48,31 @@ enum BackgroundRefresh {
         }
 
         let newPosts = sorted.filter { $0.numericID > lastSeenID }
+        sharedDefaults?.set(latest.numericID, forKey: lastSeenIDKey)
+
         guard !newPosts.isEmpty else { return }
+        // 알림이 꺼져 있어도 lastSeenID는 갱신해서, 나중에 다시 켰을 때 밀린 글이
+        // 한꺼번에 알림으로 쏟아지지 않게 한다.
+        guard NotificationSettings.shared.notificationsEnabled else { return }
 
         notify(newPosts: newPosts)
-        sharedDefaults?.set(latest.numericID, forKey: lastSeenIDKey)
     }
 
     private static func notify(newPosts: [Post]) {
         let content = UNMutableNotificationContent()
+        content.title = "pptnz.net"
         if newPosts.count == 1, let post = newPosts.first {
-            content.title = "PPTNZ 블로그 새 글"
-            content.body = post.title
+            content.subtitle = "새 글이 올라왔어요"
+            content.body = post.title.isEmpty ? post.content : post.title
+            content.userInfo = ["postID": post.id]
         } else {
-            content.title = "PPTNZ 블로그 새 글 \(newPosts.count)건"
-            content.body = newPosts.prefix(3).map(\.title).joined(separator: ", ")
+            content.subtitle = "새 글 \(newPosts.count)건이 올라왔어요"
+            content.body = newPosts.prefix(3)
+                .map { $0.title.isEmpty ? $0.content : $0.title }
+                .joined(separator: ", ")
+            if let latest = newPosts.first {
+                content.userInfo = ["postID": latest.id]
+            }
         }
         content.sound = .default
 

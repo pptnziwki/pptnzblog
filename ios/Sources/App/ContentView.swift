@@ -7,7 +7,9 @@ struct ContentView: View {
     @State private var loadError: String?
     @State private var showsSettings = false
     @State private var showsBookmarks = false
+    @State private var navigationPath = NavigationPath()
     @ObservedObject private var bookmarks = BookmarksStore.shared
+    @ObservedObject private var notificationDelegate = NotificationDelegate.shared
 
     private var filteredPosts: [Post] {
         guard !searchText.isEmpty else { return posts }
@@ -30,7 +32,7 @@ struct ContentView: View {
     }
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $navigationPath) {
             ScrollViewReader { proxy in
                 Group {
                     if posts.isEmpty && isLoading {
@@ -109,7 +111,22 @@ struct ContentView: View {
             }
             .refreshable { await load() }
             .task { await load() }
+            .onChange(of: notificationDelegate.pendingPostID) { _, newValue in
+                handleNotificationTap(newValue)
+            }
+            .onChange(of: posts) { _, _ in
+                handleNotificationTap(notificationDelegate.pendingPostID)
+            }
         }
+    }
+
+    /// 알림을 탭해서 앱이 열렸을 때 해당 글 상세 화면으로 바로 이동시킨다.
+    private func handleNotificationTap(_ postID: String?) {
+        guard let postID, let post = posts.first(where: { $0.id == postID }) else { return }
+        showsSettings = false
+        showsBookmarks = false
+        navigationPath.append(post)
+        notificationDelegate.pendingPostID = nil
     }
 
     private static let topAnchor = "top"

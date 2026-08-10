@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
+    @ObservedObject private var notificationSettings = NotificationSettings.shared
 
     private var appVersion: String {
         let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0"
@@ -26,6 +27,17 @@ struct SettingsView: View {
                     accountLink("Instagram", systemImage: "camera", url: "https://www.instagram.com/peppertones_official")
                     accountLink("X (Twitter)", systemImage: "at", url: "https://x.com/pptnzexpress")
                 }
+
+                Section("알림") {
+                    Toggle("알림 허용", isOn: $notificationSettings.notificationsEnabled)
+                    if notificationSettings.notificationsEnabled {
+                        DatePicker(
+                            "매일 알림 시간",
+                            selection: $notificationSettings.dailyTime,
+                            displayedComponents: .hourAndMinute
+                        )
+                    }
+                }
             }
             .navigationTitle("설정")
             .navigationBarTitleDisplayMode(.inline)
@@ -33,6 +45,15 @@ struct SettingsView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("닫기") { dismiss() }
                 }
+            }
+            .onChange(of: notificationSettings.notificationsEnabled) { _, enabled in
+                if enabled {
+                    BackgroundRefresh.requestNotificationPermissionIfNeeded()
+                }
+                Task { await DailyPostNotifier.reschedule(force: true) }
+            }
+            .onChange(of: notificationSettings.dailyTime) { _, _ in
+                Task { await DailyPostNotifier.reschedule(force: true) }
             }
         }
     }
