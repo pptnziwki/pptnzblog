@@ -15,7 +15,7 @@ struct PostDetailView: View {
                 if !post.title.isEmpty {
                     Text(post.title)
                         .font(.title2.bold())
-                        .foregroundStyle(Color.pptnzInk)
+                        .foregroundStyle(Color.pptnzPink)
                 }
                 Text(post.date)
                     .font(.footnote)
