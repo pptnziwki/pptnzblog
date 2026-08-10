@@ -1,0 +1,30 @@
+name: PPTNZ 블로그 체크
+
+on:
+  schedule:
+    - cron: '*/20 * * * *'   # 20분마다 실행 (GitHub 특성상 실제로는 다소 지연될 수 있음)
+  workflow_dispatch:          # 수동 실행 버튼도 열어둠
+
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - run: pip install requests beautifulsoup4
+
+      - run: python crawl_pptnz_blog.py
+        env:
+          PUSHCUT_WEBHOOK_URL: ${{ secrets.PUSHCUT_WEBHOOK_URL }}
+
+      - name: posts.json 변경사항 커밋
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add posts.json
+          git diff --staged --quiet || git commit -m "update posts.json"
+          git push
