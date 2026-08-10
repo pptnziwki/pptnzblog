@@ -70,18 +70,16 @@ struct PPTNZBlogWidgetEntryView: View {
                 Text("pptnz.net")
                     .font(.caption2.bold())
                     .foregroundStyle(Color.pptnzTeal)
-                if !post.title.isEmpty {
-                    Text(post.title)
-                        .font(.headline)
-                        .foregroundStyle(Color.pptnzInk)
-                        .lineLimit(2)
-                        .multilineTextAlignment(.leading)
-                }
+                Text(post.title)
+                    .font(.headline)
+                    .foregroundStyle(Color.pptnzInk)
+                    .lineLimit(2)
+                    .multilineTextAlignment(.leading)
                 // 사진이 있는 글이어도 위젯에서는 텍스트만 보여준다(이미지는 표시 안 함).
                 if !post.content.isEmpty {
                     Text(post.content)
-                        .font(post.title.isEmpty ? .subheadline : .caption)
-                        .foregroundStyle(post.title.isEmpty ? Color.pptnzInk : .secondary)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                         .lineLimit(contentLineLimit)
                         .multilineTextAlignment(.leading)
                 }

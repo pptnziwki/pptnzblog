@@ -12,11 +12,9 @@ struct PostDetailView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                if !post.title.isEmpty {
-                    Text(post.title)
-                        .font(.title2.bold())
-                        .foregroundStyle(Color.pptnzPink)
-                }
+                Text(post.title)
+                    .font(.title2.bold())
+                    .foregroundStyle(Color.pptnzPink)
                 Text(post.date)
                     .font(.footnote)
                     .foregroundStyle(.secondary)
@@ -47,7 +45,7 @@ struct PostDetailView: View {
                 Image("Logo")
                     .resizable()
                     .scaledToFit()
-                    .frame(height: 28)
+                    .frame(height: 40)
             }
             ToolbarItem(placement: .topBarTrailing) {
                 Button {

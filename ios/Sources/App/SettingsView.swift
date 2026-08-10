@@ -23,7 +23,7 @@ struct SettingsView: View {
                 }
 
                 Section("페퍼톤스 공식 계정") {
-                    accountLink("공식 홈페이지", systemImage: "globe", url: "https://peppertones.net")
+                    accountLink("공식 홈페이지", systemImage: "globe", url: "http://peppertones.net/")
                     accountLink("Instagram", systemImage: "camera", url: "https://www.instagram.com/peppertones_official")
                     accountLink("X (Twitter)", systemImage: "at", url: "https://x.com/pptnzexpress")
                 }
@@ -31,11 +31,35 @@ struct SettingsView: View {
                 Section("알림") {
                     Toggle("알림 허용", isOn: $notificationSettings.notificationsEnabled)
                     if notificationSettings.notificationsEnabled {
-                        DatePicker(
-                            "매일 알림 시간",
-                            selection: $notificationSettings.dailyTime,
-                            displayedComponents: .hourAndMinute
-                        )
+                        ForEach(notificationSettings.dailyTimes) { time in
+                            HStack {
+                                DatePicker(
+                                    "매일 알림 시간",
+                                    selection: Binding(
+                                        get: { notificationSettings.time(for: time.id) },
+                                        set: { notificationSettings.setTime($0, for: time.id) }
+                                    ),
+                                    displayedComponents: .hourAndMinute
+                                )
+                                if notificationSettings.dailyTimes.count > 1 {
+                                    Button {
+                                        notificationSettings.removeDailyTime(time.id)
+                                    } label: {
+                                        Image(systemName: "minus.circle.fill")
+                                            .foregroundStyle(.red)
+                                    }
+                                    .buttonStyle(.plain)
+                                }
+                            }
+                        }
+                        if notificationSettings.dailyTimes.count < NotificationSettings.maxDailyTimes {
+                            Button {
+                                notificationSettings.addDailyTime()
+                            } label: {
+                                Label("알림 시간 추가", systemImage: "plus.circle")
+                            }
+                            .foregroundStyle(Color.pptnzCoral)
+                        }
                     }
                 }
             }
@@ -52,7 +76,7 @@ struct SettingsView: View {
                 }
                 Task { await DailyPostNotifier.reschedule(force: true) }
             }
-            .onChange(of: notificationSettings.dailyTime) { _, _ in
+            .onChange(of: notificationSettings.dailyTimes) { _, _ in
                 Task { await DailyPostNotifier.reschedule(force: true) }
             }
         }

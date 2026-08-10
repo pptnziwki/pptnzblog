@@ -86,7 +86,7 @@ struct ContentView: View {
                 }
                 ToolbarItem(placement: .principal) {
                     Text("BLOG")
-                        .font(.system(.title2, design: .default, weight: .heavy))
+                        .font(.system(.title, design: .default, weight: .heavy))
                         .foregroundStyle(Color.pptnzYellow)
                 }
                 ToolbarItem(placement: .topBarTrailing) {

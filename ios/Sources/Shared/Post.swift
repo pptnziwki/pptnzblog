@@ -9,6 +9,31 @@ struct Post: Identifiable, Codable, Hashable {
     let date: String
     let content: String
 
+    private enum CodingKeys: String, CodingKey {
+        case id, title, link, date, content
+    }
+
+    /// 제목이 없는 글은 항상 "-"로 표시하기 위해, 생성/디코딩 시점에 한 번만 정규화한다.
+    init(id: String, title: String, link: String, date: String, content: String) {
+        self.id = id
+        self.title = title.isEmpty ? "-" : title
+        self.link = link
+        self.date = date
+        self.content = content
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let rawTitle = try container.decode(String.self, forKey: .title)
+        self.init(
+            id: try container.decode(String.self, forKey: .id),
+            title: rawTitle,
+            link: try container.decode(String.self, forKey: .link),
+            date: try container.decode(String.self, forKey: .date),
+            content: try container.decode(String.self, forKey: .content)
+        )
+    }
+
     /// date 문자열에서 연도(4자리 숫자)를 뽑아낸다.
     /// Textcube 날짜 표기 형식이 정확히 어떤지 확정되지 않아서,
     /// 문자열 안 첫 4자리 숫자를 연도로 간주하는 방어적인 방식으로 파싱한다.
