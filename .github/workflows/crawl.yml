@@ -5,6 +5,9 @@ on:
     - cron: '*/20 * * * *'   # 20분마다 실행 (GitHub 특성상 실제로는 다소 지연될 수 있음)
   workflow_dispatch:          # 수동 실행 버튼도 열어둠
 
+permissions:
+  contents: write   # posts.json을 커밋/푸시하려면 쓰기 권한이 필요
+
 jobs:
   crawl:
     runs-on: ubuntu-latest

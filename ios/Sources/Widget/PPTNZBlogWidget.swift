@@ -41,14 +41,16 @@ struct PPTNZBlogWidgetEntryView: View {
                 Text("PPTNZ 블로그")
                     .font(.caption2.bold())
                     .foregroundStyle(Color.pptnzTeal)
-                Text(post.title)
-                    .font(.headline)
-                    .foregroundStyle(Color.pptnzInk)
-                    .lineLimit(family == .systemSmall ? 3 : 2)
-                if family != .systemSmall, !post.content.isEmpty {
+                if !post.title.isEmpty {
+                    Text(post.title)
+                        .font(.headline)
+                        .foregroundStyle(Color.pptnzInk)
+                        .lineLimit(family == .systemSmall ? 3 : 2)
+                }
+                if !post.content.isEmpty {
                     Text(post.content)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .font(post.title.isEmpty ? .subheadline : .caption)
+                        .foregroundStyle(post.title.isEmpty ? Color.pptnzInk : .secondary)
                         .lineLimit(family == .systemLarge ? 6 : 3)
                 }
                 Spacer()

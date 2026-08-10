@@ -30,8 +30,11 @@ USER_AGENT = "PPTNZFanWidget/1.0 (contact: wooyxxng@gmail.com)"
 ENTRY_ID_RE = re.compile(r"/blog/(\d+)$")
 
 
+MAX_PAGES = 500  # 안전장치. 이 블로그는 page당 글 1개라 전체 글 수만큼만 있으면 충분
+
+
 def fetch_page(page: int = 1) -> BeautifulSoup:
-    """블로그 목록 페이지 하나를 가져와 파싱. 새 글 감지는 1페이지만으로 충분."""
+    """블로그 목록 페이지 하나를 가져와 파싱. 이 블로그는 page 파라미터당 글이 1개씩 나온다."""
     url = BASE_URL if page == 1 else f"{BASE_URL}?page={page}"
     resp = requests.get(url, headers={"User-Agent": USER_AGENT}, timeout=15)
     resp.raise_for_status()
@@ -59,8 +62,8 @@ def parse_entries(soup: BeautifulSoup) -> list[dict]:
         content = content_el.get_text("\n", strip=True) if content_el else ""
 
         raw_title = title_link.get_text(strip=True)
-        # 제목 없는 글이 많아서("-"), 본문 앞부분을 대체 제목으로 사용
-        display_title = raw_title if raw_title and raw_title != "-" else (content[:40] or "(제목 없음)")
+        # 제목 없는 글이 많음("-"). 원본 블로그처럼 그런 글은 제목을 비워둔다.
+        display_title = raw_title if raw_title and raw_title != "-" else ""
 
         posts.append(
             {
@@ -84,12 +87,32 @@ def save_current(posts: list[dict]) -> None:
     POSTS_FILE.write_text(json.dumps(posts, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
+def fetch_all_posts(known_ids: set[str]) -> list[dict]:
+    """1페이지부터 순서대로 훑으며 글을 모은다.
+
+    이미 알고 있는 글 id를 만나면(=예전에 저장해둔 지점까지 따라잡았으면) 멈추고,
+    처음 실행이라 known_ids가 비어있으면 계속 간다. 블로그 끝(가장 오래된 글)에
+    닿으면 빈 페이지 대신 마지막 글을 계속 반복해서 보여주므로, 이번 실행에서
+    이미 본 id가 다시 나오면 그때 멈춘다.
+    """
+    posts: list[dict] = []
+    seen_ids: set[str] = set()
+    for page in range(1, MAX_PAGES + 1):
+        entries = parse_entries(fetch_page(page=page))
+        if not entries or all(p["id"] in seen_ids for p in entries):
+            break
+        posts.extend(entries)
+        seen_ids.update(p["id"] for p in entries)
+        if known_ids and any(p["id"] in known_ids for p in entries):
+            break
+    return posts
+
+
 def main() -> None:
-    soup = fetch_page(page=1)
-    current_posts = parse_entries(soup)
     previous_posts = load_previous()
     previous_ids = {p["id"] for p in previous_posts}
 
+    current_posts = fetch_all_posts(previous_ids)
     new_posts = [p for p in current_posts if p["id"] not in previous_ids]
 
     if new_posts:
@@ -97,10 +120,10 @@ def main() -> None:
     else:
         print("새 글 없음")
 
-    # 이전 목록 + 이번에 새로 본 글 병합, 최신 200개만 유지 (위젯 랜덤 노출용으로 충분)
+    # 이전 목록 + 이번에 새로 본 글 병합. 지금까지 올라온 모든 글을 유지한다.
     merged = {p["id"]: p for p in previous_posts}
     merged.update({p["id"]: p for p in current_posts})
-    all_posts = sorted(merged.values(), key=lambda p: int(p["id"]), reverse=True)[:200]
+    all_posts = sorted(merged.values(), key=lambda p: int(p["id"]), reverse=True)
 
     save_current(all_posts)
 

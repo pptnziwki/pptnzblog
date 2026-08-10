@@ -10,9 +10,11 @@ struct PostDetailView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                Text(post.title)
-                    .font(.title2.bold())
-                    .foregroundStyle(Color.pptnzInk)
+                if !post.title.isEmpty {
+                    Text(post.title)
+                        .font(.title2.bold())
+                        .foregroundStyle(Color.pptnzInk)
+                }
                 Text(post.date)
                     .font(.footnote)
                     .foregroundStyle(.secondary)

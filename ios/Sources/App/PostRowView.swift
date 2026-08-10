@@ -5,18 +5,20 @@ struct PostRowView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(post.title)
-                .font(.headline)
-                .foregroundStyle(Color.pptnzInk)
-                .lineLimit(2)
+            if !post.title.isEmpty {
+                Text(post.title)
+                    .font(.headline)
+                    .foregroundStyle(Color.pptnzInk)
+                    .lineLimit(2)
+            }
             Text(post.date)
                 .font(.caption)
                 .foregroundStyle(Color.pptnzTeal)
             if !post.content.isEmpty {
                 Text(post.content)
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                    .lineLimit(2)
+                    .foregroundStyle(post.title.isEmpty ? Color.pptnzInk : .secondary)
+                    .lineLimit(post.title.isEmpty ? 4 : 2)
             }
         }
         .padding(.vertical, 4)
