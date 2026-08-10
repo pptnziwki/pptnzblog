@@ -50,9 +50,8 @@ enum DailyPostNotifier {
                   let fireDate = nextFireDate(hour: time.hour, minute: time.minute) else { continue }
 
             let content = UNMutableNotificationContent()
-            content.title = "pptnz.net"
-            content.subtitle = "오늘의 글"
-            content.body = post.title
+            content.title = post.title
+            content.body = post.content
             content.sound = .default
             content.userInfo = ["postID": post.id]
 

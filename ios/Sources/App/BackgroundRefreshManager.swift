@@ -59,22 +59,13 @@ enum BackgroundRefresh {
     }
 
     private static func notify(newPosts: [Post]) {
+        guard let latest = newPosts.first else { return }
+
         let content = UNMutableNotificationContent()
-        content.title = "pptnz.net"
-        if newPosts.count == 1, let post = newPosts.first {
-            content.subtitle = "새 글이 올라왔어요"
-            content.body = post.title
-            content.userInfo = ["postID": post.id]
-        } else {
-            content.subtitle = "새 글 \(newPosts.count)건이 올라왔어요"
-            content.body = newPosts.prefix(3)
-                .map { $0.title }
-                .joined(separator: ", ")
-            if let latest = newPosts.first {
-                content.userInfo = ["postID": latest.id]
-            }
-        }
+        content.title = "새로운 글이 올라왔어요!"
+        content.body = latest.content
         content.sound = .default
+        content.userInfo = ["postID": latest.id]
 
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
         UNUserNotificationCenter.current().add(request)
