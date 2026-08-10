@@ -98,6 +98,19 @@ final class PostDetailLoader {
                 continue
             }
 
+            // 실제로는 위 <object>/<embed> 마크업이 진짜 DOM에 있는 게 아니라,
+            // <script>writeCode2("<object>...</object>")</script> 처럼 JS 문자열 안에만 있는
+            // 경우가 대부분이다. SwiftSoup은 JS를 실행하지 않으므로 그 태그들이 실제 Element로
+            // 잡히지 않는다. 그래서 <script> 원문 텍스트에서 직접 유튜브 링크를 찾는다.
+            if tag == "script" {
+                if let videoID = Self.extractYouTubeID(from: element.data()), !seenVideoIDs.contains(videoID) {
+                    seenVideoIDs.insert(videoID)
+                    flushText()
+                    blocks.append(.youtube(videoID))
+                }
+                continue
+            }
+
             if tag == "br" {
                 currentParagraph += "\n"
                 continue
