@@ -52,6 +52,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.wooyxxng.pptnzblog
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        TARGETED_DEVICE_FAMILY: "1"
     dependencies:
       - target: PPTNZBlogWidgetExtension
         embed: true
