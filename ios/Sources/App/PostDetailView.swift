@@ -95,6 +95,7 @@ struct PostDetailView: View {
                     case .youtube(let videoID):
                         VStack(alignment: .leading, spacing: 6) {
                             YouTubePlayerView(videoID: videoID)
+                                .frame(maxWidth: .infinity)
                                 .aspectRatio(16.0 / 9.0, contentMode: .fit)
                                 .clipShape(RoundedRectangle(cornerRadius: 8))
                             if let url = URL(string: "https://www.youtube.com/watch?v=\(videoID)") {
