@@ -18,8 +18,6 @@ jobs:
       - run: pip install requests beautifulsoup4
 
       - run: python crawl_pptnz_blog.py
-        env:
-          PUSHCUT_WEBHOOK_URL: ${{ secrets.PUSHCUT_WEBHOOK_URL }}
 
       - name: posts.json 변경사항 커밋
         run: |

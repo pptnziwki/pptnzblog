@@ -38,19 +38,25 @@ struct ContentView: View {
                 } else {
                     List {
                         ForEach(groupedByYear, id: \.year) { group in
-                            Section(group.year) {
+                            Section {
                                 ForEach(group.posts) { post in
                                     NavigationLink(value: post) {
                                         PostRowView(post: post)
                                     }
                                 }
+                            } header: {
+                                Text(group.year)
+                                    .foregroundStyle(Color.pptnzPink)
                             }
                         }
                     }
                     .listStyle(.insetGrouped)
+                    .scrollContentBackground(.hidden)
+                    .background(Color.pptnzBackground)
                 }
             }
             .navigationTitle("PPTNZ 블로그")
+            .tint(Color.pptnzCoral)
             .searchable(text: $searchText, prompt: "제목·본문 검색")
             .navigationDestination(for: Post.self) { post in
                 PostDetailView(post: post)

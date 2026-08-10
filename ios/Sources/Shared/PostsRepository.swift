@@ -8,7 +8,7 @@ final class PostsRepository {
 
     /// Xcode "Signing & Capabilities > App Groups"에서 앱/위젯 두 타겟 모두에
     /// 등록한 값과 반드시 동일해야 한다. (기본값은 project.yml의 entitlements와 일치)
-    private let appGroupID = "group.com.wooyxxng.pptnzblog"
+    static let appGroupID = "group.com.wooyxxng.pptnzblog"
 
     /// crawl.yml이 posts.json을 main 브랜치에 커밋하므로 그걸 그대로 읽는다.
     private let remoteURL = URL(
@@ -17,7 +17,7 @@ final class PostsRepository {
 
     private var cacheFileURL: URL? {
         FileManager.default
-            .containerURL(forSecurityApplicationGroupIdentifier: appGroupID)?
+            .containerURL(forSecurityApplicationGroupIdentifier: Self.appGroupID)?
             .appendingPathComponent("posts_cache.json")
     }
 

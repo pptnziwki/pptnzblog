@@ -1,20 +1,20 @@
 #!/usr/bin/env python3
 """
 PPTNZ(페퍼톤스) 블로그(Textcube) 목록 페이지를 직접 파싱해서
-- 최근 글 목록을 posts.json 으로 저장하고
-- 이전 실행 결과와 비교해 새 글이 있으면 Pushcut 웹훅으로 알림을 보내는 스크립트
+최근 글 목록을 posts.json 으로 저장하는 스크립트.
 
 RSS(/blog/rss)는 채널 정보만 있고 <item>이 비어있어서(의도적 설정으로 추정),
 대신 목록 페이지(/blog) HTML을 직접 파싱합니다.
 GitHub Actions에서 15~30분마다 실행하는 걸 전제로 만들었습니다.
-posts.json은 리포지토리에 커밋되고, iOS 위젯은 이 파일을
-raw.githubusercontent.com URL로 그대로 읽어가면 됩니다.
+posts.json은 리포지토리에 커밋되고, iOS 앱/위젯은 이 파일을
+raw.githubusercontent.com URL로 그대로 읽어갑니다.
+
+새 글 알림은 (Pushcut 등 외부 웹훅 대신) iOS 앱이 Background App Refresh로
+posts.json을 주기적으로 확인해 로컬 알림을 띄우는 방식으로 처리합니다.
 """
 
 import json
-import os
 import re
-import sys
 from pathlib import Path
 from urllib.parse import urljoin
 
@@ -26,9 +26,6 @@ POSTS_FILE = Path("posts.json")
 
 # 신재평님 쪽에서 트래픽 봤을 때 뭔지 알 수 있도록 본인 식별 정보로 바꿔주세요
 USER_AGENT = "PPTNZFanWidget/1.0 (contact: wooyxxng@gmail.com)"
-
-# GitHub Actions repo secret으로 등록해서 사용 (코드에 직접 넣지 마세요)
-PUSHCUT_WEBHOOK_URL = os.environ.get("PUSHCUT_WEBHOOK_URL")
 
 ENTRY_ID_RE = re.compile(r"/blog/(\d+)$")
 
@@ -87,21 +84,6 @@ def save_current(posts: list[dict]) -> None:
     POSTS_FILE.write_text(json.dumps(posts, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
-def notify_new_posts(new_posts: list[dict]) -> None:
-    if not PUSHCUT_WEBHOOK_URL:
-        print("PUSHCUT_WEBHOOK_URL이 설정되지 않아 알림을 건너뜁니다.")
-        return
-    for post in new_posts:
-        try:
-            requests.post(
-                PUSHCUT_WEBHOOK_URL,
-                json={"title": "PPTNZ 블로그 새 글", "text": post["title"], "input": post["link"]},
-                timeout=10,
-            )
-        except requests.RequestException as e:
-            print(f"Pushcut 알림 실패: {e}", file=sys.stderr)
-
-
 def main() -> None:
     soup = fetch_page(page=1)
     current_posts = parse_entries(soup)
@@ -112,7 +94,6 @@ def main() -> None:
 
     if new_posts:
         print(f"새 글 {len(new_posts)}건 발견")
-        notify_new_posts(new_posts)
     else:
         print("새 글 없음")
 

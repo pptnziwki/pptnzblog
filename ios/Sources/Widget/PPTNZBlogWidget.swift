@@ -40,9 +40,10 @@ struct PPTNZBlogWidgetEntryView: View {
             VStack(alignment: .leading, spacing: 6) {
                 Text("PPTNZ 블로그")
                     .font(.caption2.bold())
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.pptnzTeal)
                 Text(post.title)
                     .font(.headline)
+                    .foregroundStyle(Color.pptnzInk)
                     .lineLimit(family == .systemSmall ? 3 : 2)
                 if family != .systemSmall, !post.content.isEmpty {
                     Text(post.content)
@@ -53,7 +54,7 @@ struct PPTNZBlogWidgetEntryView: View {
                 Spacer()
                 Text(post.date)
                     .font(.caption2)
-                    .foregroundStyle(.tertiary)
+                    .foregroundStyle(Color.pptnzCoral)
             }
             .padding()
             .widgetURL(URL(string: post.link))
@@ -74,7 +75,7 @@ struct PPTNZBlogWidget: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
             PPTNZBlogWidgetEntryView(entry: entry)
-                .containerBackground(.background, for: .widget)
+                .containerBackground(Color.pptnzBackground, for: .widget)
         }
         .configurationDisplayName("PPTNZ 블로그")
         .description("페퍼톤스 블로그 글을 랜덤으로 보여줍니다.")
@@ -85,8 +86,5 @@ struct PPTNZBlogWidget: Widget {
 #Preview(as: .systemMedium) {
     PPTNZBlogWidget()
 } timeline: {
-    PostEntry(
-        date: .now,
-        post: Post(id: "1", title: "샘플 제목", link: "https://example.com", date: "2024.03.15", content: "본문 미리보기 텍스트입니다.")
-    )
+    PostEntry(date: .now, post: .preview)
 }

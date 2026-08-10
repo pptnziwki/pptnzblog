@@ -23,4 +23,18 @@ struct Post: Identifiable, Codable, Hashable {
     var yearLabel: String {
         year.map { "\($0)년" } ?? "연도 미상"
     }
+
+    /// 새 글 감지 시 문자열이 아닌 숫자로 비교하기 위한 편의 프로퍼티.
+    var numericID: Int {
+        Int(id) ?? 0
+    }
+
+    /// SwiftUI #Preview용 샘플 데이터.
+    static let preview = Post(
+        id: "1",
+        title: "샘플 제목",
+        link: "https://example.com",
+        date: "2024.03.15",
+        content: "본문 미리보기 텍스트입니다."
+    )
 }

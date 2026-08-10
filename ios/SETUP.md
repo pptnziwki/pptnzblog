@@ -41,9 +41,25 @@ open PPTNZBlog.xcodeproj
 - 무료 Apple ID(유료 개발자 프로그램 미가입)로 실기기에 설치하면 서명이 7일마다 만료되어
   주기적으로 Xcode에서 다시 Run 해줘야 합니다.
 
+## 5. 새 글 알림(Background App Refresh) 수동 테스트
+
+시뮬레이터/iOS는 백그라운드 새로고침 시점을 시스템이 알아서 정하기 때문에, 개발 중엔 강제로 트리거해서 확인해야 합니다.
+
+1. 앱을 한 번 실행해서 알림 권한을 허용하고, 홈 버튼(스와이프)으로 백그라운드로 보냅니다.
+2. Xcode 디버거가 붙어있는 상태에서 콘솔(LLDB)에 아래 커맨드 입력:
+   ```
+   e -l objc -- (void)[[BGTaskScheduler sharedScheduler] _simulateLaunchForTaskWithIdentifier:@"com.wooyxxng.pptnzblog.refresh"]
+   ```
+3. `BackgroundRefresh.run()`이 즉시 실행되어 새 글이 있으면 로컬 알림이 뜹니다.
+   (최초 실행 시에는 알림 스팸 방지를 위해 "마지막으로 본 글" 기준점만 저장하고 알림은 보내지 않으니, 두 번째 트리거부터 확인하세요.)
+
 ## 참고
 
 - `posts.json`은 GitHub Actions가 15~20분마다 갱신해서 리포지토리 루트에 커밋합니다.
   앱/위젯은 `https://raw.githubusercontent.com/wooyxxng-Jang/pptnzblog/main/posts.json`을 직접 읽습니다.
+- 글 상세 화면은 `post.link` 원문 페이지를 실시간으로 가져와 본문/이미지/댓글을 파싱합니다(`PostDetailLoader`).
+  오프라인이거나 파싱에 실패하면 posts.json에 저장된 요약 텍스트로 자동 폴백합니다.
 - `Post.year`는 Textcube 날짜 텍스트에서 첫 4자리 숫자를 정규식으로 뽑아 연도로 씁니다.
   실제 `posts.json`을 받아본 뒤 날짜 형식이 예상과 다르면 `Sources/Shared/Post.swift`의 정규식만 손보면 됩니다.
+- 댓글이 달린 글을 아직 실제로 보지 못해 `PostDetailLoader`의 댓글 파싱 마크업은 방어적으로 추정해 작성했습니다.
+  실제 댓글이 달린 글의 HTML을 확인하면 파싱 셀렉터를 맞게 조정해야 할 수 있습니다.

@@ -7,10 +7,11 @@ struct PostRowView: View {
         VStack(alignment: .leading, spacing: 4) {
             Text(post.title)
                 .font(.headline)
+                .foregroundStyle(Color.pptnzInk)
                 .lineLimit(2)
             Text(post.date)
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.pptnzTeal)
             if !post.content.isEmpty {
                 Text(post.content)
                     .font(.subheadline)
@@ -19,5 +20,6 @@ struct PostRowView: View {
             }
         }
         .padding(.vertical, 4)
+        .listRowBackground(Color.pptnzBackground)
     }
 }
