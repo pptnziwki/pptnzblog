@@ -79,7 +79,7 @@ private fun WidgetContent(post: Post?, source: WidgetPostSource) {
     var modifier = GlanceModifier
         .fillMaxSize()
         .background(ColorProvider(PptnzBackground))
-        .padding(12.dp)
+        .padding(16.dp)
 
     if (post != null) {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("pptnzblog://post/${post.id}"))

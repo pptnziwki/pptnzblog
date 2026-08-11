@@ -56,7 +56,7 @@ object PostShareCardSpec {
 private fun Modifier.softCardShadow(
     cornerRadius: Dp,
     color: Color = Color.Black,
-    alpha: Float = 0.09f,
+    alpha: Float = 0.06f,
     blurRadius: Dp = 20.dp,
     offsetY: Dp = 6.dp,
     layers: Int = 12,
