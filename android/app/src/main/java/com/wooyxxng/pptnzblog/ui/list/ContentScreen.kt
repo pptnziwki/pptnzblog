@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -137,7 +138,7 @@ fun ContentScreen(
             )
         },
         bottomBar = {
-            Surface(color = PptnzBackground, tonalElevation = 0.dp) {
+            Surface(color = PptnzBackground, tonalElevation = 0.dp, modifier = Modifier.imePadding()) {
                 OutlinedTextField(
                     value = searchText,
                     onValueChange = { searchText = it },
