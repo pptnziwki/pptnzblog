@@ -17,9 +17,7 @@ import androidx.glance.appwidget.action.actionStartActivity
 import androidx.glance.appwidget.provideContent
 import androidx.glance.appwidget.state.getAppWidgetState
 import androidx.glance.background
-import androidx.glance.layout.Alignment
 import androidx.glance.layout.Column
-import androidx.glance.layout.Row
 import androidx.glance.layout.Spacer
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
@@ -35,7 +33,7 @@ import com.wooyxxng.pptnzblog.data.PostsRepository
 import com.wooyxxng.pptnzblog.ui.theme.PptnzBackground
 import com.wooyxxng.pptnzblog.ui.theme.PptnzCoral
 import com.wooyxxng.pptnzblog.ui.theme.PptnzInk
-import com.wooyxxng.pptnzblog.ui.theme.PptnzPink
+import com.wooyxxng.pptnzblog.ui.theme.PptnzPinkStrong
 import com.wooyxxng.pptnzblog.ui.theme.PptnzTeal
 import kotlinx.coroutines.flow.first
 
@@ -92,9 +90,10 @@ private fun WidgetContent(post: Post?, source: WidgetPostSource) {
     Column(modifier = modifier) {
         Text(
             text = if (source == WidgetPostSource.BOOKMARKS) "북마크함" else "pptnz.net",
-            style = TextStyle(color = ColorProvider(PptnzTeal), fontSize = 11.sp),
+            maxLines = 1,
+            style = TextStyle(color = ColorProvider(PptnzTeal), fontSize = 11.sp, fontWeight = FontWeight.Bold),
         )
-        Spacer(modifier = GlanceModifier.padding(top = 4.dp))
+        Spacer(modifier = GlanceModifier.padding(top = 6.dp))
 
         if (post == null) {
             Text(
@@ -102,24 +101,24 @@ private fun WidgetContent(post: Post?, source: WidgetPostSource) {
                 style = TextStyle(color = ColorProvider(PptnzInk), fontSize = 14.sp),
             )
         } else {
+            // 위젯 배경(크림색)과 대비가 약한 연한 핑크 대신, 진한 핑크로 제목이 잘 보이게 한다.
             Text(
                 text = post.title,
                 maxLines = 2,
-                style = TextStyle(color = ColorProvider(PptnzPink), fontSize = 16.sp, fontWeight = FontWeight.Bold),
+                style = TextStyle(color = ColorProvider(PptnzPinkStrong), fontSize = 15.sp, fontWeight = FontWeight.Bold),
             )
-            Spacer(modifier = GlanceModifier.padding(top = 4.dp))
+            Spacer(modifier = GlanceModifier.padding(top = 6.dp))
             Text(
                 text = post.content,
-                maxLines = 3,
+                maxLines = 2,
                 style = TextStyle(color = ColorProvider(PptnzInk), fontSize = 12.sp),
             )
-            Spacer(modifier = GlanceModifier.defaultWeight())
-            Row(modifier = GlanceModifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = post.date,
-                    style = TextStyle(color = ColorProvider(PptnzCoral), fontSize = 11.sp),
-                )
-            }
+            Spacer(modifier = GlanceModifier.padding(top = 6.dp))
+            Text(
+                text = post.date,
+                maxLines = 1,
+                style = TextStyle(color = ColorProvider(PptnzCoral), fontSize = 11.sp),
+            )
         }
     }
 }
