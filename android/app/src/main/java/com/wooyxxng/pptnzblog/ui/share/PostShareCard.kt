@@ -19,12 +19,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.wooyxxng.pptnzblog.R
@@ -42,6 +46,37 @@ object PostShareCardSpec {
     val canvasWidth = cardWidth + shadowPadding * 2
 }
 
+/**
+ * `Modifier.shadow()`(elevation 기반 네이티브 그림자)는 화면에는 보이지만,
+ * `ShareCardRenderer`가 쓰는 `GraphicsLayer.record { }.toImageBitmap()` 오프스크린
+ * 캡처 경로에는 전혀 포함되지 않아 내보낸 이미지에 그림자가 아예 안 찍히는 문제가 있었다.
+ * elevation 대신 반투명 라운드 사각형을 여러 겹 겹쳐 그리는 방식으로 블러를 흉내 내면
+ * 일반 벡터 드로우 명령이라 캡처 경로에서도 그대로 렌더링된다.
+ */
+private fun Modifier.softCardShadow(
+    cornerRadius: Dp,
+    color: Color = Color.Black,
+    alpha: Float = 0.22f,
+    blurRadius: Dp = 20.dp,
+    offsetY: Dp = 6.dp,
+    layers: Int = 12,
+): Modifier = drawBehind {
+    val cornerPx = cornerRadius.toPx()
+    val blurPx = blurRadius.toPx()
+    val offsetYPx = offsetY.toPx()
+    val stepAlpha = alpha / layers
+
+    for (i in layers downTo 1) {
+        val spread = blurPx * i / layers
+        drawRoundRect(
+            color = color.copy(alpha = stepAlpha),
+            topLeft = Offset(-spread, offsetYPx - spread),
+            size = Size(size.width + spread * 2, size.height + spread * 2),
+            cornerRadius = CornerRadius(cornerPx + spread, cornerPx + spread),
+        )
+    }
+}
+
 @Composable
 fun PostShareCard(post: Post) {
     Box(
@@ -55,12 +90,7 @@ fun PostShareCard(post: Post) {
             modifier = Modifier
                 .width(PostShareCardSpec.cardWidth)
                 .defaultMinSize(minHeight = PostShareCardSpec.cardMinHeight)
-                .shadow(
-                    elevation = 16.dp,
-                    shape = RoundedCornerShape(PostShareCardSpec.cornerRadius),
-                    ambientColor = Color.Black.copy(alpha = 0.2f),
-                    spotColor = Color.Black.copy(alpha = 0.3f),
-                )
+                .softCardShadow(cornerRadius = PostShareCardSpec.cornerRadius)
                 .clip(RoundedCornerShape(PostShareCardSpec.cornerRadius))
                 .background(PptnzBackground)
                 .padding(24.dp),
