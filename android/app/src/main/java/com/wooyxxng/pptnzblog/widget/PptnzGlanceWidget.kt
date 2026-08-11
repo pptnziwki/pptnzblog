@@ -18,6 +18,7 @@ import androidx.glance.appwidget.provideContent
 import androidx.glance.appwidget.state.getAppWidgetState
 import androidx.glance.background
 import androidx.glance.layout.Column
+import androidx.glance.layout.Spacer
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.padding
@@ -30,9 +31,8 @@ import com.wooyxxng.pptnzblog.data.BookmarksStore
 import com.wooyxxng.pptnzblog.data.Post
 import com.wooyxxng.pptnzblog.data.PostsRepository
 import com.wooyxxng.pptnzblog.ui.theme.PptnzBackground
-import com.wooyxxng.pptnzblog.ui.theme.PptnzCoral
 import com.wooyxxng.pptnzblog.ui.theme.PptnzInk
-import com.wooyxxng.pptnzblog.ui.theme.PptnzPinkStrong
+import com.wooyxxng.pptnzblog.ui.theme.PptnzPink
 import com.wooyxxng.pptnzblog.ui.theme.PptnzTeal
 import kotlinx.coroutines.flow.first
 
@@ -86,15 +86,13 @@ private fun WidgetContent(post: Post?, source: WidgetPostSource) {
         modifier = modifier.clickable(actionStartActivity(intent))
     }
 
-    // Glance는 위젯 프레임 크기를 홈 화면 그리드에 맞춰 minHeight보다 훨씬 좁게 줄 때가 있어,
-    // Spacer로 간격을 띄우면 RemoteViews 변환 과정에서 뒤쪽 요소가 통째로 잘려 안 보이는
-    // 문제가 있었다. Spacer 대신 각 Text에 padding(top=)을 직접 붙이고 줄 수/폰트를 더
-    // 줄여 좁은 프레임에서도 전체 내용이 표시되게 한다.
+    // iOS WidgetKit 레이아웃(pptnz.net 라벨 → 제목 → 본문 → 아래쪽 고정 작성일)과 맞춘다.
     Column(modifier = modifier) {
+        // 위젯을 어떤 소스(랜덤/북마크함)로 추가했는지와 무관하게 iOS와 동일하게 항상 "pptnz.net"만 표시한다.
         Text(
-            text = if (source == WidgetPostSource.BOOKMARKS) "북마크함" else "pptnz.net",
+            text = "pptnz.net",
             maxLines = 1,
-            style = TextStyle(color = ColorProvider(PptnzTeal), fontSize = 10.sp, fontWeight = FontWeight.Bold),
+            style = TextStyle(color = ColorProvider(PptnzTeal), fontSize = 11.sp, fontWeight = FontWeight.Bold),
         )
 
         if (post == null) {
@@ -105,24 +103,23 @@ private fun WidgetContent(post: Post?, source: WidgetPostSource) {
                 style = TextStyle(color = ColorProvider(PptnzInk), fontSize = 13.sp),
             )
         } else {
-            // 위젯 배경(크림색)과 대비가 약한 연한 핑크 대신, 진한 핑크로 제목이 잘 보이게 한다.
             Text(
                 text = post.title,
                 maxLines = 2,
                 modifier = GlanceModifier.padding(top = 4.dp),
-                style = TextStyle(color = ColorProvider(PptnzPinkStrong), fontSize = 14.sp, fontWeight = FontWeight.Bold),
+                style = TextStyle(color = ColorProvider(PptnzInk), fontSize = 15.sp, fontWeight = FontWeight.Bold),
             )
             Text(
                 text = post.content,
-                maxLines = 1,
+                maxLines = 8,
                 modifier = GlanceModifier.padding(top = 4.dp),
-                style = TextStyle(color = ColorProvider(PptnzInk), fontSize = 12.sp),
+                style = TextStyle(color = ColorProvider(PptnzInk.copy(alpha = 0.65f)), fontSize = 12.sp),
             )
+            Spacer(modifier = GlanceModifier.defaultWeight())
             Text(
                 text = post.date,
                 maxLines = 1,
-                modifier = GlanceModifier.padding(top = 4.dp),
-                style = TextStyle(color = ColorProvider(PptnzCoral), fontSize = 10.sp),
+                style = TextStyle(color = ColorProvider(PptnzPink), fontSize = 11.sp),
             )
         }
     }
