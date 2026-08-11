@@ -18,7 +18,6 @@ import androidx.glance.appwidget.provideContent
 import androidx.glance.appwidget.state.getAppWidgetState
 import androidx.glance.background
 import androidx.glance.layout.Column
-import androidx.glance.layout.Spacer
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.padding
@@ -80,44 +79,50 @@ private fun WidgetContent(post: Post?, source: WidgetPostSource) {
     var modifier = GlanceModifier
         .fillMaxSize()
         .background(ColorProvider(PptnzBackground))
-        .padding(16.dp)
+        .padding(12.dp)
 
     if (post != null) {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("pptnzblog://post/${post.id}"))
         modifier = modifier.clickable(actionStartActivity(intent))
     }
 
+    // Glance는 위젯 프레임 크기를 홈 화면 그리드에 맞춰 minHeight보다 훨씬 좁게 줄 때가 있어,
+    // Spacer로 간격을 띄우면 RemoteViews 변환 과정에서 뒤쪽 요소가 통째로 잘려 안 보이는
+    // 문제가 있었다. Spacer 대신 각 Text에 padding(top=)을 직접 붙이고 줄 수/폰트를 더
+    // 줄여 좁은 프레임에서도 전체 내용이 표시되게 한다.
     Column(modifier = modifier) {
         Text(
             text = if (source == WidgetPostSource.BOOKMARKS) "북마크함" else "pptnz.net",
             maxLines = 1,
-            style = TextStyle(color = ColorProvider(PptnzTeal), fontSize = 11.sp, fontWeight = FontWeight.Bold),
+            style = TextStyle(color = ColorProvider(PptnzTeal), fontSize = 10.sp, fontWeight = FontWeight.Bold),
         )
-        Spacer(modifier = GlanceModifier.padding(top = 6.dp))
 
         if (post == null) {
             Text(
                 text = if (source == WidgetPostSource.BOOKMARKS) "저장한 글이 없어요" else "글을 불러올 수 없어요",
-                style = TextStyle(color = ColorProvider(PptnzInk), fontSize = 14.sp),
+                maxLines = 2,
+                modifier = GlanceModifier.padding(top = 4.dp),
+                style = TextStyle(color = ColorProvider(PptnzInk), fontSize = 13.sp),
             )
         } else {
             // 위젯 배경(크림색)과 대비가 약한 연한 핑크 대신, 진한 핑크로 제목이 잘 보이게 한다.
             Text(
                 text = post.title,
                 maxLines = 2,
-                style = TextStyle(color = ColorProvider(PptnzPinkStrong), fontSize = 15.sp, fontWeight = FontWeight.Bold),
+                modifier = GlanceModifier.padding(top = 4.dp),
+                style = TextStyle(color = ColorProvider(PptnzPinkStrong), fontSize = 14.sp, fontWeight = FontWeight.Bold),
             )
-            Spacer(modifier = GlanceModifier.padding(top = 6.dp))
             Text(
                 text = post.content,
-                maxLines = 2,
+                maxLines = 1,
+                modifier = GlanceModifier.padding(top = 4.dp),
                 style = TextStyle(color = ColorProvider(PptnzInk), fontSize = 12.sp),
             )
-            Spacer(modifier = GlanceModifier.padding(top = 6.dp))
             Text(
                 text = post.date,
                 maxLines = 1,
-                style = TextStyle(color = ColorProvider(PptnzCoral), fontSize = 11.sp),
+                modifier = GlanceModifier.padding(top = 4.dp),
+                style = TextStyle(color = ColorProvider(PptnzCoral), fontSize = 10.sp),
             )
         }
     }
