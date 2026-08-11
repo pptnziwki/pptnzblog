@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">pptnz.net</string>
+    <string name="widget_display_name">pptnz.net</string>
+    <string name="widget_description">페퍼톤스 블로그 글을 보여줍니다. 랜덤 또는 북마크함 중에서 고를 수 있어요.</string>
+    <string name="notification_channel_name">새 글 알림</string>
+</resources>
