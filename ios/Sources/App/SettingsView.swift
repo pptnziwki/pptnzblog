@@ -13,21 +13,6 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             List {
-                Section("앱 정보") {
-                    LabeledContent("버전", value: appVersion)
-                    LabeledContent("개발자", value: "Wooyoung Jang")
-                    Link(destination: URL(string: "mailto:wooyxxng@gmail.com")!) {
-                        LabeledContent("문의하기", value: "wooyxxng@gmail.com")
-                    }
-                    .foregroundStyle(.primary)
-                }
-
-                Section("페퍼톤스 공식 계정") {
-                    accountLink("공식 홈페이지", systemImage: "globe", url: "http://peppertones.net/")
-                    accountLink("Instagram", systemImage: "camera", url: "https://www.instagram.com/peppertones_official")
-                    accountLink("X (Twitter)", systemImage: "at", url: "https://x.com/pptnzexpress")
-                }
-
                 Section("알림") {
                     Toggle("알림 허용", isOn: $notificationSettings.notificationsEnabled)
                     if notificationSettings.notificationsEnabled {
@@ -61,6 +46,24 @@ struct SettingsView: View {
                             .foregroundStyle(Color.pptnzCoral)
                         }
                     }
+                }
+
+                Section("페퍼톤스 공식 계정") {
+                    accountLink("공식 홈페이지", systemImage: "globe", url: "http://peppertones.net/")
+                    accountLink("Instagram", systemImage: "camera", url: "https://www.instagram.com/peppertones_official")
+                    accountLink("X (Twitter)", systemImage: "at", url: "https://x.com/pptnzexpress")
+                }
+
+                Section("앱 정보") {
+                    LabeledContent("버전", value: appVersion)
+                    Link(destination: URL(string: "https://x.com/h6ox2i?s=11")!) {
+                        LabeledContent("개발자", value: "@h6ox2i")
+                    }
+                    .foregroundStyle(.primary)
+                    Link(destination: URL(string: "mailto:pptnzblog@gmail.com")!) {
+                        LabeledContent("문의하기", value: "pptnzblog@gmail.com")
+                    }
+                    .foregroundStyle(.primary)
                 }
             }
             .navigationTitle("설정")
