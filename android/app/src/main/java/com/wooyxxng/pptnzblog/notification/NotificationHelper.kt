@@ -23,7 +23,8 @@ object NotificationHelper {
         val channel = NotificationChannel(
             CHANNEL_ID,
             context.getString(R.string.notification_channel_name),
-            NotificationManager.IMPORTANCE_DEFAULT,
+            // 헤즈업(배너) 형태로 화면에 바로 뜨려면 HIGH 이상의 importance가 필요하다.
+            NotificationManager.IMPORTANCE_HIGH,
         )
         val manager = context.getSystemService(NotificationManager::class.java)
         manager?.createNotificationChannel(channel)
@@ -41,12 +42,15 @@ object NotificationHelper {
         )
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(android.R.drawable.ic_dialog_info)
+            // 상태표시줄 아이콘은 알파 채널만 사용해 실루엣으로 그려지므로, 로고의
+            // foreground 레이어(투명 배경)를 그대로 사용한다.
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle(post.title)
             .setContentText(post.content)
             .setStyle(NotificationCompat.BigTextStyle().bigText(post.content))
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
             .build()
 
         if (Build.VERSION.SDK_INT < 33 ||
