@@ -1,8 +1,20 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.serialization")
 }
+
+// 릴리즈 서명 정보는 저장소에 커밋되지 않는 local.properties에서 읽는다.
+// local.properties에 아래 키가 없으면 release 빌드는 서명 없이 빌드된다(배포 불가, 로컬 디버그용).
+val keystoreProperties = Properties().apply {
+    val propsFile = rootProject.file("local.properties")
+    if (propsFile.exists()) {
+        propsFile.inputStream().use { load(it) }
+    }
+}
+val releaseStoreFile = keystoreProperties.getProperty("RELEASE_STORE_FILE")
 
 android {
     namespace = "com.wooyxxng.pptnzblog"
@@ -16,9 +28,23 @@ android {
         versionName = "1.1"
     }
 
+    signingConfigs {
+        if (releaseStoreFile != null) {
+            create("release") {
+                storeFile = rootProject.file(releaseStoreFile)
+                storePassword = keystoreProperties.getProperty("RELEASE_STORE_PASSWORD")
+                keyAlias = keystoreProperties.getProperty("RELEASE_KEY_ALIAS")
+                keyPassword = keystoreProperties.getProperty("RELEASE_KEY_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
+            if (releaseStoreFile != null) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
     }
 
