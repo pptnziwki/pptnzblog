@@ -10,6 +10,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
@@ -32,9 +34,8 @@ import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.appwidget.updateAll
 import com.wooyxxng.pptnzblog.ui.theme.PptnzBackground
-import com.wooyxxng.pptnzblog.ui.theme.PptnzCoral
 import com.wooyxxng.pptnzblog.ui.theme.PptnzInk
-import com.wooyxxng.pptnzblog.ui.theme.PptnzPink
+import com.wooyxxng.pptnzblog.ui.theme.PptnzTeal
 import com.wooyxxng.pptnzblog.ui.theme.PptnzBlogTheme
 import kotlinx.coroutines.launch
 
@@ -88,34 +89,34 @@ private fun WidgetConfigureScreen(onSourceSelected: (WidgetPostSource) -> Unit) 
     var selected by remember { mutableStateOf(WidgetPostSource.RANDOM) }
 
     Scaffold(containerColor = PptnzBackground) { padding ->
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
                 .padding(24.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+            contentAlignment = Alignment.Center,
         ) {
-            Text(
-                "위젯에 표시할 글",
-                style = MaterialTheme.typography.headlineSmall,
-                color = PptnzPink,
-            )
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                SourceOption(
+                    title = "랜덤",
+                    description = "전체 글 중에서 무작위로 보여줘요.",
+                    selected = selected == WidgetPostSource.RANDOM,
+                    onClick = { selected = WidgetPostSource.RANDOM },
+                )
+                SourceOption(
+                    title = "북마크함",
+                    description = "저장한 글 중에서 무작위로 보여줘요.",
+                    selected = selected == WidgetPostSource.BOOKMARKS,
+                    onClick = { selected = WidgetPostSource.BOOKMARKS },
+                )
 
-            SourceOption(
-                title = "랜덤",
-                description = "전체 글 중에서 무작위로 보여줘요.",
-                selected = selected == WidgetPostSource.RANDOM,
-                onClick = { selected = WidgetPostSource.RANDOM },
-            )
-            SourceOption(
-                title = "북마크함",
-                description = "저장한 글 중에서 무작위로 보여줘요.",
-                selected = selected == WidgetPostSource.BOOKMARKS,
-                onClick = { selected = WidgetPostSource.BOOKMARKS },
-            )
-
-            Button(onClick = { onSourceSelected(selected) }) {
-                Text("추가하기")
+                Button(onClick = { onSourceSelected(selected) }) {
+                    Text("확인")
+                }
             }
         }
     }
@@ -127,10 +128,11 @@ private fun SourceOption(title: String, description: String, selected: Boolean, 
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
-            .background(if (selected) PptnzCoral.copy(alpha = 0.15f) else PptnzInk.copy(alpha = 0.05f))
+            .background(if (selected) PptnzTeal.copy(alpha = 0.15f) else PptnzInk.copy(alpha = 0.05f))
             .clickable(onClick = onClick)
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(title, style = MaterialTheme.typography.titleMedium, color = PptnzInk)
         Text(description, style = MaterialTheme.typography.bodySmall, color = PptnzInk.copy(alpha = 0.7f))
