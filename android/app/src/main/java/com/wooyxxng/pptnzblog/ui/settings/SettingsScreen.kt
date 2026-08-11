@@ -47,7 +47,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -59,9 +58,10 @@ import com.wooyxxng.pptnzblog.ui.theme.PptnzCoral
 import com.wooyxxng.pptnzblog.ui.theme.PptnzDivider
 import com.wooyxxng.pptnzblog.ui.theme.PptnzInk
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.map
 import kotlin.math.abs
-import kotlin.math.roundToInt
 
 /** 설정 화면 항목 행의 통일된 높이 */
 private val SettingsRowHeight = 52.dp
@@ -317,10 +317,16 @@ private fun TimeEditDialog(
 
 private val WheelItemHeight = 40.dp
 private const val WheelVisibleCount = 3
+private const val WheelHalfCount = WheelVisibleCount / 2
 
 /**
  * 안드로이드 기본 [androidx.compose.material3.TimePicker]의 시계 다이얼 대신,
  * 세로 스크롤 휠 형태로 시/분을 선택하는 커스텀 피커.
+ *
+ * LazyColumn의 contentPadding으로 여백을 주는 방식은 리스트 맨 앞/뒤 경계에서만
+ * 특별하게 취급되어(스크롤 오프셋 계산이 index 0 주변에서 어긋남) 선택 항목이
+ * 가운데 줄이 아닌 다른 줄에 위치하는 문제가 있었다. 대신 위·아래에 빈 아이템을
+ * 채워 넣어 모든 항목(빈 항목 포함)이 동일하게 취급되도록 한다.
  */
 @Composable
 private fun WheelPicker(
@@ -329,26 +335,11 @@ private fun WheelPicker(
     onSelectedIndexChange: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val density = LocalDensity.current
-    val half = WheelVisibleCount / 2
-    // LazyColumn의 contentPadding은 리스트 맨 앞(index 0) 경계에만 여백을 만들기 때문에,
-    // 단순히 initialFirstVisibleItemIndex = selectedIndex로 두면 해당 아이템이 뷰포트 맨
-    // 위 줄에 위치하게 된다(가운데 줄이 아님). 선택된 아이템이 실제로 가운데 줄에 오도록
-    // index/offset을 직접 계산한다.
-    val (initialIndex, initialOffsetPx) = remember(selectedIndex) {
-        if (selectedIndex > half) {
-            (selectedIndex - half) to 0
-        } else {
-            val itemHeightPx = with(density) { WheelItemHeight.toPx() }
-            0 to (selectedIndex * itemHeightPx).roundToInt()
-        }
+    val paddedItems = remember(items) {
+        List<String?>(WheelHalfCount) { null } + items + List<String?>(WheelHalfCount) { null }
     }
-    val listState = rememberLazyListState(
-        initialFirstVisibleItemIndex = initialIndex,
-        initialFirstVisibleItemScrollOffset = initialOffsetPx,
-    )
+    val listState = rememberLazyListState(initialFirstVisibleItemIndex = selectedIndex)
     val flingBehavior = rememberSnapFlingBehavior(listState)
-    val sidePadding = WheelItemHeight * half
 
     Box(
         modifier = modifier.height(WheelItemHeight * WheelVisibleCount),
@@ -364,19 +355,21 @@ private fun WheelPicker(
         LazyColumn(
             state = listState,
             flingBehavior = flingBehavior,
-            contentPadding = PaddingValues(vertical = sidePadding),
         ) {
-            itemsIndexed(items) { index, label ->
+            itemsIndexed(paddedItems) { paddedIndex, label ->
+                val itemIndex = paddedIndex - WheelHalfCount
                 Box(
                     modifier = Modifier.height(WheelItemHeight).fillParentMaxWidth(),
                     contentAlignment = Alignment.Center,
                 ) {
-                    Text(
-                        label,
-                        color = if (index == selectedIndex) PptnzInk else PptnzInk.copy(alpha = 0.3f),
-                        fontWeight = if (index == selectedIndex) FontWeight.Bold else FontWeight.Normal,
-                        style = MaterialTheme.typography.titleMedium,
-                    )
+                    if (label != null) {
+                        Text(
+                            label,
+                            color = if (itemIndex == selectedIndex) PptnzInk else PptnzInk.copy(alpha = 0.3f),
+                            fontWeight = if (itemIndex == selectedIndex) FontWeight.Bold else FontWeight.Normal,
+                            style = MaterialTheme.typography.titleMedium,
+                        )
+                    }
                 }
             }
         }
@@ -389,6 +382,8 @@ private fun WheelPicker(
             info.visibleItemsInfo.minByOrNull { abs((it.offset + it.size / 2) - center) }?.index
         }
             .filterNotNull()
+            .map { it - WheelHalfCount }
+            .filter { it in items.indices }
             .distinctUntilChanged()
             .collect(onSelectedIndexChange)
     }
