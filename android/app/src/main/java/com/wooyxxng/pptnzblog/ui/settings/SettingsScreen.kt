@@ -47,6 +47,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -60,6 +61,7 @@ import com.wooyxxng.pptnzblog.ui.theme.PptnzInk
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlin.math.abs
+import kotlin.math.roundToInt
 
 /** 설정 화면 항목 행의 통일된 높이 */
 private val SettingsRowHeight = 52.dp
@@ -327,9 +329,26 @@ private fun WheelPicker(
     onSelectedIndexChange: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val listState = rememberLazyListState(initialFirstVisibleItemIndex = selectedIndex)
+    val density = LocalDensity.current
+    val half = WheelVisibleCount / 2
+    // LazyColumn의 contentPadding은 리스트 맨 앞(index 0) 경계에만 여백을 만들기 때문에,
+    // 단순히 initialFirstVisibleItemIndex = selectedIndex로 두면 해당 아이템이 뷰포트 맨
+    // 위 줄에 위치하게 된다(가운데 줄이 아님). 선택된 아이템이 실제로 가운데 줄에 오도록
+    // index/offset을 직접 계산한다.
+    val (initialIndex, initialOffsetPx) = remember(selectedIndex) {
+        if (selectedIndex > half) {
+            (selectedIndex - half) to 0
+        } else {
+            val itemHeightPx = with(density) { WheelItemHeight.toPx() }
+            0 to (selectedIndex * itemHeightPx).roundToInt()
+        }
+    }
+    val listState = rememberLazyListState(
+        initialFirstVisibleItemIndex = initialIndex,
+        initialFirstVisibleItemScrollOffset = initialOffsetPx,
+    )
     val flingBehavior = rememberSnapFlingBehavior(listState)
-    val sidePadding = WheelItemHeight * (WheelVisibleCount / 2)
+    val sidePadding = WheelItemHeight * half
 
     Box(
         modifier = modifier.height(WheelItemHeight * WheelVisibleCount),
