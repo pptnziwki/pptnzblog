@@ -3,42 +3,66 @@ package com.wooyxxng.pptnzblog.ui.settings
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.RemoveCircle
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TimePicker
-import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import com.wooyxxng.pptnzblog.BuildConfig
 import com.wooyxxng.pptnzblog.data.AppPreferences
 import com.wooyxxng.pptnzblog.data.DailyTime
 import com.wooyxxng.pptnzblog.ui.theme.PptnzBackground
 import com.wooyxxng.pptnzblog.ui.theme.PptnzCoral
+import com.wooyxxng.pptnzblog.ui.theme.PptnzDivider
+import com.wooyxxng.pptnzblog.ui.theme.PptnzInk
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
+import kotlin.math.abs
+
+/** 설정 화면 항목 행의 통일된 높이 */
+private val SettingsRowHeight = 52.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -55,8 +79,8 @@ fun SettingsScreen(
         containerColor = PptnzBackground,
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("설정") },
-                actions = { TextButton(onClick = onDismiss) { Text("닫기") } },
+                title = { Text("설정", fontWeight = FontWeight.Bold, color = PptnzInk) },
+                actions = { TextButton(onClick = onDismiss) { Text("닫기", color = PptnzCoral) } },
             )
         },
     ) { padding ->
@@ -66,27 +90,44 @@ fun SettingsScreen(
                 .background(PptnzBackground)
                 .padding(padding)
                 .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(24.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp),
         ) {
             // 알림
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                SectionTitle("알림")
+            SettingsSection(title = "알림") {
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().height(SettingsRowHeight),
                     horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text("알림 허용")
-                    Switch(checked = notificationsEnabled, onCheckedChange = onNotificationsEnabledChange)
+                    Text("알림 허용", color = PptnzInk, style = MaterialTheme.typography.bodyLarge)
+                    Switch(
+                        checked = notificationsEnabled,
+                        onCheckedChange = onNotificationsEnabledChange,
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = PptnzBackground,
+                            checkedTrackColor = PptnzCoral,
+                            checkedBorderColor = PptnzCoral,
+                            uncheckedThumbColor = PptnzBackground,
+                            uncheckedTrackColor = PptnzInk.copy(alpha = 0.2f),
+                            uncheckedBorderColor = PptnzInk.copy(alpha = 0.2f),
+                        ),
+                    )
                 }
 
                 if (notificationsEnabled) {
                     dailyTimes.forEach { time ->
+                        HorizontalDivider(color = PptnzDivider, thickness = 1.dp)
                         Row(
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier.fillMaxWidth().height(SettingsRowHeight),
                             horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            TextButton(onClick = { editingTime = time }) {
-                                Text("매일 %02d:%02d".format(time.hour, time.minute))
+                            TextButton(onClick = { editingTime = time }, contentPadding = PaddingValues(0.dp)) {
+                                Text(
+                                    "매일 %02d:%02d".format(time.hour, time.minute),
+                                    color = PptnzInk,
+                                    style = MaterialTheme.typography.bodyLarge,
+                                )
                             }
                             if (dailyTimes.size > 1) {
                                 IconButton(onClick = {
@@ -98,33 +139,44 @@ fun SettingsScreen(
                         }
                     }
                     if (dailyTimes.size < AppPreferences.MAX_DAILY_TIMES) {
-                        TextButton(onClick = {
-                            onDailyTimesChange(dailyTimes + DailyTime(hour = 9, minute = 0))
-                        }) {
+                        HorizontalDivider(color = PptnzDivider, thickness = 1.dp)
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(SettingsRowHeight)
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = null,
+                                ) { onDailyTimesChange(dailyTimes + DailyTime(hour = 9, minute = 0)) },
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
                             Icon(Icons.Filled.Add, contentDescription = null, tint = PptnzCoral)
-                            Text("알림 시간 추가", color = PptnzCoral, modifier = Modifier.padding(start = 4.dp))
+                            Text(
+                                "알림 시간 추가",
+                                color = PptnzCoral,
+                                style = MaterialTheme.typography.bodyLarge,
+                                modifier = Modifier.padding(start = 4.dp),
+                            )
                         }
                     }
                 }
             }
 
-            Divider()
-
             // 페퍼톤스 공식 계정
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                SectionTitle("페퍼톤스 공식 계정")
+            SettingsSection(title = "페퍼톤스 공식 계정") {
                 AccountLink("공식 홈페이지", "http://peppertones.net/")
+                HorizontalDivider(color = PptnzDivider, thickness = 1.dp)
                 AccountLink("Instagram", "https://www.instagram.com/peppertones_official")
+                HorizontalDivider(color = PptnzDivider, thickness = 1.dp)
                 AccountLink("X (Twitter)", "https://x.com/pptnzexpress")
             }
 
-            Divider()
-
             // 앱 정보
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                SectionTitle("앱 정보")
+            SettingsSection(title = "앱 정보") {
                 InfoRow("버전", "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})")
+                HorizontalDivider(color = PptnzDivider, thickness = 1.dp)
                 AccountLink(label = "개발자", url = "https://x.com/h6ox2i?s=11", valueLabel = "@h6ox2i")
+                HorizontalDivider(color = PptnzDivider, thickness = 1.dp)
                 AccountLink(label = "문의하기", url = "mailto:pptnzblog@gmail.com", valueLabel = "pptnzblog@gmail.com")
             }
         }
@@ -144,15 +196,36 @@ fun SettingsScreen(
 }
 
 @Composable
-private fun SectionTitle(text: String) {
-    Text(text, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+private fun SettingsSection(title: String, content: @Composable ColumnScope.() -> Unit) {
+    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+        Text(
+            title,
+            style = MaterialTheme.typography.titleSmall,
+            fontWeight = FontWeight.Bold,
+            color = PptnzInk,
+            modifier = Modifier.padding(start = 4.dp, bottom = 8.dp),
+        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .background(PptnzInk.copy(alpha = 0.03f))
+                .padding(horizontal = 16.dp, vertical = 4.dp),
+            verticalArrangement = Arrangement.spacedBy(0.dp),
+            content = content,
+        )
+    }
 }
 
 @Composable
 private fun InfoRow(label: String, value: String) {
-    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-        Text(label)
-        Text(value)
+    Row(
+        modifier = Modifier.fillMaxWidth().height(SettingsRowHeight),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(label, color = PptnzInk)
+        Text(value, color = PptnzInk.copy(alpha = 0.6f))
     }
 }
 
@@ -162,21 +235,21 @@ private fun AccountLink(label: String, url: String, valueLabel: String? = null) 
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp),
+            .height(SettingsRowHeight)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+            ) { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url))) },
         horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        TextButton(onClick = {
-            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
-        }) {
-            Text(label)
-        }
+        Text(label, color = PptnzInk)
         if (valueLabel != null) {
             Text(valueLabel, color = PptnzCoral)
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TimeEditDialog(
     initialHour: Int,
@@ -184,15 +257,120 @@ private fun TimeEditDialog(
     onConfirm: (Int, Int) -> Unit,
     onDismiss: () -> Unit,
 ) {
-    val state = rememberTimePickerState(initialHour = initialHour, initialMinute = initialMinute, is24Hour = true)
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        confirmButton = {
-            TextButton(onClick = { onConfirm(state.hour, state.minute) }) { Text("확인") }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) { Text("취소") }
-        },
-        text = { TimePicker(state = state) },
-    )
+    var hour by remember { mutableStateOf(initialHour) }
+    var minute by remember { mutableStateOf(initialMinute) }
+
+    Dialog(onDismissRequest = onDismiss) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(24.dp))
+                .background(PptnzBackground)
+                .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text(
+                "알림 시간 설정",
+                color = PptnzInk,
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.titleMedium,
+            )
+            Spacer(Modifier.height(20.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                WheelPicker(
+                    items = (0..23).map { "%02d".format(it) },
+                    selectedIndex = hour,
+                    onSelectedIndexChange = { hour = it },
+                    modifier = Modifier.width(64.dp),
+                )
+                Text(
+                    ":",
+                    color = PptnzInk,
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.padding(horizontal = 4.dp),
+                )
+                WheelPicker(
+                    items = (0..59).map { "%02d".format(it) },
+                    selectedIndex = minute,
+                    onSelectedIndexChange = { minute = it },
+                    modifier = Modifier.width(64.dp),
+                )
+            }
+            Spacer(Modifier.height(20.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                TextButton(onClick = onDismiss, modifier = Modifier.weight(1f)) {
+                    Text("취소", color = PptnzInk.copy(alpha = 0.6f))
+                }
+                TextButton(onClick = { onConfirm(hour, minute) }, modifier = Modifier.weight(1f)) {
+                    Text("확인", color = PptnzCoral, fontWeight = FontWeight.Bold)
+                }
+            }
+        }
+    }
+}
+
+private val WheelItemHeight = 40.dp
+private const val WheelVisibleCount = 3
+
+/**
+ * 안드로이드 기본 [androidx.compose.material3.TimePicker]의 시계 다이얼 대신,
+ * 세로 스크롤 휠 형태로 시/분을 선택하는 커스텀 피커.
+ */
+@Composable
+private fun WheelPicker(
+    items: List<String>,
+    selectedIndex: Int,
+    onSelectedIndexChange: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val listState = rememberLazyListState(initialFirstVisibleItemIndex = selectedIndex)
+    val flingBehavior = rememberSnapFlingBehavior(listState)
+    val sidePadding = WheelItemHeight * (WheelVisibleCount / 2)
+
+    Box(
+        modifier = modifier.height(WheelItemHeight * WheelVisibleCount),
+        contentAlignment = Alignment.Center,
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(WheelItemHeight)
+                .clip(RoundedCornerShape(8.dp))
+                .background(PptnzCoral.copy(alpha = 0.1f)),
+        )
+        LazyColumn(
+            state = listState,
+            flingBehavior = flingBehavior,
+            contentPadding = PaddingValues(vertical = sidePadding),
+        ) {
+            itemsIndexed(items) { index, label ->
+                Box(
+                    modifier = Modifier.height(WheelItemHeight).fillParentMaxWidth(),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        label,
+                        color = if (index == selectedIndex) PptnzInk else PptnzInk.copy(alpha = 0.3f),
+                        fontWeight = if (index == selectedIndex) FontWeight.Bold else FontWeight.Normal,
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(listState) {
+        snapshotFlow {
+            val info = listState.layoutInfo
+            val center = info.viewportSize.height / 2
+            info.visibleItemsInfo.minByOrNull { abs((it.offset + it.size / 2) - center) }?.index
+        }
+            .filterNotNull()
+            .distinctUntilChanged()
+            .collect(onSelectedIndexChange)
+    }
 }

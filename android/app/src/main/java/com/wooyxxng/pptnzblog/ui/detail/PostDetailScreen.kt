@@ -1,5 +1,6 @@
 package com.wooyxxng.pptnzblog.ui.detail
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -35,9 +37,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.wooyxxng.pptnzblog.R
 import com.wooyxxng.pptnzblog.data.Post
 import com.wooyxxng.pptnzblog.data.PostComment
 import com.wooyxxng.pptnzblog.data.PostContentBlock
@@ -80,10 +86,22 @@ fun PostDetailScreen(
         containerColor = PptnzBackground,
         topBar = {
             CenterAlignedTopAppBar(
-                title = {},
+                title = {
+                    Image(
+                        painter = painterResource(R.drawable.logo),
+                        contentDescription = null,
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier.height(30.dp),
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = "뒤로", tint = PptnzCoral)
+                        Icon(
+                            Icons.Filled.ArrowBack,
+                            contentDescription = "뒤로",
+                            tint = PptnzCoral,
+                            modifier = Modifier.size(26.dp),
+                        )
                     }
                 },
                 actions = {
@@ -92,10 +110,16 @@ fun PostDetailScreen(
                             if (isBookmarked) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder,
                             contentDescription = "북마크",
                             tint = PptnzCoral,
+                            modifier = Modifier.size(26.dp),
                         )
                     }
                     IconButton(onClick = onShare) {
-                        Icon(Icons.Filled.Share, contentDescription = "공유", tint = PptnzCoral)
+                        Icon(
+                            Icons.Filled.Share,
+                            contentDescription = "공유",
+                            tint = PptnzCoral,
+                            modifier = Modifier.size(26.dp),
+                        )
                     }
                 },
             )
@@ -110,7 +134,12 @@ fun PostDetailScreen(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            Text(post.title, style = MaterialTheme.typography.headlineSmall, color = PptnzPink)
+            Text(
+                post.title,
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold,
+                color = PptnzPink,
+            )
             Text(post.date, style = MaterialTheme.typography.bodySmall, color = PptnzTeal)
 
             BodyContent(detail = detail, post = post, isLoading = isLoading, loadFailed = loadFailed)
@@ -157,6 +186,7 @@ private fun BodyContent(detail: PostDetail?, post: Post, isLoading: Boolean, loa
                                 AsyncImage(
                                     model = block.url,
                                     contentDescription = null,
+                                    contentScale = ContentScale.FillWidth,
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .clip(RoundedCornerShape(8.dp)),
@@ -243,7 +273,7 @@ private fun CommentsSection(comments: List<PostComment>, showsAll: Boolean, onTo
                             Text(comment.date, style = MaterialTheme.typography.labelSmall)
                         }
                     }
-                    Text(comment.text, color = PptnzInk)
+                    Text(comment.text, color = PptnzInk, style = MaterialTheme.typography.bodySmall)
                 }
             }
 

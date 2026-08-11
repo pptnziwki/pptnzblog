@@ -5,11 +5,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.weight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -19,10 +20,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.wooyxxng.pptnzblog.R
 import com.wooyxxng.pptnzblog.data.Post
 import com.wooyxxng.pptnzblog.ui.theme.PptnzBackground
 import com.wooyxxng.pptnzblog.ui.theme.PptnzCoral
@@ -50,17 +54,25 @@ fun PostShareCard(post: Post) {
             modifier = Modifier
                 .size(PostShareCardSpec.cardWidth, PostShareCardSpec.cardHeight)
                 .shadow(
-                    elevation = 16.dp,
+                    elevation = 6.dp,
                     shape = RoundedCornerShape(PostShareCardSpec.cornerRadius),
-                    ambientColor = Color.Black.copy(alpha = 0.18f),
-                    spotColor = Color.Black.copy(alpha = 0.18f),
+                    ambientColor = Color.Black.copy(alpha = 0.08f),
+                    spotColor = Color.Black.copy(alpha = 0.08f),
                 )
                 .clip(RoundedCornerShape(PostShareCardSpec.cornerRadius))
                 .background(PptnzBackground)
                 .padding(24.dp),
         ) {
+            Image(
+                painter = painterResource(R.drawable.logo),
+                contentDescription = null,
+                contentScale = ContentScale.Fit,
+                modifier = Modifier.height(26.dp),
+            )
+
             Text(
                 text = post.title,
+                modifier = Modifier.padding(top = 12.dp),
                 color = PptnzPink,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,

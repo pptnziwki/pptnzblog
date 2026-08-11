@@ -26,8 +26,14 @@ val PptnzTeal = Color(0xFF7AAAAA)
 /** 섹션 제목류 (#F6BBB7) */
 val PptnzPink = Color(0xFFF6BBB7)
 
+/** 글 상세 제목처럼 더 진하게 강조가 필요한 곳에 쓰는 핑크 */
+val PptnzPinkStrong = Color(0xFFE8628F)
+
 /** 헤더 "BLOG" 로고 텍스트용 크림 옐로우 */
 val PptnzYellow = Color(0xFFF0EFA3)
+
+/** 리스트 구분선 등에 쓰는 옅은 선 색 */
+val PptnzDivider = PptnzInk.copy(alpha = 0.08f)
 
 private val PptnzColorScheme = lightColorScheme(
     primary = PptnzCoral,

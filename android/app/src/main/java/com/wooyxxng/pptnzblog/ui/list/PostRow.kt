@@ -1,5 +1,6 @@
 package com.wooyxxng.pptnzblog.ui.list
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,7 +16,10 @@ import com.wooyxxng.pptnzblog.ui.theme.PptnzTeal
 
 @Composable
 fun PostRow(post: Post, modifier: Modifier = Modifier) {
-    Column(modifier = modifier.fillMaxWidth().padding(vertical = 6.dp)) {
+    Column(
+        modifier = modifier.fillMaxWidth().padding(vertical = 14.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+    ) {
         Text(
             text = post.title,
             style = MaterialTheme.typography.titleMedium,
