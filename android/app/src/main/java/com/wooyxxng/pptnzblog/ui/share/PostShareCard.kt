@@ -7,10 +7,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -35,29 +36,30 @@ import com.wooyxxng.pptnzblog.ui.theme.PptnzPink
 
 object PostShareCardSpec {
     val cardWidth = 320.dp
-    val cardHeight = 427.dp
+    val cardMinHeight = 427.dp
     val cornerRadius = 28.dp
     val shadowPadding = 24.dp
     val canvasWidth = cardWidth + shadowPadding * 2
-    val canvasHeight = cardHeight + shadowPadding * 2
 }
 
 @Composable
 fun PostShareCard(post: Post) {
     Box(
         modifier = Modifier
-            .size(PostShareCardSpec.canvasWidth, PostShareCardSpec.canvasHeight)
-            .background(Color.Transparent),
+            .width(PostShareCardSpec.canvasWidth)
+            .background(Color.Transparent)
+            .padding(PostShareCardSpec.shadowPadding),
         contentAlignment = Alignment.Center,
     ) {
         Column(
             modifier = Modifier
-                .size(PostShareCardSpec.cardWidth, PostShareCardSpec.cardHeight)
+                .width(PostShareCardSpec.cardWidth)
+                .defaultMinSize(minHeight = PostShareCardSpec.cardMinHeight)
                 .shadow(
-                    elevation = 6.dp,
+                    elevation = 16.dp,
                     shape = RoundedCornerShape(PostShareCardSpec.cornerRadius),
-                    ambientColor = Color.Black.copy(alpha = 0.08f),
-                    spotColor = Color.Black.copy(alpha = 0.08f),
+                    ambientColor = Color.Black.copy(alpha = 0.2f),
+                    spotColor = Color.Black.copy(alpha = 0.3f),
                 )
                 .clip(RoundedCornerShape(PostShareCardSpec.cornerRadius))
                 .background(PptnzBackground)
@@ -89,7 +91,7 @@ fun PostShareCard(post: Post) {
                 modifier = Modifier.padding(top = 12.dp),
             )
 
-            Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.height(20.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
