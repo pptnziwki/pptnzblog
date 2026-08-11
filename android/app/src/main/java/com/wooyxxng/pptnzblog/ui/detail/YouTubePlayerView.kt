@@ -2,7 +2,6 @@ package com.wooyxxng.pptnzblog.ui.detail
 
 import android.annotation.SuppressLint
 import android.graphics.Color
-import android.view.View
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.runtime.Composable
@@ -30,7 +29,6 @@ fun YouTubePlayerView(videoId: String, modifier: Modifier = Modifier) {
                 settings.javaScriptEnabled = true
                 settings.mediaPlaybackRequiresUserGesture = false
                 settings.domStorageEnabled = true
-                setLayerType(View.LAYER_TYPE_SOFTWARE, null)
                 setBackgroundColor(Color.parseColor("#1F1F1F"))
                 webViewClient = WebViewClient()
             }
