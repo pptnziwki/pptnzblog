@@ -3,6 +3,8 @@
 페퍼톤스(PPTNZ) 공식 블로그(peppertones.net) 새 글을
 감지해서 알려주고, iOS/Android 앱 + 위젯으로 모아 볼 수 있게 하는 개인 프로젝트.
 
+![스크린샷](screenshot/Group%201597880462.png)
+
 ## 구성
 
 - **크롤러** (`crawl_pptnz_blog.py`, `.github/workflows/crawl.yml`)
