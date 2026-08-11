@@ -42,9 +42,10 @@ object NotificationHelper {
         )
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            // 상태표시줄 아이콘은 알파 채널만 사용해 실루엣으로 그려지므로, 로고의
-            // foreground 레이어(투명 배경)를 그대로 사용한다.
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            // 상태표시줄 아이콘은 알파 채널만 사용해 실루엣으로 그려진다. adaptive icon의
+            // foreground 레이어는 안전 영역 여백이 넓어 그대로 쓰면 실루엣이 작게 보이므로,
+            // 투명 여백을 잘라내 캔버스를 꽉 채운 전용 알림 아이콘을 사용한다.
+            .setSmallIcon(R.drawable.ic_stat_notify)
             .setContentTitle(post.title)
             .setContentText(post.content)
             .setStyle(NotificationCompat.BigTextStyle().bigText(post.content))
