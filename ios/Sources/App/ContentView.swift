@@ -9,6 +9,8 @@ struct ContentView: View {
     @State private var showsBookmarks = false
     @State private var navigationPath = NavigationPath()
     @State private var collapsedYears: Set<String> = []
+    @State private var notice: Notice?
+    @AppStorage("dismissedNoticeID") private var dismissedNoticeID = ""
     @ObservedObject private var bookmarks = BookmarksStore.shared
     @ObservedObject private var notificationDelegate = NotificationDelegate.shared
 
@@ -34,60 +36,67 @@ struct ContentView: View {
 
     var body: some View {
         NavigationStack(path: $navigationPath) {
-            ScrollViewReader { proxy in
-                Group {
-                    if posts.isEmpty && isLoading {
-                        ProgressView("불러오는 중…")
-                    } else if let loadError, posts.isEmpty {
-                        ContentUnavailableView(
-                            "글을 불러오지 못했어요",
-                            systemImage: "wifi.slash",
-                            description: Text(loadError)
-                        )
-                    } else if filteredPosts.isEmpty {
-                        ContentUnavailableView.search(text: searchText)
-                    } else {
-                        ZStack(alignment: .bottomTrailing) {
-                            List {
-                                Color.clear.frame(height: 0)
-                                    .listRowInsets(EdgeInsets())
-                                    .listRowSeparator(.hidden)
-                                    .id(Self.topAnchor)
-                                ForEach(groupedByYear, id: \.year) { group in
-                                    Section {
-                                        if !collapsedYears.contains(group.year) {
-                                            ForEach(group.posts) { post in
-                                                NavigationLink(value: post) {
-                                                    PostRowView(post: post)
+            VStack(spacing: 0) {
+                if let notice, notice.id != dismissedNoticeID {
+                    NoticeBannerView(message: notice.message) {
+                        withAnimation { dismissedNoticeID = notice.id }
+                    }
+                }
+                ScrollViewReader { proxy in
+                    Group {
+                        if posts.isEmpty && isLoading {
+                            ProgressView("불러오는 중…")
+                        } else if let loadError, posts.isEmpty {
+                            ContentUnavailableView(
+                                "글을 불러오지 못했어요",
+                                systemImage: "wifi.slash",
+                                description: Text(loadError)
+                            )
+                        } else if filteredPosts.isEmpty {
+                            ContentUnavailableView.search(text: searchText)
+                        } else {
+                            ZStack(alignment: .bottomTrailing) {
+                                List {
+                                    Color.clear.frame(height: 0)
+                                        .listRowInsets(EdgeInsets())
+                                        .listRowSeparator(.hidden)
+                                        .id(Self.topAnchor)
+                                    ForEach(groupedByYear, id: \.year) { group in
+                                        Section {
+                                            if !collapsedYears.contains(group.year) {
+                                                ForEach(group.posts) { post in
+                                                    NavigationLink(value: post) {
+                                                        PostRowView(post: post)
+                                                    }
                                                 }
                                             }
-                                        }
-                                    } header: {
-                                        Button {
-                                            withAnimation { toggleYear(group.year) }
-                                        } label: {
-                                            HStack {
-                                                Text(group.year)
-                                                    .foregroundStyle(Color.pptnzPink)
-                                                Spacer()
-                                                Image(systemName: collapsedYears.contains(group.year) ? "chevron.right" : "chevron.down")
-                                                    .foregroundStyle(Color.pptnzPink)
+                                        } header: {
+                                            Button {
+                                                withAnimation { toggleYear(group.year) }
+                                            } label: {
+                                                HStack {
+                                                    Text(group.year)
+                                                        .foregroundStyle(Color.pptnzPink)
+                                                    Spacer()
+                                                    Image(systemName: collapsedYears.contains(group.year) ? "chevron.right" : "chevron.down")
+                                                        .foregroundStyle(Color.pptnzPink)
+                                                }
                                             }
+                                            .buttonStyle(.plain)
                                         }
-                                        .buttonStyle(.plain)
                                     }
+                                    Color.clear.frame(height: 0)
+                                        .listRowInsets(EdgeInsets())
+                                        .listRowSeparator(.hidden)
+                                        .id(Self.bottomAnchor)
                                 }
-                                Color.clear.frame(height: 0)
-                                    .listRowInsets(EdgeInsets())
-                                    .listRowSeparator(.hidden)
-                                    .id(Self.bottomAnchor)
-                            }
-                            .listStyle(.plain)
-                            .scrollContentBackground(.hidden)
-                            .background(Color.pptnzBackground)
-                            .contentMargins(.top, 0, for: .scrollContent)
+                                .listStyle(.plain)
+                                .scrollContentBackground(.hidden)
+                                .background(Color.pptnzBackground)
+                                .contentMargins(.top, 0, for: .scrollContent)
 
-                            scrollButtons(proxy: proxy)
+                                scrollButtons(proxy: proxy)
+                            }
                         }
                     }
                 }
@@ -130,7 +139,11 @@ struct ContentView: View {
                 BookmarksView(posts: bookmarkedPosts)
             }
             .refreshable { await load() }
-            .task { await load() }
+            .task {
+                async let noticeTask = NoticeRepository.loadNotice()
+                await load()
+                notice = await noticeTask
+            }
             .onChange(of: notificationDelegate.pendingPostID) { _, newValue in
                 handleNotificationTap(newValue)
             }
