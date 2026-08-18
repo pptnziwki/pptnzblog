@@ -42,7 +42,7 @@ def make_description(content: str) -> str:
 
 def render_page(post: dict) -> str:
     post_id = post["id"]
-    title = post.get("title") or "페퍼톤스 블로그"
+    title = post.get("title") or "-"
     content = post.get("content") or ""
     link = post["link"]
     thumbnail = post.get("thumbnail") or FALLBACK_IMAGE_URL
