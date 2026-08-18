@@ -53,7 +53,7 @@ struct ShareTextPickerView: View {
                     Button("취소") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("카드 생성") { confirm() }
+                    Button("공유") { confirm() }
                         .disabled(selectedRange == nil)
                 }
             }

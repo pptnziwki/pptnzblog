@@ -63,7 +63,7 @@ struct PostDetailView: View {
                     Button {
                         startInstagramShare()
                     } label: {
-                        Label("인스타그램 스토리로 공유", systemImage: "camera.viewfinder")
+                        Label("구간 선택", systemImage: "camera.viewfinder")
                     }
                     Button {
                         shareLink()
