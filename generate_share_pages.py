@@ -5,6 +5,11 @@ posts.json을 읽어서 GitHub Pages(docs/)에 올릴 글별 공유 페이지를
 각 페이지(docs/s/{id}.html)는:
 - OG 메타 태그(og:title/og:description/og:image/og:url)를 담고 있어
   카카오톡/메시지 등에서 링크를 공유하면 썸네일 미리보기가 뜬다.
+- 썸네일 이미지는 원본 블로그에 직접 링크하지 않고 docs/assets/thumbs/에
+  내려받아 우리 GitHub Pages 도메인에서 서빙한다. 원본 블로그 robots.txt가
+  `Disallow: /blog/`로 걸려 있어서 Twitterbot 등 robots.txt를 지키는
+  크롤러는 원본 이미지를 아예 가져오지 못해 트위터 카드에 썸네일이
+  안 뜨는 문제가 있었다(카카오톡 등은 robots.txt를 안 지켜서 멀쩡했음).
 - 로드 즉시 커스텀 URL 스킴(pptnzblog://post/{id})으로 앱 실행을 시도하고,
   일정 시간 뒤에도 여전히 브라우저에 남아있으면(=앱이 없으면) 원문 블로그
   페이지로 리다이렉트한다.
@@ -21,10 +26,14 @@ import html
 import json
 import re
 from pathlib import Path
+from urllib.parse import urlparse
+
+import requests
 
 POSTS_FILE = Path("posts.json")
 DOCS_DIR = Path("docs")
 SHARE_DIR = DOCS_DIR / "s"
+THUMBS_DIR = DOCS_DIR / "assets" / "thumbs"
 
 # GitHub Pages 활성화 후 실제 호스트명으로 맞춰야 한다.
 PAGES_BASE_URL = "https://pptnziwki.github.io/pptnzblog"
@@ -34,6 +43,32 @@ FALLBACK_IMAGE_URL = f"{PAGES_BASE_URL}/assets/og-fallback.png"
 APP_SCHEME_TEMPLATE = "pptnzblog://post/{id}"
 
 DESCRIPTION_MAX_LEN = 150
+
+
+USER_AGENT = "PPTNZFanWidget/1.0 (contact: wooyxxng@gmail.com)"
+
+
+def mirror_thumbnail(post_id: str, url: str) -> str | None:
+    """원본 썸네일 이미지를 docs/assets/thumbs/에 내려받고 우리 도메인 URL을 반환한다.
+
+    이미 내려받은 적 있으면(파일 존재) 다시 받지 않는다. 실패하면 None을
+    반환해 호출부에서 기본 이미지로 대체하게 한다.
+    """
+    ext = Path(urlparse(url).path).suffix or ".jpg"
+    filename = f"{post_id}{ext}"
+    out_path = THUMBS_DIR / filename
+    if out_path.exists():
+        return f"{PAGES_BASE_URL}/assets/thumbs/{filename}"
+
+    try:
+        resp = requests.get(url, headers={"User-Agent": USER_AGENT}, timeout=15)
+        resp.raise_for_status()
+    except requests.RequestException:
+        return None
+
+    THUMBS_DIR.mkdir(parents=True, exist_ok=True)
+    out_path.write_bytes(resp.content)
+    return f"{PAGES_BASE_URL}/assets/thumbs/{filename}"
 
 
 def make_description(content: str) -> str:
@@ -49,11 +84,12 @@ def render_page(post: dict) -> str:
     title = post.get("title") or "-"
     content = post.get("content") or ""
     link = post["link"]
-    thumbnail = post.get("thumbnail") or FALLBACK_IMAGE_URL
-    # 트위터(X) 카드는 og:image/twitter:image가 https가 아니면 조용히 무시한다.
-    # 원본 블로그가 http만 지원하는 줄 알았지만 https로도 동일하게 응답하길래 스킴만 바꿔준다.
-    if thumbnail.startswith("http://"):
-        thumbnail = "https://" + thumbnail[len("http://") :]
+    original_thumbnail = post.get("thumbnail")
+    thumbnail = None
+    if original_thumbnail:
+        thumbnail = mirror_thumbnail(post_id, original_thumbnail)
+    if not thumbnail:
+        thumbnail = FALLBACK_IMAGE_URL
 
     page_url = f"{PAGES_BASE_URL}/s/{post_id}.html"
     app_url = APP_SCHEME_TEMPLATE.format(id=post_id)
