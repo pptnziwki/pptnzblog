@@ -23,7 +23,7 @@ DOCS_DIR = Path("docs")
 SHARE_DIR = DOCS_DIR / "s"
 
 # GitHub Pages 활성화 후 실제 호스트명으로 맞춰야 한다.
-PAGES_BASE_URL = "https://pptnzblog.github.io/pptnzblog"
+PAGES_BASE_URL = "https://pptnziwki.github.io/pptnzblog"
 FALLBACK_IMAGE_URL = f"{PAGES_BASE_URL}/assets/og-fallback.png"
 
 # 앱이 처리하는 커스텀 URL 스킴 (PPTNZBlogApp.swift의 .onOpenURL과 짝을 이룬다)
