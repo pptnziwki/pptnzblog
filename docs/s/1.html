@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>pptnz blog</title>
+<meta property="og:title" content="pptnz blog" />
+<meta property="og:description" content="페퍼톤스 블로그를 열었습니다. 숨어지내는 저희들과 공감할 수 있는 창구가 되었으면 좋겠습니다.2008년 3월 뮤직비디오 촬영중@김포공항 담장 옆(아무것도 못하고 금새 쫓겨났음)" />
+<meta property="og:image" content="https://wooyxxng-jang.github.io/pptnzblog/assets/og-fallback.png" />
+<meta property="og:url" content="https://wooyxxng-jang.github.io/pptnzblog/s/1.html" />
+<meta property="og:type" content="article" />
+<meta name="twitter:card" content="summary_large_image" />
+</head>
+<body>
+<p>pptnz blog</p>
+<p>2009/04/18 01:47</p>
+<p>페퍼톤스 블로그를 열었습니다. 숨어지내는 저희들과 공감할 수 있는 창구가 되었으면 좋겠습니다.2008년 3월 뮤직비디오 촬영중@김포공항 담장 옆(아무것도 못하고 금새 쫓겨났음)</p>
+<p><a href="http://peppertones.host.whoisweb.net/blog/1">원문으로 이동</a></p>
+<script>
+(function () {
+  var appUrl = "pptnzblog://post/1";
+  var fallbackUrl = "http://peppertones.host.whoisweb.net/blog/1";
+  var redirected = false;
+
+  function goFallback() {
+    if (redirected || document.hidden) return;
+    redirected = true;
+    window.location.href = fallbackUrl;
+  }
+
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) redirected = true;
+  });
+
+  window.location.href = appUrl;
+  setTimeout(goFallback, 1200);
+})();
+</script>
+</body>
+</html>

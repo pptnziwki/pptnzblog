@@ -4,6 +4,10 @@ import SwiftUI
 /// 실제 화면에는 그려지지 않고, `ImageRenderer`로 오프스크린 렌더링해 이미지로만 사용한다.
 struct PostShareCard: View {
     let post: Post
+    /// 카드에 실제로 표시할 본문. 문단을 골라 공유하는 경우 post.content 대신 이 값을 쓴다.
+    var displayText: String? = nil
+
+    private var bodyText: String { displayText ?? post.content }
 
     /// 실제로 눈에 보이는 카드 영역(3:4 비율).
     static let cardSize = CGSize(width: 320, height: 427)
@@ -32,7 +36,7 @@ struct PostShareCard: View {
                     .foregroundStyle(Color.pptnzPink)
                     .lineLimit(3)
 
-                Text(post.content)
+                Text(bodyText)
                     .font(.system(size: 14))
                     .foregroundStyle(Color.pptnzInk)
                     .lineLimit(14)
@@ -62,8 +66,8 @@ struct PostShareCard: View {
 @MainActor
 enum PostShareCardRenderer {
     /// SwiftUI 카드를 고해상도 PNG `UIImage`로 렌더링한다. 카드 밖 배경은 투명 처리된다.
-    static func render(post: Post) -> UIImage? {
-        let renderer = ImageRenderer(content: PostShareCard(post: post))
+    static func render(post: Post, displayText: String? = nil) -> UIImage? {
+        let renderer = ImageRenderer(content: PostShareCard(post: post, displayText: displayText))
         renderer.scale = 3
         renderer.isOpaque = false
         return renderer.uiImage

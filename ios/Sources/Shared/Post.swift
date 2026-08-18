@@ -8,18 +8,21 @@ struct Post: Identifiable, Codable, Hashable {
     let link: String
     let date: String
     let content: String
+    /// 본문 첫 이미지 URL. 없는 글도 많아서 optional.
+    let thumbnail: String?
 
     private enum CodingKeys: String, CodingKey {
-        case id, title, link, date, content
+        case id, title, link, date, content, thumbnail
     }
 
     /// 제목이 없는 글은 항상 "-"로 표시하기 위해, 생성/디코딩 시점에 한 번만 정규화한다.
-    init(id: String, title: String, link: String, date: String, content: String) {
+    init(id: String, title: String, link: String, date: String, content: String, thumbnail: String? = nil) {
         self.id = id
         self.title = title.isEmpty ? "-" : title
         self.link = link
         self.date = date
         self.content = content
+        self.thumbnail = thumbnail
     }
 
     init(from decoder: Decoder) throws {
@@ -30,7 +33,8 @@ struct Post: Identifiable, Codable, Hashable {
             title: rawTitle,
             link: try container.decode(String.self, forKey: .link),
             date: try container.decode(String.self, forKey: .date),
-            content: try container.decode(String.self, forKey: .content)
+            content: try container.decode(String.self, forKey: .content),
+            thumbnail: try container.decodeIfPresent(String.self, forKey: .thumbnail)
         )
     }
 

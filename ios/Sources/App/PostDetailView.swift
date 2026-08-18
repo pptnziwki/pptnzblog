@@ -8,6 +8,7 @@ struct PostDetailView: View {
     @State private var loadFailed = false
     @State private var showsAllComments = false
     @State private var shareItems: [Any]?
+    @State private var showsTextPicker = false
     @ObservedObject private var bookmarks = BookmarksStore.shared
 
     var body: some View {
@@ -58,13 +59,21 @@ struct PostDetailView: View {
                 .buttonStyle(.plain)
             }
             ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    share()
+                Menu {
+                    Button {
+                        startInstagramShare()
+                    } label: {
+                        Label("인스타그램 스토리로 공유", systemImage: "camera.viewfinder")
+                    }
+                    Button {
+                        shareLink()
+                    } label: {
+                        Label("링크 공유", systemImage: "link")
+                    }
                 } label: {
                     Image(systemName: "square.and.arrow.up")
                         .foregroundStyle(Color.pptnzCoral)
                 }
-                .buttonStyle(.plain)
             }
         }
         .task { await load() }
@@ -76,12 +85,30 @@ struct PostDetailView: View {
                 ShareSheet(items: shareItems)
             }
         }
+        .sheet(isPresented: $showsTextPicker) {
+            ShareTextPickerView(
+                paragraphs: ShareParagraphExtractor.paragraphs(from: detail?.blocks ?? [])
+            ) { selectedText in
+                shareToInstagramStory(displayText: selectedText)
+            }
+        }
+    }
+
+    /// 인스타그램 스토리 공유 흐름을 시작한다. 원문 파싱에 성공해 문단이 있으면
+    /// 구간 선택 시트를 먼저 띄우고, 실패/로딩 중이면 post.content 그대로 카드에 담는다.
+    private func startInstagramShare() {
+        let paragraphs = ShareParagraphExtractor.paragraphs(from: detail?.blocks ?? [])
+        guard !paragraphs.isEmpty else {
+            shareToInstagramStory(displayText: nil)
+            return
+        }
+        showsTextPicker = true
     }
 
     /// 3:4 카드를 렌더링해 인스타그램 스토리로 바로 공유하고,
     /// 인스타그램이 없으면 카드 이미지 + 글 링크로 일반 공유 시트를 띄운다.
-    private func share() {
-        guard let image = PostShareCardRenderer.render(post: post) else { return }
+    private func shareToInstagramStory(displayText: String?) {
+        guard let image = PostShareCardRenderer.render(post: post, displayText: displayText) else { return }
         if InstagramStorySharer.share(image: image) { return }
 
         var items: [Any] = [image]
@@ -89,6 +116,14 @@ struct PostDetailView: View {
             items.append(url)
         }
         shareItems = items
+    }
+
+    /// 글 상세로 딥링크되는 공유 페이지 URL을 표준 공유 시트로 공유한다.
+    /// 카카오톡/메시지 등에서는 OG 태그로 썸네일/제목/본문 미리보기가 뜨고,
+    /// 앱이 설치된 기기에서 열면 해당 글로, 없으면 원문 블로그로 이동한다.
+    private func shareLink() {
+        guard let url = SharePagesConfig.url(for: post.id) else { return }
+        shareItems = [url]
     }
 
     @ViewBuilder

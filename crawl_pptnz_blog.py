@@ -81,6 +81,12 @@ def parse_entries(soup: BeautifulSoup) -> list[dict]:
         content_el = entry.select_one("div.article")
         content = extract_content(content_el)
 
+        thumbnail = None
+        if content_el is not None:
+            img = content_el.find("img")
+            if img and img.get("src"):
+                thumbnail = urljoin(BASE_URL + "/", img["src"])
+
         raw_title = title_link.get_text(strip=True)
         # 제목 없는 글이 많음("-"). 원본 블로그처럼 그런 글은 제목을 비워둔다.
         display_title = raw_title if raw_title and raw_title != "-" else ""
@@ -92,6 +98,7 @@ def parse_entries(soup: BeautifulSoup) -> list[dict]:
                 "link": urljoin(BASE_URL + "/", post_id),
                 "date": date_text,
                 "content": content,
+                "thumbnail": thumbnail,
             }
         )
     return posts
