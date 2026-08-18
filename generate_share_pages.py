@@ -8,6 +8,10 @@ posts.json을 읽어서 GitHub Pages(docs/)에 올릴 글별 공유 페이지를
 - 로드 즉시 커스텀 URL 스킴(pptnzblog://post/{id})으로 앱 실행을 시도하고,
   일정 시간 뒤에도 여전히 브라우저에 남아있으면(=앱이 없으면) 원문 블로그
   페이지로 리다이렉트한다.
+- 트위터(X) 등 인앱 브라우저는 보안상 자동 스킴 리다이렉트를 막아버려서
+  자동 시도가 조용히 실패한다. 이를 우회하기 위해 "앱에서 보기" 링크를
+  본문에 노출해 사용자가 직접 탭하면(=명시적 사용자 제스처) 인앱
+  브라우저에서도 커스텀 스킴 네비게이션이 대체로 허용된다.
 
 이미 존재하는 페이지는 다시 만들지 않는다(매 크롤링마다 git diff가 커지는 것 방지).
 GitHub Actions에서 크롤링 직후에 실행하는 걸 전제로 만들었다.
@@ -74,6 +78,7 @@ def render_page(post: dict) -> str:
 <p>{esc_title}</p>
 <p>{html.escape(post.get("date", ""))}</p>
 <p>{esc_description}</p>
+<p><a href="{html.escape(app_url)}">앱에서 보기</a></p>
 <p><a href="{html.escape(link)}">원문으로 이동</a></p>
 <script>
 (function () {{
