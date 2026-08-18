@@ -66,6 +66,9 @@ def render_page(post: dict) -> str:
 <meta property="og:url" content="{html.escape(page_url)}" />
 <meta property="og:type" content="article" />
 <meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="{esc_title}" />
+<meta name="twitter:description" content="{esc_description}" />
+<meta name="twitter:image" content="{html.escape(thumbnail)}" />
 </head>
 <body>
 <p>{esc_title}</p>
