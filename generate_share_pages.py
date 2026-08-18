@@ -50,6 +50,10 @@ def render_page(post: dict) -> str:
     content = post.get("content") or ""
     link = post["link"]
     thumbnail = post.get("thumbnail") or FALLBACK_IMAGE_URL
+    # 트위터(X) 카드는 og:image/twitter:image가 https가 아니면 조용히 무시한다.
+    # 원본 블로그가 http만 지원하는 줄 알았지만 https로도 동일하게 응답하길래 스킴만 바꿔준다.
+    if thumbnail.startswith("http://"):
+        thumbnail = "https://" + thumbnail[len("http://") :]
 
     page_url = f"{PAGES_BASE_URL}/s/{post_id}.html"
     app_url = APP_SCHEME_TEMPLATE.format(id=post_id)
