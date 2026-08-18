@@ -4,7 +4,7 @@ import Foundation
 /// 공유 페이지는 카카오톡/메시지 등에서 열어볼 미리보기(OG 태그)를 담당하고,
 /// 앱이 설치돼 있으면 pptnzblog://post/{id} 스킴으로, 없으면 원문으로 리다이렉트한다.
 enum SharePagesConfig {
-    static let baseURL = "https://wooyxxng-jang.github.io/pptnzblog"
+    static let baseURL = "https://pptnzblog.github.io/pptnzblog"
 
     static func url(for postID: String) -> URL? {
         URL(string: "\(baseURL)/s/\(postID).html")
