@@ -183,6 +183,12 @@ struct NewsView: View {
         .scrollContentBackground(.hidden)
         .background(Color.pptnzBackground)
         .contentMargins(.top, 0, for: .scrollContent)
+        // 필터 바와 (상단에 고정되는) 연도 헤더 사이의 틈으로 행이 비쳐 보이지 않게 배경색으로 덮는다.
+        .overlay(alignment: .top) {
+            Color.pptnzBackground
+                .frame(height: 20)
+                .allowsHitTesting(false)
+        }
     }
 
     private func toggleYear(_ year: Int) {
