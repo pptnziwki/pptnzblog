@@ -8,32 +8,18 @@ enum HomeSection: String, CaseIterable, Identifiable {
     var id: String { rawValue }
 }
 
+/// iOS 기본 세그먼트 컨트롤. 별도 색을 입히지 않고 시스템 스타일을 그대로 쓴다.
 struct SectionToggleView: View {
     @Binding var selection: HomeSection
 
     var body: some View {
-        HStack(spacing: 2) {
+        Picker("섹션", selection: $selection) {
             ForEach(HomeSection.allCases) { section in
-                Button {
-                    withAnimation(.easeInOut(duration: 0.2)) { selection = section }
-                } label: {
-                    Text(section.rawValue)
-                        .font(.system(.title3, design: .default, weight: .heavy))
-                        .foregroundStyle(selection == section ? Color.pptnzYellow : Color.pptnzCoral.opacity(0.55))
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 4)
-                        .background {
-                            if selection == section {
-                                Capsule().fill(Color.pptnzCoral)
-                            }
-                        }
-                }
-                .buttonStyle(.plain)
-                .accessibilityAddTraits(selection == section ? .isSelected : [])
+                Text(section.rawValue).tag(section)
             }
         }
-        .padding(2)
-        .background(Capsule().fill(Color.pptnzCoral.opacity(0.12)))
+        .pickerStyle(.segmented)
+        .frame(width: 160)
     }
 }
 

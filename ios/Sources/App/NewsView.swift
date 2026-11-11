@@ -186,19 +186,19 @@ struct NewsRowView: View {
         VStack(alignment: .leading, spacing: 6) {
             HStack(spacing: 8) {
                 Text(item.tag.uppercased())
-                    .font(.caption2.weight(.heavy))
-                    .foregroundStyle(tagColor)
-                    .padding(.horizontal, 8)
+                    .font(.caption2.weight(.semibold))
+                    .foregroundStyle(.secondary)
+                    .padding(.horizontal, 7)
                     .padding(.vertical, 2)
-                    .background(Capsule().fill(tagColor.opacity(0.15)))
+                    .background(Capsule().fill(Color.secondary.opacity(0.15)))
                 Text(item.date)
                     .font(.caption)
-                    .foregroundStyle(Color.pptnzTeal)
+                    .foregroundStyle(.secondary)
                 Spacer(minLength: 0)
                 if item.linkURL != nil {
-                    Image(systemName: "arrow.up.right.square")
+                    Image(systemName: "link")
                         .font(.footnote)
-                        .foregroundStyle(Color.pptnzCoral)
+                        .foregroundStyle(.secondary)
                 }
             }
             Text(item.content)
@@ -208,16 +208,6 @@ struct NewsRowView: View {
         }
         .padding(.vertical, 4)
         .contentShape(Rectangle())
-    }
-
-    private var tagColor: Color {
-        switch item.tag {
-        case "live": return .pptnzCoral
-        case "release": return .pptnzTeal
-        case "tv", "radio", "movie": return Color(red: 0.55, green: 0.5, blue: 0.85)
-        case "work", "work & live": return Color(red: 0.85, green: 0.62, blue: 0.2)
-        default: return .secondary
-        }
     }
 }
 
