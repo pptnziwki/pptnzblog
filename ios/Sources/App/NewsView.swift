@@ -34,7 +34,7 @@ struct NewsView: View {
     @State private var isLoading = false
     @State private var loadError: String?
     @State private var expandedYears: Set<Int> = []
-    @State private var didSetInitialExpansion = false
+    @State private var didSetInitialExpansion = false  // 처음 한 번만 전체 펼침 상태로 시작
     @State private var filter: NewsFilter = .all
     @Environment(\.openURL) private var openURL
 
@@ -86,6 +86,16 @@ struct NewsView: View {
         .padding(.horizontal, 12)
         .padding(.vertical, 8)
         .frame(maxWidth: .infinity, alignment: .leading)
+        // 목록이 필터 뒤로 스크롤될 때 글자가 겹쳐 보이지 않도록 배경색을 깔고 아래쪽으로 옅어지게 한다.
+        .background(alignment: .top) {
+            LinearGradient(
+                colors: [Color.pptnzBackground, Color.pptnzBackground, Color.pptnzBackground.opacity(0)],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .padding(.bottom, -14)
+            .allowsHitTesting(false)
+        }
     }
 
     private var chipRow: some View {
@@ -165,6 +175,8 @@ struct NewsView: View {
                                 .foregroundStyle(Color.pptnzPink)
                         }
                         .contentShape(Rectangle())
+                        // 스크롤하면 헤더가 상단에 붙는데, 배경이 없으면 아래 행과 글자가 겹쳐 보인다.
+                        .background(Color.pptnzBackground)
                     }
                     .buttonStyle(.plain)
                 }
@@ -230,9 +242,9 @@ struct NewsView: View {
         }
         guard !items.isEmpty else { return }
 
-        // 처음 열었을 때는 최신 연도만 펼쳐둔다. (소식이 수백 건이라 전부 펼치면 너무 길다)
-        if !didSetInitialExpansion, let latestYear = items.map(\.year).max() {
-            expandedYears = [latestYear]
+        // 처음 열었을 때는 모든 연도를 펼쳐둔다. (블로그와 같은 기본 상태)
+        if !didSetInitialExpansion {
+            expandedYears = Set(items.map(\.year))
             didSetInitialExpansion = true
         }
         // 사용자가 NEWS 탭에서 본 소식은 이후 백그라운드 새로고침이 "새 소식"으로 알리지 않게 기록한다.

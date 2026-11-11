@@ -9,7 +9,7 @@ enum HomeSection: String, CaseIterable, Identifiable {
     var id: String { rawValue }
 }
 
-/// iOS 기본 세그먼트 컨트롤 그대로, 글자만 크게·볼드·하늘색(#ACD9E9)으로 바꾼 토글.
+/// iOS 기본 세그먼트 컨트롤 그대로, 글자만 크게·볼드·하늘색(#92C9DE)으로 바꾼 토글.
 /// 배경/틴트는 건드리지 않아서 시스템 스타일(iOS 26에서는 유리)을 그대로 따른다.
 struct SectionToggleView: View {
     @Binding var selection: HomeSection
@@ -18,7 +18,7 @@ struct SectionToggleView: View {
         _selection = selection
         let attributes: [NSAttributedString.Key: Any] = [
             .font: UIFont.systemFont(ofSize: 18, weight: .bold),
-            .foregroundColor: UIColor(Color.pptnzSky),
+            .foregroundColor: UIColor(Color.pptnzSkyText),
         ]
         let appearance = UISegmentedControl.appearance()
         appearance.setTitleTextAttributes(attributes, for: .normal)
