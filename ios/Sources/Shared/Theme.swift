@@ -15,8 +15,6 @@ extension Color {
     static let pptnzPink = Color(red: 246.0 / 255.0, green: 187.0 / 255.0, blue: 183.0 / 255.0)
     /// 헤더 "BLOG" 로고 텍스트용 크림 옐로우
     static let pptnzYellow = Color(red: 240.0 / 255.0, green: 239.0 / 255.0, blue: 163.0 / 255.0)
-    /// 헤더 BLOG/NEWS 토글 배경용 하늘색 (#ACD9E9)
+    /// 헤더 BLOG/NEWS 토글 글자 등에 쓰는 하늘색 (#ACD9E9)
     static let pptnzSky = Color(red: 172.0 / 255.0, green: 217.0 / 255.0, blue: 233.0 / 255.0)
-    /// 하늘색 계열이면서 크림 배경 위에서 읽히도록 진하게 만든 글자색 (#3F8FB0)
-    static let pptnzSkyDeep = Color(red: 63.0 / 255.0, green: 143.0 / 255.0, blue: 176.0 / 255.0)
 }
