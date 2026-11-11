@@ -166,10 +166,22 @@ struct NewsView: View {
                             Image(systemName: forcesExpansion || expandedYears.contains(group.year) ? "chevron.down" : "chevron.right")
                                 .foregroundStyle(Color.pptnzPink)
                         }
-                        .padding(.vertical, 6)
+                        .padding(.top, 6)
+                        .padding(.bottom, 16)
                         .contentShape(Rectangle())
                         // 스크롤하면 헤더가 상단에 붙는데, 배경이 없으면 아래 행과 글자가 겹쳐 보인다.
-                        .background(Color.pptnzBackground)
+                        // 블로그처럼 위는 배경색, 아래로 갈수록 옅어지는 그라디언트를 깐다.
+                        .background {
+                            LinearGradient(
+                                stops: [
+                                    .init(color: Color.pptnzBackground, location: 0),
+                                    .init(color: Color.pptnzBackground, location: 0.55),
+                                    .init(color: Color.pptnzBackground.opacity(0), location: 1),
+                                ],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
+                        }
                     }
                     .buttonStyle(.plain)
                 }
