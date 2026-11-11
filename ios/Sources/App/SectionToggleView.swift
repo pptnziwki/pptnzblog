@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 /// 앱 상단 헤더에서 BLOG / NEWS를 오가는 토글.
 enum HomeSection: String, CaseIterable, Identifiable {
@@ -8,50 +9,30 @@ enum HomeSection: String, CaseIterable, Identifiable {
     var id: String { rawValue }
 }
 
-/// 헤더 BLOG / NEWS 토글. 글자색은 하늘색(#ACD9E9), 배경은 유리(Liquid Glass) 느낌.
-/// 하늘색 글자가 읽히도록 유리에 어두운 틴트를 살짝 입히고,
-/// 선택된 탭은 그 위에 밝은 반투명 알약을 올린다. (iOS 26 미만은 시스템 머티리얼로 대체)
+/// iOS 기본 세그먼트 컨트롤 그대로, 글자만 크게·볼드·하늘색(#ACD9E9)으로 바꾼 토글.
+/// 배경/틴트는 건드리지 않아서 시스템 스타일(iOS 26에서는 유리)을 그대로 따른다.
 struct SectionToggleView: View {
     @Binding var selection: HomeSection
-    @Namespace private var pill
+
+    init(selection: Binding<HomeSection>) {
+        _selection = selection
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.systemFont(ofSize: 18, weight: .bold),
+            .foregroundColor: UIColor(Color.pptnzSky),
+        ]
+        let appearance = UISegmentedControl.appearance()
+        appearance.setTitleTextAttributes(attributes, for: .normal)
+        appearance.setTitleTextAttributes(attributes, for: .selected)
+    }
 
     var body: some View {
-        HStack(spacing: 0) {
+        Picker("섹션", selection: $selection) {
             ForEach(HomeSection.allCases) { section in
-                Button {
-                    withAnimation(.snappy(duration: 0.2)) { selection = section }
-                } label: {
-                    Text(section.rawValue)
-                        .font(.system(size: 18, weight: .bold))
-                        .foregroundStyle(Color.pptnzSky.opacity(selection == section ? 1 : 0.65))
-                        .frame(width: 84, height: 34)
-                        .background {
-                            if selection == section {
-                                Capsule()
-                                    .fill(Color.white.opacity(0.22))
-                                    .matchedGeometryEffect(id: "pill", in: pill)
-                            }
-                        }
-                        .contentShape(Capsule())
-                }
-                .buttonStyle(.plain)
-                .accessibilityAddTraits(selection == section ? .isSelected : [])
+                Text(section.rawValue).tag(section)
             }
         }
-        .padding(3)
-        .modifier(GlassCapsule())
-    }
-}
-
-private struct GlassCapsule: ViewModifier {
-    func body(content: Content) -> some View {
-        if #available(iOS 26.0, *) {
-            content.glassEffect(.regular.tint(Color.pptnzInk.opacity(0.55)), in: Capsule())
-        } else {
-            content
-                .background(Capsule().fill(Color.pptnzInk.opacity(0.55)))
-                .background(.ultraThinMaterial, in: Capsule())
-        }
+        .pickerStyle(.segmented)
+        .frame(width: 200)
     }
 }
 
