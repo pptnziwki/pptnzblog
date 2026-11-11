@@ -9,9 +9,7 @@ struct ContentView: View {
     @State private var showsBookmarks = false
     @State private var navigationPath = NavigationPath()
     @State private var collapsedYears: Set<String> = []
-    @State private var notice: Notice?
     @State private var section: HomeSection = .blog
-    @AppStorage("dismissedNoticeID") private var dismissedNoticeID = ""
     @ObservedObject private var bookmarks = BookmarksStore.shared
     @ObservedObject private var notificationDelegate = NotificationDelegate.shared
 
@@ -37,11 +35,6 @@ struct ContentView: View {
 
     private var blogContent: some View {
         VStack(spacing: 0) {
-            if let notice, notice.id != dismissedNoticeID {
-                NoticeBannerView(message: notice.message) {
-                    withAnimation { dismissedNoticeID = notice.id }
-                }
-            }
             ScrollViewReader { proxy in
                 Group {
                     if posts.isEmpty && isLoading {
@@ -150,11 +143,7 @@ struct ContentView: View {
                 BookmarksView(posts: bookmarkedPosts)
             }
             .refreshable { await load() }
-            .task {
-                async let noticeTask = NoticeRepository.loadNotice()
-                await load()
-                notice = await noticeTask
-            }
+            .task { await load() }
             .onChange(of: notificationDelegate.pendingPostID) { _, newValue in
                 handleNotificationTap(newValue)
             }
