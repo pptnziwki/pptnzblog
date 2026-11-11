@@ -11,6 +11,7 @@ news.json 은 앱이 raw.githubusercontent.com 으로 그대로 읽어간다.
 비교해서 로컬 알림으로 처리한다(블로그 새 글 알림과 동일한 방식).
 """
 
+import datetime
 import hashlib
 import json
 import re
@@ -199,6 +200,58 @@ def _split_manual(item: dict) -> list[dict] | None:
     ]
 
 
+def _parse_day(text: str, year: int, month: int | None) -> tuple[int, int, int] | None:
+    """'2026/4/17' / '4/17' / '17' 형태를 (연, 월, 일)로. 월/연이 생략되면 직전 값을 이어받는다."""
+    parts = [int(p) for p in text.strip().split("/")]
+    if len(parts) == 3:
+        return parts[0], parts[1], parts[2]
+    if len(parts) == 2:
+        return year, parts[0], parts[1]
+    if len(parts) == 1 and month is not None:
+        return year, month, parts[0]
+    return None
+
+
+def expand_days(item: dict) -> list[dict]:
+    """live 항목의 날짜 범위('2026/4/17-19,24-26', '2017/9/2~3' 등)를 하루 단위 항목으로 쪼갠다.
+    하루짜리이거나 형식을 해석할 수 없는 날짜('2020/8' 등)는 그대로 둔다."""
+    if "live" not in [t.strip() for t in item["tag"].split("&")]:
+        return [item]
+    date = item["date"].strip()
+    if not re.fullmatch(r"[\d/,\s~-]+", date) or not re.search(r"[~,-]", date):
+        return [item]
+
+    days: list[datetime.date] = []
+    year, month = item["year"], None
+    for token in date.split(","):
+        token = token.strip()
+        if not token:
+            continue
+        # '-' 또는 '~'로 시작/끝 날짜를 나눈다. (끝 날짜는 월이 생략될 수 있다: '17-19', '6/21-7/01')
+        bounds = re.split(r"\s*[-~]\s*", token)
+        if len(bounds) > 2:
+            return [item]
+        start = _parse_day(bounds[0], year, month)
+        if start is None:
+            return [item]
+        year, month = start[0], start[1]
+        end = _parse_day(bounds[1], year, month) if len(bounds) == 2 else start
+        if end is None:
+            return [item]
+        try:
+            first = datetime.date(*start)
+            last = datetime.date(*end)
+        except ValueError:
+            return [item]
+        if last < first or (last - first).days > 31:
+            return [item]
+        days.extend(first + datetime.timedelta(n) for n in range((last - first).days + 1))
+
+    if len(days) <= 1:
+        return [item]
+    return [_derive(item, f"{d.year}/{d.month}/{d.day}", item["content"]) for d in days]
+
+
 def split_tour(item: dict) -> list[dict]:
     if item["tag"] != "live":
         return [item]
@@ -207,6 +260,11 @@ def split_tour(item: dict) -> list[dict]:
         if parts:
             return parts
     return [item]
+
+
+def split_items(item: dict) -> list[dict]:
+    """투어 분리 후, live 항목은 다시 하루 단위로 분리한다."""
+    return [day for part in split_tour(item) for day in expand_days(part)]
 
 
 def make_id(item: dict) -> str:
@@ -224,7 +282,7 @@ def parse_news(html: str) -> list[dict]:
         parsed = parse_chunk(chunk)
         if parsed is None:
             continue
-        for item in split_tour(parsed):
+        for item in split_items(parsed):
             base_id = make_id(item)
             # 완전히 같은 항목이 두 번 나오는 경우를 위한 접미사
             count = seen.get(base_id, 0)

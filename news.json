@@ -16,9 +16,25 @@
     "link": null
   },
   {
-    "id": "e4801f94e6dc",
+    "id": "301247df622d",
     "tag": "live",
-    "date": "2026/12/11-13",
+    "date": "2026/12/11",
+    "year": 2026,
+    "content": "concert 'overdrive'",
+    "link": "https://nol.yanolja.com/ticket/products/26015370"
+  },
+  {
+    "id": "29eab1c20411",
+    "tag": "live",
+    "date": "2026/12/12",
+    "year": 2026,
+    "content": "concert 'overdrive'",
+    "link": "https://nol.yanolja.com/ticket/products/26015370"
+  },
+  {
+    "id": "5c27beda8773",
+    "tag": "live",
+    "date": "2026/12/13",
     "year": 2026,
     "content": "concert 'overdrive'",
     "link": "https://nol.yanolja.com/ticket/products/26015370"
@@ -88,17 +104,33 @@
     "link": null
   },
   {
-    "id": "c6ff40b87116",
+    "id": "b600f03faaf1",
     "tag": "live",
-    "date": "2026/7/11-12",
+    "date": "2026/7/11",
     "year": 2026,
     "content": "페퍼톤스 클럽투어 서울 무신사개러지",
     "link": null
   },
   {
-    "id": "12883f28ec96",
+    "id": "59c590e95864",
     "tag": "live",
-    "date": "2026/7/18-19",
+    "date": "2026/7/12",
+    "year": 2026,
+    "content": "페퍼톤스 클럽투어 서울 무신사개러지",
+    "link": null
+  },
+  {
+    "id": "c93b1aea154e",
+    "tag": "live",
+    "date": "2026/7/18",
+    "year": 2026,
+    "content": "페퍼톤스 클럽투어 부산 금사락",
+    "link": null
+  },
+  {
+    "id": "1107d9510cd6",
+    "tag": "live",
+    "date": "2026/7/19",
     "year": 2026,
     "content": "페퍼톤스 클럽투어 부산 금사락",
     "link": null
@@ -128,9 +160,17 @@
     "link": null
   },
   {
-    "id": "de0ad78be306",
+    "id": "a007f8aa2bde",
     "tag": "live",
-    "date": "2026/8/8-9",
+    "date": "2026/8/8",
+    "year": 2026,
+    "content": "페퍼톤스 클럽투어 서울(앵콜) 언더스테이지",
+    "link": null
+  },
+  {
+    "id": "7b73b1719361",
+    "tag": "live",
+    "date": "2026/8/9",
     "year": 2026,
     "content": "페퍼톤스 클럽투어 서울(앵콜) 언더스테이지",
     "link": null
@@ -168,9 +208,49 @@
     "link": null
   },
   {
-    "id": "11f21e919b80",
+    "id": "3101313e3269",
     "tag": "live",
-    "date": "2026/4/17-19,24-26",
+    "date": "2026/4/17",
+    "year": 2026,
+    "content": "어쿠스틱 라이브 안락 at 이화여자대학교 ECC 영산극장",
+    "link": null
+  },
+  {
+    "id": "d30b859891e4",
+    "tag": "live",
+    "date": "2026/4/18",
+    "year": 2026,
+    "content": "어쿠스틱 라이브 안락 at 이화여자대학교 ECC 영산극장",
+    "link": null
+  },
+  {
+    "id": "3c50bcd27e0e",
+    "tag": "live",
+    "date": "2026/4/19",
+    "year": 2026,
+    "content": "어쿠스틱 라이브 안락 at 이화여자대학교 ECC 영산극장",
+    "link": null
+  },
+  {
+    "id": "d683043d5b98",
+    "tag": "live",
+    "date": "2026/4/24",
+    "year": 2026,
+    "content": "어쿠스틱 라이브 안락 at 이화여자대학교 ECC 영산극장",
+    "link": null
+  },
+  {
+    "id": "e4a4e09f35e4",
+    "tag": "live",
+    "date": "2026/4/25",
+    "year": 2026,
+    "content": "어쿠스틱 라이브 안락 at 이화여자대학교 ECC 영산극장",
+    "link": null
+  },
+  {
+    "id": "8b6fef08b649",
+    "tag": "live",
+    "date": "2026/4/26",
     "year": 2026,
     "content": "어쿠스틱 라이브 안락 at 이화여자대학교 ECC 영산극장",
     "link": null
@@ -200,9 +280,25 @@
     "link": null
   },
   {
-    "id": "ba229c17cd39",
+    "id": "a8826a9d4864",
     "tag": "live",
-    "date": "2025/12/12-14",
+    "date": "2025/12/12",
+    "year": 2025,
+    "content": "2025 concert '공명' at 연세대학교 신촌캠퍼스 대강당",
+    "link": null
+  },
+  {
+    "id": "38e62916e8ce",
+    "tag": "live",
+    "date": "2025/12/13",
+    "year": 2025,
+    "content": "2025 concert '공명' at 연세대학교 신촌캠퍼스 대강당",
+    "link": null
+  },
+  {
+    "id": "e45c40193735",
+    "tag": "live",
+    "date": "2025/12/14",
     "year": 2025,
     "content": "2025 concert '공명' at 연세대학교 신촌캠퍼스 대강당",
     "link": null
@@ -296,9 +392,17 @@
     "link": null
   },
   {
-    "id": "70d4e07db8d7",
+    "id": "f0bdef3f82e5",
     "tag": "live",
-    "date": "2025/6/28-29",
+    "date": "2025/6/28",
+    "year": 2025,
+    "content": "2025 PEPPERTONES CLUB TOUR 서울 at 무신사개러지",
+    "link": null
+  },
+  {
+    "id": "dfe0868de48a",
+    "tag": "live",
+    "date": "2025/6/29",
     "year": 2025,
     "content": "2025 PEPPERTONES CLUB TOUR 서울 at 무신사개러지",
     "link": null
@@ -336,9 +440,17 @@
     "link": null
   },
   {
-    "id": "8cc551d51ec3",
+    "id": "34903d52828e",
     "tag": "live",
-    "date": "2025/7/26-27",
+    "date": "2025/7/26",
+    "year": 2025,
+    "content": "2025 PEPPERTONES CLUB TOUR 인천 at 트라이보울",
+    "link": null
+  },
+  {
+    "id": "6750a1372735",
+    "tag": "live",
+    "date": "2025/7/27",
     "year": 2025,
     "content": "2025 PEPPERTONES CLUB TOUR 인천 at 트라이보울",
     "link": null
@@ -408,9 +520,17 @@
     "link": null
   },
   {
-    "id": "2c8a37687f93",
+    "id": "ebf149f530ef",
     "tag": "live",
-    "date": "2024/12/14-15",
+    "date": "2024/12/14",
+    "year": 2024,
+    "content": "2024 concert 'TWENTY' at 세종대 대양홀",
+    "link": null
+  },
+  {
+    "id": "e60ac9e85415",
+    "tag": "live",
+    "date": "2024/12/15",
     "year": 2024,
     "content": "2024 concert 'TWENTY' at 세종대 대양홀",
     "link": null
@@ -504,9 +624,17 @@
     "link": null
   },
   {
-    "id": "be63eda9d4eb",
+    "id": "f1011f74399d",
     "tag": "live",
-    "date": "2024/6/22-23",
+    "date": "2024/6/22",
+    "year": 2024,
+    "content": "'party plenty' 서울 명화 라이브홀",
+    "link": null
+  },
+  {
+    "id": "827c87792e1e",
+    "tag": "live",
+    "date": "2024/6/23",
     "year": 2024,
     "content": "'party plenty' 서울 명화 라이브홀",
     "link": null
@@ -552,9 +680,17 @@
     "link": null
   },
   {
-    "id": "0b520090afca",
+    "id": "949345fa4c07",
     "tag": "live",
-    "date": "2024/7/27-28",
+    "date": "2024/7/27",
+    "year": 2024,
+    "content": "'party plenty' 서울 언더스테이지",
+    "link": null
+  },
+  {
+    "id": "da45a05f2b18",
+    "tag": "live",
+    "date": "2024/7/28",
     "year": 2024,
     "content": "'party plenty' 서울 언더스테이지",
     "link": null
@@ -584,9 +720,25 @@
     "link": null
   },
   {
-    "id": "fb6c081b6746",
+    "id": "6aa2a9416bcc",
     "tag": "live",
-    "date": "2023/12/15-17",
+    "date": "2023/12/15",
+    "year": 2023,
+    "content": "2023 연말 콘서트 '긴 여행의 끝' at YES24라이브홀",
+    "link": null
+  },
+  {
+    "id": "a02301dfd23f",
+    "tag": "live",
+    "date": "2023/12/16",
+    "year": 2023,
+    "content": "2023 연말 콘서트 '긴 여행의 끝' at YES24라이브홀",
+    "link": null
+  },
+  {
+    "id": "52b03e614896",
+    "tag": "live",
+    "date": "2023/12/17",
     "year": 2023,
     "content": "2023 연말 콘서트 '긴 여행의 끝' at YES24라이브홀",
     "link": null
@@ -784,9 +936,25 @@
     "link": null
   },
   {
-    "id": "4edf44f018ea",
+    "id": "ca4839947162",
     "tag": "live",
-    "date": "2022/12/16-18",
+    "date": "2022/12/16",
+    "year": 2022,
+    "content": "concert 'thousand umbrellas' at yes24 live hall",
+    "link": null
+  },
+  {
+    "id": "5d953c1fc5bb",
+    "tag": "live",
+    "date": "2022/12/17",
+    "year": 2022,
+    "content": "concert 'thousand umbrellas' at yes24 live hall",
+    "link": null
+  },
+  {
+    "id": "d0b05af89cf4",
+    "tag": "live",
+    "date": "2022/12/18",
     "year": 2022,
     "content": "concert 'thousand umbrellas' at yes24 live hall",
     "link": null
@@ -840,9 +1008,25 @@
     "link": null
   },
   {
-    "id": "faa1d827a9c8",
+    "id": "2b63d8e389e5",
     "tag": "live",
-    "date": "2022/7/1-3",
+    "date": "2022/7/1",
+    "year": 2022,
+    "content": "mint paper presents '노리플라이, 정준일, 페퍼톤스' at 블루스퀘어",
+    "link": null
+  },
+  {
+    "id": "d946b032e9d3",
+    "tag": "live",
+    "date": "2022/7/2",
+    "year": 2022,
+    "content": "mint paper presents '노리플라이, 정준일, 페퍼톤스' at 블루스퀘어",
+    "link": null
+  },
+  {
+    "id": "facf199e001c",
+    "tag": "live",
+    "date": "2022/7/3",
     "year": 2022,
     "content": "mint paper presents '노리플라이, 정준일, 페퍼톤스' at 블루스퀘어",
     "link": null
@@ -904,9 +1088,17 @@
     "link": null
   },
   {
-    "id": "c30015ab40ce",
+    "id": "0aadaf6f00a8",
     "tag": "live",
-    "date": "2021/12/11-12",
+    "date": "2021/12/11",
+    "year": 2021,
+    "content": "concert 'travelers' at 블루스퀘어 마스터카드홀",
+    "link": null
+  },
+  {
+    "id": "d303a4835972",
+    "tag": "live",
+    "date": "2021/12/12",
     "year": 2021,
     "content": "concert 'travelers' at 블루스퀘어 마스터카드홀",
     "link": null
@@ -1032,9 +1224,41 @@
     "link": null
   },
   {
-    "id": "46235c5a90eb",
+    "id": "326a601b45ad",
     "tag": "live",
-    "date": "2019/12/21-25",
+    "date": "2019/12/21",
+    "year": 2019,
+    "content": "concert 'peppertones live 2019 : 써클'",
+    "link": null
+  },
+  {
+    "id": "0a92ffb9e8eb",
+    "tag": "live",
+    "date": "2019/12/22",
+    "year": 2019,
+    "content": "concert 'peppertones live 2019 : 써클'",
+    "link": null
+  },
+  {
+    "id": "59015b97bd98",
+    "tag": "live",
+    "date": "2019/12/23",
+    "year": 2019,
+    "content": "concert 'peppertones live 2019 : 써클'",
+    "link": null
+  },
+  {
+    "id": "e3be8fbfdb4e",
+    "tag": "live",
+    "date": "2019/12/24",
+    "year": 2019,
+    "content": "concert 'peppertones live 2019 : 써클'",
+    "link": null
+  },
+  {
+    "id": "a435183bc6c4",
+    "tag": "live",
+    "date": "2019/12/25",
     "year": 2019,
     "content": "concert 'peppertones live 2019 : 써클'",
     "link": null
@@ -1192,9 +1416,25 @@
     "link": null
   },
   {
-    "id": "eb0d8222e4e2",
+    "id": "379ef98a0319",
     "tag": "live",
-    "date": "2018/12/7-9",
+    "date": "2018/12/7",
+    "year": 2018,
+    "content": "concert 'long way : to home' at 이화여대 삼성홀",
+    "link": null
+  },
+  {
+    "id": "7f676345398d",
+    "tag": "live",
+    "date": "2018/12/8",
+    "year": 2018,
+    "content": "concert 'long way : to home' at 이화여대 삼성홀",
+    "link": null
+  },
+  {
+    "id": "cf159d1ff811",
+    "tag": "live",
+    "date": "2018/12/9",
     "year": 2018,
     "content": "concert 'long way : to home' at 이화여대 삼성홀",
     "link": null
@@ -1296,9 +1536,17 @@
     "link": null
   },
   {
-    "id": "c3cb78917f13",
+    "id": "226cd24291cf",
     "tag": "live",
-    "date": "2018/6/9~10",
+    "date": "2018/6/9",
+    "year": 2018,
+    "content": "concert 'long way' at 블루스퀘어 아이마켓홀",
+    "link": null
+  },
+  {
+    "id": "fc86e2a09ce4",
+    "tag": "live",
+    "date": "2018/6/10",
     "year": 2018,
     "content": "concert 'long way' at 블루스퀘어 아이마켓홀",
     "link": null
@@ -1368,9 +1616,25 @@
     "link": null
   },
   {
-    "id": "869a927d1ab9",
+    "id": "dfba151247ce",
     "tag": "live",
-    "date": "2017/12/15~17",
+    "date": "2017/12/15",
+    "year": 2017,
+    "content": "2017 페퍼톤스 연말공연 'wish-list' at 서울 이화여고 100주년 기념관 화암홀",
+    "link": null
+  },
+  {
+    "id": "85b01da0567b",
+    "tag": "live",
+    "date": "2017/12/16",
+    "year": 2017,
+    "content": "2017 페퍼톤스 연말공연 'wish-list' at 서울 이화여고 100주년 기념관 화암홀",
+    "link": null
+  },
+  {
+    "id": "ece12d36b582",
+    "tag": "live",
+    "date": "2017/12/17",
     "year": 2017,
     "content": "2017 페퍼톤스 연말공연 'wish-list' at 서울 이화여고 100주년 기념관 화암홀",
     "link": null
@@ -1384,9 +1648,17 @@
     "link": null
   },
   {
-    "id": "59a748124ceb",
+    "id": "fcea9c51c4d3",
     "tag": "live",
-    "date": "2017/9/2~3",
+    "date": "2017/9/2",
+    "year": 2017,
+    "content": "With, Antenna. 2017 서울 at 잠실실내체육관",
+    "link": null
+  },
+  {
+    "id": "3b883b39fab6",
+    "tag": "live",
+    "date": "2017/9/3",
     "year": 2017,
     "content": "With, Antenna. 2017 서울 at 잠실실내체육관",
     "link": null
@@ -1520,9 +1792,25 @@
     "link": null
   },
   {
-    "id": "7dbe109b16d0",
+    "id": "41fb4406e465",
     "tag": "live",
-    "date": "2016/12/16~18",
+    "date": "2016/12/16",
+    "year": 2016,
+    "content": "concert 'CAMPFIRE'",
+    "link": null
+  },
+  {
+    "id": "1729e3f3994a",
+    "tag": "live",
+    "date": "2016/12/17",
+    "year": 2016,
+    "content": "concert 'CAMPFIRE'",
+    "link": null
+  },
+  {
+    "id": "fa4167eb3c70",
+    "tag": "live",
+    "date": "2016/12/18",
     "year": 2016,
     "content": "concert 'CAMPFIRE'",
     "link": null
@@ -1568,9 +1856,17 @@
     "link": null
   },
   {
-    "id": "17ec3cb130ea",
+    "id": "a597610b069d",
     "tag": "live",
-    "date": "2016/10/22~23",
+    "date": "2016/10/22",
+    "year": 2016,
+    "content": "Grand Mint Festival 2016",
+    "link": null
+  },
+  {
+    "id": "ba3a0b5e5b48",
+    "tag": "live",
+    "date": "2016/10/23",
     "year": 2016,
     "content": "Grand Mint Festival 2016",
     "link": null
@@ -1584,9 +1880,25 @@
     "link": null
   },
   {
-    "id": "21d2ddfd30d9",
+    "id": "969c8665a289",
     "tag": "live",
-    "date": "2016/09/23~25",
+    "date": "2016/9/23",
+    "year": 2016,
+    "content": "Hello, Antenna. The Label Concert",
+    "link": null
+  },
+  {
+    "id": "85dc92e600c9",
+    "tag": "live",
+    "date": "2016/9/24",
+    "year": 2016,
+    "content": "Hello, Antenna. The Label Concert",
+    "link": null
+  },
+  {
+    "id": "189c84ffbf61",
+    "tag": "live",
+    "date": "2016/9/25",
     "year": 2016,
     "content": "Hello, Antenna. The Label Concert",
     "link": null
@@ -1712,9 +2024,25 @@
     "link": null
   },
   {
-    "id": "4bd4c9aa25e7",
+    "id": "a4f6f5b0c48c",
     "tag": "live",
-    "date": "2015/12/29~31",
+    "date": "2015/12/29",
+    "year": 2015,
+    "content": "2015 페퍼톤스 연말 콘서트 \"풍년\"",
+    "link": null
+  },
+  {
+    "id": "d3bde6c9a0b4",
+    "tag": "live",
+    "date": "2015/12/30",
+    "year": 2015,
+    "content": "2015 페퍼톤스 연말 콘서트 \"풍년\"",
+    "link": null
+  },
+  {
+    "id": "209adb78bdc1",
+    "tag": "live",
+    "date": "2015/12/31",
     "year": 2015,
     "content": "2015 페퍼톤스 연말 콘서트 \"풍년\"",
     "link": null
@@ -1888,9 +2216,25 @@
     "link": null
   },
   {
-    "id": "e5192789d737",
+    "id": "b0481c1571a0",
     "tag": "live",
-    "date": "2014/12/23~25",
+    "date": "2014/12/23",
+    "year": 2014,
+    "content": "2014 페퍼톤스 10주년기념 연말콘서트 \"PEPPER10NES, Our Songs\"",
+    "link": null
+  },
+  {
+    "id": "9f21abd81f39",
+    "tag": "live",
+    "date": "2014/12/24",
+    "year": 2014,
+    "content": "2014 페퍼톤스 10주년기념 연말콘서트 \"PEPPER10NES, Our Songs\"",
+    "link": null
+  },
+  {
+    "id": "f5108330f857",
+    "tag": "live",
+    "date": "2014/12/25",
     "year": 2014,
     "content": "2014 페퍼톤스 10주년기념 연말콘서트 \"PEPPER10NES, Our Songs\"",
     "link": null
@@ -2248,9 +2592,81 @@
     "link": null
   },
   {
-    "id": "177c9aa7677c",
+    "id": "2c24be811cdc",
     "tag": "live",
-    "date": "2013/5/1~5, 8~12",
+    "date": "2013/5/1",
+    "year": 2013,
+    "content": "페퍼톤스 콘서트 \"十日夜話 십일야화\"",
+    "link": null
+  },
+  {
+    "id": "02162693f33e",
+    "tag": "live",
+    "date": "2013/5/2",
+    "year": 2013,
+    "content": "페퍼톤스 콘서트 \"十日夜話 십일야화\"",
+    "link": null
+  },
+  {
+    "id": "92ca5e1dace8",
+    "tag": "live",
+    "date": "2013/5/3",
+    "year": 2013,
+    "content": "페퍼톤스 콘서트 \"十日夜話 십일야화\"",
+    "link": null
+  },
+  {
+    "id": "345e017538f4",
+    "tag": "live",
+    "date": "2013/5/4",
+    "year": 2013,
+    "content": "페퍼톤스 콘서트 \"十日夜話 십일야화\"",
+    "link": null
+  },
+  {
+    "id": "db04e9c0e09a",
+    "tag": "live",
+    "date": "2013/5/5",
+    "year": 2013,
+    "content": "페퍼톤스 콘서트 \"十日夜話 십일야화\"",
+    "link": null
+  },
+  {
+    "id": "db9d6365bac3",
+    "tag": "live",
+    "date": "2013/5/8",
+    "year": 2013,
+    "content": "페퍼톤스 콘서트 \"十日夜話 십일야화\"",
+    "link": null
+  },
+  {
+    "id": "d67892e42a19",
+    "tag": "live",
+    "date": "2013/5/9",
+    "year": 2013,
+    "content": "페퍼톤스 콘서트 \"十日夜話 십일야화\"",
+    "link": null
+  },
+  {
+    "id": "99b3fff1e8e4",
+    "tag": "live",
+    "date": "2013/5/10",
+    "year": 2013,
+    "content": "페퍼톤스 콘서트 \"十日夜話 십일야화\"",
+    "link": null
+  },
+  {
+    "id": "6ec535248ec1",
+    "tag": "live",
+    "date": "2013/5/11",
+    "year": 2013,
+    "content": "페퍼톤스 콘서트 \"十日夜話 십일야화\"",
+    "link": null
+  },
+  {
+    "id": "b1df8e53b55c",
+    "tag": "live",
+    "date": "2013/5/12",
     "year": 2013,
     "content": "페퍼톤스 콘서트 \"十日夜話 십일야화\"",
     "link": null
@@ -2312,17 +2728,41 @@
     "link": null
   },
   {
-    "id": "a55b476f7c68",
+    "id": "f68857a5db78",
     "tag": "live",
-    "date": "2012/12/21~23",
+    "date": "2012/12/21",
     "year": 2012,
     "content": "페퍼톤스 연말 콘서트 [Fine.] 서울",
     "link": null
   },
   {
-    "id": "556e641f37cb",
+    "id": "6fa2607728e4",
     "tag": "live",
-    "date": "2012/12/28~29",
+    "date": "2012/12/22",
+    "year": 2012,
+    "content": "페퍼톤스 연말 콘서트 [Fine.] 서울",
+    "link": null
+  },
+  {
+    "id": "0b1d0448a298",
+    "tag": "live",
+    "date": "2012/12/23",
+    "year": 2012,
+    "content": "페퍼톤스 연말 콘서트 [Fine.] 서울",
+    "link": null
+  },
+  {
+    "id": "9d5fb4d860cc",
+    "tag": "live",
+    "date": "2012/12/28",
+    "year": 2012,
+    "content": "페퍼톤스 연말 콘서트 [Fine.] 부산",
+    "link": null
+  },
+  {
+    "id": "ef14c4a6e419",
+    "tag": "live",
+    "date": "2012/12/29",
     "year": 2012,
     "content": "페퍼톤스 연말 콘서트 [Fine.] 부산",
     "link": null
@@ -2536,9 +2976,89 @@
     "link": null
   },
   {
-    "id": "00ada32eede5",
+    "id": "ea84039edc7f",
     "tag": "live",
-    "date": "2012/6/21-7/01",
+    "date": "2012/6/21",
+    "year": 2012,
+    "content": "Beginner’s Luck live at 동덕여대 공연예술센터",
+    "link": null
+  },
+  {
+    "id": "f54310aa653e",
+    "tag": "live",
+    "date": "2012/6/22",
+    "year": 2012,
+    "content": "Beginner’s Luck live at 동덕여대 공연예술센터",
+    "link": null
+  },
+  {
+    "id": "0fc8d91c88e2",
+    "tag": "live",
+    "date": "2012/6/23",
+    "year": 2012,
+    "content": "Beginner’s Luck live at 동덕여대 공연예술센터",
+    "link": null
+  },
+  {
+    "id": "0359fb61a23e",
+    "tag": "live",
+    "date": "2012/6/24",
+    "year": 2012,
+    "content": "Beginner’s Luck live at 동덕여대 공연예술센터",
+    "link": null
+  },
+  {
+    "id": "65d235430455",
+    "tag": "live",
+    "date": "2012/6/25",
+    "year": 2012,
+    "content": "Beginner’s Luck live at 동덕여대 공연예술센터",
+    "link": null
+  },
+  {
+    "id": "d48f366df097",
+    "tag": "live",
+    "date": "2012/6/26",
+    "year": 2012,
+    "content": "Beginner’s Luck live at 동덕여대 공연예술센터",
+    "link": null
+  },
+  {
+    "id": "b2412d90eb59",
+    "tag": "live",
+    "date": "2012/6/27",
+    "year": 2012,
+    "content": "Beginner’s Luck live at 동덕여대 공연예술센터",
+    "link": null
+  },
+  {
+    "id": "8abbbe027b8e",
+    "tag": "live",
+    "date": "2012/6/28",
+    "year": 2012,
+    "content": "Beginner’s Luck live at 동덕여대 공연예술센터",
+    "link": null
+  },
+  {
+    "id": "665617dbc855",
+    "tag": "live",
+    "date": "2012/6/29",
+    "year": 2012,
+    "content": "Beginner’s Luck live at 동덕여대 공연예술센터",
+    "link": null
+  },
+  {
+    "id": "1743be6d3bce",
+    "tag": "live",
+    "date": "2012/6/30",
+    "year": 2012,
+    "content": "Beginner’s Luck live at 동덕여대 공연예술센터",
+    "link": null
+  },
+  {
+    "id": "4dfac8132bf1",
+    "tag": "live",
+    "date": "2012/7/1",
     "year": 2012,
     "content": "Beginner’s Luck live at 동덕여대 공연예술센터",
     "link": null
@@ -2616,9 +3136,33 @@
     "link": null
   },
   {
-    "id": "98e7a75c27bb",
+    "id": "986d22c035c8",
     "tag": "live",
-    "date": "2011/12/8-11",
+    "date": "2011/12/8",
+    "year": 2011,
+    "content": "'비밀의 밤' at 이화여고 화암홀",
+    "link": null
+  },
+  {
+    "id": "c4a346f31ed3",
+    "tag": "live",
+    "date": "2011/12/9",
+    "year": 2011,
+    "content": "'비밀의 밤' at 이화여고 화암홀",
+    "link": null
+  },
+  {
+    "id": "c7080b35f3af",
+    "tag": "live",
+    "date": "2011/12/10",
+    "year": 2011,
+    "content": "'비밀의 밤' at 이화여고 화암홀",
+    "link": null
+  },
+  {
+    "id": "55f92a77c9ae",
+    "tag": "live",
+    "date": "2011/12/11",
     "year": 2011,
     "content": "'비밀의 밤' at 이화여고 화암홀",
     "link": null
@@ -2696,25 +3240,57 @@
     "link": null
   },
   {
-    "id": "a7f5bd4f06bd",
+    "id": "02829ad9425e",
     "tag": "live",
-    "date": "2011/4/15-17",
+    "date": "2011/4/15",
     "year": 2011,
     "content": "안테나 뮤직 워리어스 '그래 우리 함께..' 서울",
     "link": null
   },
   {
-    "id": "e2d2f4881b0b",
+    "id": "4ef00ac71a4c",
     "tag": "live",
-    "date": "2011/4/23-24",
+    "date": "2011/4/16",
+    "year": 2011,
+    "content": "안테나 뮤직 워리어스 '그래 우리 함께..' 서울",
+    "link": null
+  },
+  {
+    "id": "d69d0b4214e8",
+    "tag": "live",
+    "date": "2011/4/17",
+    "year": 2011,
+    "content": "안테나 뮤직 워리어스 '그래 우리 함께..' 서울",
+    "link": null
+  },
+  {
+    "id": "2d49ace3d065",
+    "tag": "live",
+    "date": "2011/4/23",
     "year": 2011,
     "content": "안테나 뮤직 워리어스 '그래 우리 함께..' 부산",
     "link": null
   },
   {
-    "id": "117f6d45fdd7",
+    "id": "143dafd80744",
     "tag": "live",
-    "date": "2011/4/30-5/1",
+    "date": "2011/4/24",
+    "year": 2011,
+    "content": "안테나 뮤직 워리어스 '그래 우리 함께..' 부산",
+    "link": null
+  },
+  {
+    "id": "9997a2723e2b",
+    "tag": "live",
+    "date": "2011/4/30",
+    "year": 2011,
+    "content": "안테나 뮤직 워리어스 '그래 우리 함께..' 대구",
+    "link": null
+  },
+  {
+    "id": "58c91ba179b8",
+    "tag": "live",
+    "date": "2011/5/1",
     "year": 2011,
     "content": "안테나 뮤직 워리어스 '그래 우리 함께..' 대구",
     "link": null
@@ -2744,9 +3320,25 @@
     "link": null
   },
   {
-    "id": "797a56513eb7",
+    "id": "7e6db976bbd1",
     "tag": "live",
-    "date": "2010/12/17-19",
+    "date": "2010/12/17",
+    "year": 2010,
+    "content": "CAMPFIRE at 대학로 이다1관",
+    "link": null
+  },
+  {
+    "id": "0743ddc30db2",
+    "tag": "live",
+    "date": "2010/12/18",
+    "year": 2010,
+    "content": "CAMPFIRE at 대학로 이다1관",
+    "link": null
+  },
+  {
+    "id": "061c25ea4f85",
+    "tag": "live",
+    "date": "2010/12/19",
     "year": 2010,
     "content": "CAMPFIRE at 대학로 이다1관",
     "link": null
@@ -2784,9 +3376,33 @@
     "link": null
   },
   {
-    "id": "87f004788b8f",
+    "id": "8af0b9f79371",
     "tag": "live",
-    "date": "2010/9/2-5",
+    "date": "2010/9/2",
+    "year": 2010,
+    "content": "정재형 음악회 게스트 at 웰콤시어터",
+    "link": null
+  },
+  {
+    "id": "0bed4b65ba7f",
+    "tag": "live",
+    "date": "2010/9/3",
+    "year": 2010,
+    "content": "정재형 음악회 게스트 at 웰콤시어터",
+    "link": null
+  },
+  {
+    "id": "e7b682db4dd6",
+    "tag": "live",
+    "date": "2010/9/4",
+    "year": 2010,
+    "content": "정재형 음악회 게스트 at 웰콤시어터",
+    "link": null
+  },
+  {
+    "id": "6167eb78523d",
+    "tag": "live",
+    "date": "2010/9/5",
     "year": 2010,
     "content": "정재형 음악회 게스트 at 웰콤시어터",
     "link": null
@@ -2840,25 +3456,57 @@
     "link": null
   },
   {
-    "id": "01075c4e297c",
+    "id": "6492c3090856",
     "tag": "live",
-    "date": "2010/4/23-25",
+    "date": "2010/4/23",
     "year": 2010,
     "content": "live '안테나뮤직 대실망쇼'",
     "link": null
   },
   {
-    "id": "868f51a7a10e",
+    "id": "0c5467f3de76",
     "tag": "live",
-    "date": "2010/4/10-11",
+    "date": "2010/4/24",
+    "year": 2010,
+    "content": "live '안테나뮤직 대실망쇼'",
+    "link": null
+  },
+  {
+    "id": "22c8c6fe603f",
+    "tag": "live",
+    "date": "2010/4/25",
+    "year": 2010,
+    "content": "live '안테나뮤직 대실망쇼'",
+    "link": null
+  },
+  {
+    "id": "10590ba3be1d",
+    "tag": "live",
+    "date": "2010/4/10",
     "year": 2010,
     "content": "live 'live icon 2' with mate, no reply",
     "link": null
   },
   {
-    "id": "06f50cd9da48",
+    "id": "b10cb05421ca",
     "tag": "live",
-    "date": "2010/3/4-5",
+    "date": "2010/4/11",
+    "year": 2010,
+    "content": "live 'live icon 2' with mate, no reply",
+    "link": null
+  },
+  {
+    "id": "8c0cdefeb9c4",
+    "tag": "live",
+    "date": "2010/3/4",
+    "year": 2010,
+    "content": "ebs 'space 공감' live",
+    "link": null
+  },
+  {
+    "id": "77ecb887fa74",
+    "tag": "live",
+    "date": "2010/3/5",
     "year": 2010,
     "content": "ebs 'space 공감' live",
     "link": null
@@ -2936,9 +3584,25 @@
     "link": null
   },
   {
-    "id": "8f5109a55e2f",
+    "id": "5fb924b47bfe",
     "tag": "live",
-    "date": "2009/9/18-20",
+    "date": "2009/9/18",
+    "year": 2009,
+    "content": "'pptnz 3 concert' at 상상아트홀",
+    "link": null
+  },
+  {
+    "id": "c61a360fbf47",
+    "tag": "live",
+    "date": "2009/9/19",
+    "year": 2009,
+    "content": "'pptnz 3 concert' at 상상아트홀",
+    "link": null
+  },
+  {
+    "id": "67bb7395ec96",
+    "tag": "live",
+    "date": "2009/9/20",
     "year": 2009,
     "content": "'pptnz 3 concert' at 상상아트홀",
     "link": null
@@ -3104,9 +3768,17 @@
     "link": null
   },
   {
-    "id": "ad1fd34ed7e6",
+    "id": "23457ab45ce5",
     "tag": "live",
-    "date": "2008/6/20,21",
+    "date": "2008/6/20",
+    "year": 2008,
+    "content": "concert 'now we go!' at 이화여고 100주년 기념관",
+    "link": null
+  },
+  {
+    "id": "c98ef2366e4a",
+    "tag": "live",
+    "date": "2008/6/21",
     "year": 2008,
     "content": "concert 'now we go!' at 이화여고 100주년 기념관",
     "link": null
