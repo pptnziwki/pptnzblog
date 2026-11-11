@@ -1,5 +1,30 @@
 import SwiftUI
 
+/// 태그 필터 칩. 주요 태그 5개와 "기타"(그 외 태그), 그리고 "전체".
+enum NewsFilter: String, CaseIterable, Identifiable {
+    case all, live, release, tv, radio, work, other
+
+    var id: String { rawValue }
+
+    var label: String {
+        switch self {
+        case .all: return "전체"
+        case .other: return "기타"
+        default: return rawValue.uppercased()
+        }
+    }
+
+    func matches(_ item: NewsItem) -> Bool {
+        switch self {
+        case .all: return true
+        case .other: return !item.tags.contains { Self.primaryTags.contains($0) }
+        default: return item.tags.contains(rawValue)
+        }
+    }
+
+    private static let primaryTags: Set<String> = ["live", "release", "tv", "radio", "work"]
+}
+
 /// peppertones.net news 탭 내용을 연도별 토글 목록으로 보여준다.
 /// 검색어는 상위(ContentView)의 `.searchable`에서 내려받는다.
 struct NewsView: View {
@@ -10,13 +35,18 @@ struct NewsView: View {
     @State private var loadError: String?
     @State private var expandedYears: Set<Int> = []
     @State private var didSetInitialExpansion = false
+    @State private var filter: NewsFilter = .all
     @Environment(\.openURL) private var openURL
 
     private var isSearching: Bool { !searchText.isEmpty }
 
+    /// 검색이나 태그 필터가 걸려 있으면 접힌 연도에 있는 결과도 보이도록 항상 펼친다.
+    private var forcesExpansion: Bool { isSearching || filter != .all }
+
     private var filteredItems: [NewsItem] {
-        guard isSearching else { return items }
-        return items.filter {
+        let tagFiltered = items.filter { filter.matches($0) }
+        guard isSearching else { return tagFiltered }
+        return tagFiltered.filter {
             $0.content.localizedCaseInsensitiveContains(searchText)
                 || $0.tag.localizedCaseInsensitiveContains(searchText)
                 || $0.date.localizedCaseInsensitiveContains(searchText)
@@ -34,6 +64,51 @@ struct NewsView: View {
     }
 
     var body: some View {
+        content
+        .safeAreaInset(edge: .top, spacing: 0) {
+            if !items.isEmpty {
+                filterBar
+            }
+        }
+        .background(Color.pptnzBackground)
+        .refreshable { await load() }
+        .task { await load() }
+    }
+
+    /// 상단 태그 필터. 한 번에 하나만 선택한다.
+    private var filterBar: some View {
+        // 한 줄에 다 들어가면 그대로, 좁은 기기에서는 가로 스크롤로 넘어간다.
+        ViewThatFits(in: .horizontal) {
+            chipRow
+            ScrollView(.horizontal, showsIndicators: false) { chipRow }
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private var chipRow: some View {
+        HStack(spacing: 4) {
+            ForEach(NewsFilter.allCases) { option in
+                Button {
+                    withAnimation { filter = option }
+                } label: {
+                    Text(option.label)
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(filter == option ? Color.pptnzInk : Color.secondary)
+                        .lineLimit(1)
+                        .fixedSize()
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 6)
+                        .background(Capsule().fill(filter == option ? Color.pptnzSky : Color.secondary.opacity(0.12)))
+                }
+                .buttonStyle(.plain)
+            }
+        }
+    }
+
+    private var content: some View {
         ScrollViewReader { proxy in
             Group {
                 if items.isEmpty && isLoading {
@@ -47,6 +122,8 @@ struct NewsView: View {
                 } else if filteredItems.isEmpty {
                     if isSearching {
                         ContentUnavailableView.search(text: searchText)
+                    } else if filter != .all {
+                        ContentUnavailableView("\(filter.label) 소식이 없어요", systemImage: "line.3.horizontal.decrease.circle")
                     } else {
                         ContentUnavailableView("아직 소식이 없어요", systemImage: "newspaper")
                     }
@@ -58,9 +135,6 @@ struct NewsView: View {
                 }
             }
         }
-        .background(Color.pptnzBackground)
-        .refreshable { await load() }
-        .task { await load() }
     }
 
     private var list: some View {
@@ -71,8 +145,7 @@ struct NewsView: View {
                 .id(Self.topAnchor)
             ForEach(groupedByYear, id: \.year) { group in
                 Section {
-                    // 검색 중에는 접힌 연도에 있는 결과도 보이도록 항상 펼친다.
-                    if isSearching || expandedYears.contains(group.year) {
+                    if forcesExpansion || expandedYears.contains(group.year) {
                         ForEach(group.items) { item in
                             NewsRowView(item: item) {
                                 if let url = item.linkURL { openURL(url) }
@@ -88,7 +161,7 @@ struct NewsView: View {
                             Text(String(group.year) + "년")
                                 .foregroundStyle(Color.pptnzPink)
                             Spacer()
-                            Image(systemName: isSearching || expandedYears.contains(group.year) ? "chevron.down" : "chevron.right")
+                            Image(systemName: forcesExpansion || expandedYears.contains(group.year) ? "chevron.down" : "chevron.right")
                                 .foregroundStyle(Color.pptnzPink)
                         }
                         .contentShape(Rectangle())

@@ -16,6 +16,14 @@ struct NewsItem: Identifiable, Codable, Hashable {
 
     var yearLabel: String { "\(year)년" }
 
+    /// "work & live"처럼 여러 태그가 묶여 있을 수 있어서 개별 태그로 나눈다.
+    var tags: [String] {
+        tag.components(separatedBy: "&").map { $0.trimmingCharacters(in: .whitespaces) }
+    }
+
+    /// 공연(live) 소식인지. 다녀온 공연 체크는 이 소식에만 붙는다.
+    var isLive: Bool { tags.contains("live") }
+
     /// 같은 연도 안에서 최신순으로 정렬하기 위한 값 (yyyymmdd).
     /// 원문은 "2026/12/11-13", "2024/9-" 처럼 일/월이 빠지거나 범위인 경우가 있어서
     /// 날짜 문자열 안의 첫 `연/월(/일)`만 읽고, 없는 부분은 0으로 둔다.
