@@ -88,11 +88,51 @@
     "link": null
   },
   {
-    "id": "88e34bb36652",
+    "id": "c6ff40b87116",
     "tag": "live",
-    "date": "2026/7/11-8/1",
+    "date": "2026/7/11-12",
     "year": 2026,
-    "content": "페퍼톤스 클럽투어 7/11-12 서울 무신사개러지, 7/18-19 부산 금사락, 7/25 전주 더뮤지션, 7/26 광주 보헤미안,\n8/1 대전 대전음악창작소, 8/8-9 서울(앵콜) 언더스테이지",
+    "content": "페퍼톤스 클럽투어 서울 무신사개러지",
+    "link": null
+  },
+  {
+    "id": "12883f28ec96",
+    "tag": "live",
+    "date": "2026/7/18-19",
+    "year": 2026,
+    "content": "페퍼톤스 클럽투어 부산 금사락",
+    "link": null
+  },
+  {
+    "id": "44fe579c91fe",
+    "tag": "live",
+    "date": "2026/7/25",
+    "year": 2026,
+    "content": "페퍼톤스 클럽투어 전주 더뮤지션",
+    "link": null
+  },
+  {
+    "id": "c387539ca521",
+    "tag": "live",
+    "date": "2026/7/26",
+    "year": 2026,
+    "content": "페퍼톤스 클럽투어 광주 보헤미안",
+    "link": null
+  },
+  {
+    "id": "42e58d49b4ea",
+    "tag": "live",
+    "date": "2026/8/1",
+    "year": 2026,
+    "content": "페퍼톤스 클럽투어 대전 대전음악창작소",
+    "link": null
+  },
+  {
+    "id": "de0ad78be306",
+    "tag": "live",
+    "date": "2026/8/8-9",
+    "year": 2026,
+    "content": "페퍼톤스 클럽투어 서울(앵콜) 언더스테이지",
     "link": null
   },
   {
@@ -256,11 +296,51 @@
     "link": null
   },
   {
-    "id": "cf813882f367",
+    "id": "70d4e07db8d7",
     "tag": "live",
-    "date": "2025/6/28-29, 7/5-6, 7/19-20, 7/26-27",
+    "date": "2025/6/28-29",
     "year": 2025,
-    "content": "2025 PEPPERTONES CLUB TOUR 서울 at 무신사개러지, 대구 at 락왕, 부산 at 금사락, 전주 at 더 뮤지션, 광주 at 보헤미안, 인천 at 트라이보울",
+    "content": "2025 PEPPERTONES CLUB TOUR 서울 at 무신사개러지",
+    "link": null
+  },
+  {
+    "id": "bd2d2ce87c43",
+    "tag": "live",
+    "date": "2025/7/5",
+    "year": 2025,
+    "content": "2025 PEPPERTONES CLUB TOUR 대구 at 락왕",
+    "link": null
+  },
+  {
+    "id": "4d19413afc9f",
+    "tag": "live",
+    "date": "2025/7/6",
+    "year": 2025,
+    "content": "2025 PEPPERTONES CLUB TOUR 부산 at 금사락",
+    "link": null
+  },
+  {
+    "id": "399783b585cd",
+    "tag": "live",
+    "date": "2025/7/19",
+    "year": 2025,
+    "content": "2025 PEPPERTONES CLUB TOUR 전주 at 더 뮤지션",
+    "link": null
+  },
+  {
+    "id": "ad22bcfd1a35",
+    "tag": "live",
+    "date": "2025/7/20",
+    "year": 2025,
+    "content": "2025 PEPPERTONES CLUB TOUR 광주 at 보헤미안",
+    "link": null
+  },
+  {
+    "id": "8cc551d51ec3",
+    "tag": "live",
+    "date": "2025/7/26-27",
+    "year": 2025,
+    "content": "2025 PEPPERTONES CLUB TOUR 인천 at 트라이보울",
     "link": null
   },
   {
@@ -424,11 +504,59 @@
     "link": null
   },
   {
-    "id": "c6fa53d20064",
+    "id": "be63eda9d4eb",
     "tag": "live",
-    "date": "2024/6/22-7/28",
+    "date": "2024/6/22-23",
     "year": 2024,
-    "content": "'party plenty' 6/22-23 서울 명화 라이브홀, 7/6 부산 소향씨어터, 7/13 대구 헤비,\n7/14 광주 보헤미안, 7/20 대전 음악창작소, 7/21 전주 더 뮤지션, 7/27-28 서울 언더스테이지",
+    "content": "'party plenty' 서울 명화 라이브홀",
+    "link": null
+  },
+  {
+    "id": "6defe406361a",
+    "tag": "live",
+    "date": "2024/7/6",
+    "year": 2024,
+    "content": "'party plenty' 부산 소향씨어터",
+    "link": null
+  },
+  {
+    "id": "962b2b5ee848",
+    "tag": "live",
+    "date": "2024/7/13",
+    "year": 2024,
+    "content": "'party plenty' 대구 헤비",
+    "link": null
+  },
+  {
+    "id": "eac59c020583",
+    "tag": "live",
+    "date": "2024/7/14",
+    "year": 2024,
+    "content": "'party plenty' 광주 보헤미안",
+    "link": null
+  },
+  {
+    "id": "08b0e7abcb8d",
+    "tag": "live",
+    "date": "2024/7/20",
+    "year": 2024,
+    "content": "'party plenty' 대전 음악창작소",
+    "link": null
+  },
+  {
+    "id": "be66eae28d1b",
+    "tag": "live",
+    "date": "2024/7/21",
+    "year": 2024,
+    "content": "'party plenty' 전주 더 뮤지션",
+    "link": null
+  },
+  {
+    "id": "0b520090afca",
+    "tag": "live",
+    "date": "2024/7/27-28",
+    "year": 2024,
+    "content": "'party plenty' 서울 언더스테이지",
     "link": null
   },
   {
@@ -528,11 +656,59 @@
     "link": null
   },
   {
-    "id": "1fd0839ae2bc",
+    "id": "bfde59c81f6d",
     "tag": "live",
-    "date": "2023/7/1 광주, 7/2 전주, 7/8 부산, 7/9 대구, 7/15 대전, 7/22 서울, 7/29 제주",
+    "date": "2023/7/1",
     "year": 2023,
-    "content": "페퍼톤스 클럽투어 2023",
+    "content": "페퍼톤스 클럽투어 2023 광주",
+    "link": null
+  },
+  {
+    "id": "ff095c4707ae",
+    "tag": "live",
+    "date": "2023/7/2",
+    "year": 2023,
+    "content": "페퍼톤스 클럽투어 2023 전주",
+    "link": null
+  },
+  {
+    "id": "9bb8d721a706",
+    "tag": "live",
+    "date": "2023/7/8",
+    "year": 2023,
+    "content": "페퍼톤스 클럽투어 2023 부산",
+    "link": null
+  },
+  {
+    "id": "f217cc337cd0",
+    "tag": "live",
+    "date": "2023/7/9",
+    "year": 2023,
+    "content": "페퍼톤스 클럽투어 2023 대구",
+    "link": null
+  },
+  {
+    "id": "a0a337ef6473",
+    "tag": "live",
+    "date": "2023/7/15",
+    "year": 2023,
+    "content": "페퍼톤스 클럽투어 2023 대전",
+    "link": null
+  },
+  {
+    "id": "e4dec2660251",
+    "tag": "live",
+    "date": "2023/7/22",
+    "year": 2023,
+    "content": "페퍼톤스 클럽투어 2023 서울",
+    "link": null
+  },
+  {
+    "id": "94b2506c1172",
+    "tag": "live",
+    "date": "2023/7/29",
+    "year": 2023,
+    "content": "페퍼톤스 클럽투어 2023 제주",
     "link": null
   },
   {
@@ -896,11 +1072,75 @@
     "link": null
   },
   {
-    "id": "644f97d67dd2",
+    "id": "7f90f11ba908",
     "tag": "live",
-    "date": "2019/7/6 ~8/10",
+    "date": "2019/7/6",
     "year": 2019,
-    "content": "페퍼톤스 2015 CLUB TOUR\n7/6 광주 at 광주 보헤미안 소극장\n7/7 전주 at 딥인투\n7/13 춘천 at 상상마당 춘천아트센터\n7/20 부산 at 오즈홀\n7/21 대구 at 락왕\n7/28 대전 at 믹스페이스\n8/2 구리 at 구리아트홀 유채꽃 소극장\n8/4 서울 at UNDERSTAGE\n8/10 제주 at 2D Hall",
+    "content": "페퍼톤스 2015 CLUB TOUR 광주 at 광주 보헤미안 소극장",
+    "link": null
+  },
+  {
+    "id": "3a474f75c4df",
+    "tag": "live",
+    "date": "2019/7/7",
+    "year": 2019,
+    "content": "페퍼톤스 2015 CLUB TOUR 전주 at 딥인투",
+    "link": null
+  },
+  {
+    "id": "60ab9fc62ec1",
+    "tag": "live",
+    "date": "2019/7/13",
+    "year": 2019,
+    "content": "페퍼톤스 2015 CLUB TOUR 춘천 at 상상마당 춘천아트센터",
+    "link": null
+  },
+  {
+    "id": "118e526e2c1c",
+    "tag": "live",
+    "date": "2019/7/20",
+    "year": 2019,
+    "content": "페퍼톤스 2015 CLUB TOUR 부산 at 오즈홀",
+    "link": null
+  },
+  {
+    "id": "3162503cbb19",
+    "tag": "live",
+    "date": "2019/7/21",
+    "year": 2019,
+    "content": "페퍼톤스 2015 CLUB TOUR 대구 at 락왕",
+    "link": null
+  },
+  {
+    "id": "ce8787e3d0bf",
+    "tag": "live",
+    "date": "2019/7/28",
+    "year": 2019,
+    "content": "페퍼톤스 2015 CLUB TOUR 대전 at 믹스페이스",
+    "link": null
+  },
+  {
+    "id": "edf41561eea0",
+    "tag": "live",
+    "date": "2019/8/2",
+    "year": 2019,
+    "content": "페퍼톤스 2015 CLUB TOUR 구리 at 구리아트홀 유채꽃 소극장",
+    "link": null
+  },
+  {
+    "id": "41614b5c0565",
+    "tag": "live",
+    "date": "2019/8/4",
+    "year": 2019,
+    "content": "페퍼톤스 2015 CLUB TOUR 서울 at UNDERSTAGE",
+    "link": null
+  },
+  {
+    "id": "bcbc803885af",
+    "tag": "live",
+    "date": "2019/8/10",
+    "year": 2019,
+    "content": "페퍼톤스 2015 CLUB TOUR 제주 at 2D Hall",
     "link": null
   },
   {
@@ -1016,11 +1256,35 @@
     "link": null
   },
   {
-    "id": "4784918476fe",
+    "id": "6a6a4f3abee9",
     "tag": "live",
-    "date": "2018/7/7 광주, 7/8 대전, 7/14 부산, 7/15 대구",
+    "date": "2018/7/7",
     "year": 2018,
-    "content": "live tour '2018 peppertones long way club tour'",
+    "content": "live tour '2018 peppertones long way club tour' 광주",
+    "link": null
+  },
+  {
+    "id": "954f11413800",
+    "tag": "live",
+    "date": "2018/7/8",
+    "year": 2018,
+    "content": "live tour '2018 peppertones long way club tour' 대전",
+    "link": null
+  },
+  {
+    "id": "ca3db0eb1a64",
+    "tag": "live",
+    "date": "2018/7/14",
+    "year": 2018,
+    "content": "live tour '2018 peppertones long way club tour' 부산",
+    "link": null
+  },
+  {
+    "id": "f5621f7e0b7b",
+    "tag": "live",
+    "date": "2018/7/15",
+    "year": 2018,
+    "content": "live tour '2018 peppertones long way club tour' 대구",
     "link": null
   },
   {
@@ -1120,11 +1384,43 @@
     "link": null
   },
   {
-    "id": "0d5df1faad68",
+    "id": "59a748124ceb",
     "tag": "live",
-    "date": "2017/9/2~3 서울, 9/9 부산, 9/16 대구, 9/26 LA, 9/29 NY",
+    "date": "2017/9/2~3",
     "year": 2017,
-    "content": "With, Antenna. 2017\n서울 at 잠실실내체육관\n부산 at 벡스코 오디토리움\n대구 at 엑스코 5층 컨벤션홀\nLA at Dolby Theatre\nNY at New Jersey Performing arts center",
+    "content": "With, Antenna. 2017 서울 at 잠실실내체육관",
+    "link": null
+  },
+  {
+    "id": "aa063a6f5e35",
+    "tag": "live",
+    "date": "2017/9/9",
+    "year": 2017,
+    "content": "With, Antenna. 2017 부산 at 벡스코 오디토리움",
+    "link": null
+  },
+  {
+    "id": "e205f2a02256",
+    "tag": "live",
+    "date": "2017/9/16",
+    "year": 2017,
+    "content": "With, Antenna. 2017 대구 at 엑스코 5층 컨벤션홀",
+    "link": null
+  },
+  {
+    "id": "056581e6fb72",
+    "tag": "live",
+    "date": "2017/9/26",
+    "year": 2017,
+    "content": "With, Antenna. 2017 LA at Dolby Theatre",
+    "link": null
+  },
+  {
+    "id": "bbd171a2ae06",
+    "tag": "live",
+    "date": "2017/9/29",
+    "year": 2017,
+    "content": "With, Antenna. 2017 NY at New Jersey Performing arts center",
     "link": null
   },
   {
@@ -1312,11 +1608,51 @@
     "link": null
   },
   {
-    "id": "560ead0cb80d",
+    "id": "fc7d5803b308",
     "tag": "live",
-    "date": "2016/06/18 광주, 6/19 대전, 6/25 부산, 6/26 대구, 7/2 강릉, 7/10 서울",
+    "date": "2016/06/18",
     "year": 2016,
-    "content": "페퍼톤스 2016 CLUB TOUR",
+    "content": "페퍼톤스 2016 CLUB TOUR 광주",
+    "link": null
+  },
+  {
+    "id": "00e0c63c6b0e",
+    "tag": "live",
+    "date": "2016/6/19",
+    "year": 2016,
+    "content": "페퍼톤스 2016 CLUB TOUR 대전",
+    "link": null
+  },
+  {
+    "id": "e12ab241d693",
+    "tag": "live",
+    "date": "2016/6/25",
+    "year": 2016,
+    "content": "페퍼톤스 2016 CLUB TOUR 부산",
+    "link": null
+  },
+  {
+    "id": "ef17e5b95643",
+    "tag": "live",
+    "date": "2016/6/26",
+    "year": 2016,
+    "content": "페퍼톤스 2016 CLUB TOUR 대구",
+    "link": null
+  },
+  {
+    "id": "46f78b2f8841",
+    "tag": "live",
+    "date": "2016/7/2",
+    "year": 2016,
+    "content": "페퍼톤스 2016 CLUB TOUR 강릉",
+    "link": null
+  },
+  {
+    "id": "f58d23aad6d5",
+    "tag": "live",
+    "date": "2016/7/10",
+    "year": 2016,
+    "content": "페퍼톤스 2016 CLUB TOUR 서울",
     "link": null
   },
   {
@@ -1456,11 +1792,51 @@
     "link": null
   },
   {
-    "id": "b2617ff73f52",
+    "id": "d5f94803cfeb",
     "tag": "live",
-    "date": "2015/06/13 부산, 6/14 대구, 6/20 광주, 6/21 대전, 6/27 서울, 7/04 제주",
+    "date": "2015/06/13",
     "year": 2015,
-    "content": "페퍼톤스 2015 CLUB TOUR\n부산 at 드림홀(구 오즈홀)\n대구 at 락왕(구 인디야)\n광주 at 네버마인드\n대전 at 믹스페이스\n서울 at 예스24 무브홀\n제주 at 겟스페이스",
+    "content": "페퍼톤스 2015 CLUB TOUR 부산 at 드림홀(구 오즈홀)",
+    "link": null
+  },
+  {
+    "id": "5a739126c057",
+    "tag": "live",
+    "date": "2015/6/14",
+    "year": 2015,
+    "content": "페퍼톤스 2015 CLUB TOUR 대구 at 락왕(구 인디야)",
+    "link": null
+  },
+  {
+    "id": "c8841d314635",
+    "tag": "live",
+    "date": "2015/6/20",
+    "year": 2015,
+    "content": "페퍼톤스 2015 CLUB TOUR 광주 at 네버마인드",
+    "link": null
+  },
+  {
+    "id": "474c6b573c83",
+    "tag": "live",
+    "date": "2015/6/21",
+    "year": 2015,
+    "content": "페퍼톤스 2015 CLUB TOUR 대전 at 믹스페이스",
+    "link": null
+  },
+  {
+    "id": "ac3f8419a48a",
+    "tag": "live",
+    "date": "2015/6/27",
+    "year": 2015,
+    "content": "페퍼톤스 2015 CLUB TOUR 서울 at 예스24 무브홀",
+    "link": null
+  },
+  {
+    "id": "4697c9a2cff7",
+    "tag": "live",
+    "date": "2015/7/04",
+    "year": 2015,
+    "content": "페퍼톤스 2015 CLUB TOUR 제주 at 겟스페이스",
     "link": null
   },
   {
@@ -1584,11 +1960,43 @@
     "link": "http://www.genie.co.kr/genies_pick/02/f_genies_pick.asp?pick_id=11#live"
   },
   {
-    "id": "f475583ba9a9",
+    "id": "704d963e3550",
     "tag": "live",
-    "date": "2014/08/16 부산, 8/17 대구, 8/23 광주, 8/24 대전, 8/30 서울",
+    "date": "2014/08/16",
     "year": 2014,
-    "content": "페퍼톤스 2014 CLUB TOUR \"HIGH-FIVE\"\n부산 at 드림홀(구 오즈홀)\n대구 at 락왕(구 인디야)\n광주 at 네버마인드\n대전 at 인스카이2\n서울 at 예스24 무브홀",
+    "content": "페퍼톤스 2014 CLUB TOUR \"HIGH-FIVE\" 부산 at 드림홀(구 오즈홀)",
+    "link": null
+  },
+  {
+    "id": "f315f578c751",
+    "tag": "live",
+    "date": "2014/8/17",
+    "year": 2014,
+    "content": "페퍼톤스 2014 CLUB TOUR \"HIGH-FIVE\" 대구 at 락왕(구 인디야)",
+    "link": null
+  },
+  {
+    "id": "a28f64f1ac97",
+    "tag": "live",
+    "date": "2014/8/23",
+    "year": 2014,
+    "content": "페퍼톤스 2014 CLUB TOUR \"HIGH-FIVE\" 광주 at 네버마인드",
+    "link": null
+  },
+  {
+    "id": "45eeb5003a64",
+    "tag": "live",
+    "date": "2014/8/24",
+    "year": 2014,
+    "content": "페퍼톤스 2014 CLUB TOUR \"HIGH-FIVE\" 대전 at 인스카이2",
+    "link": null
+  },
+  {
+    "id": "080afcf27a89",
+    "tag": "live",
+    "date": "2014/8/30",
+    "year": 2014,
+    "content": "페퍼톤스 2014 CLUB TOUR \"HIGH-FIVE\" 서울 at 예스24 무브홀",
     "link": null
   },
   {
@@ -1776,11 +2184,43 @@
     "link": null
   },
   {
-    "id": "c7971bc6c2e0",
+    "id": "fa794728861d",
     "tag": "live",
-    "date": "2013/6/9 대구, 6/14 대전, 6/15 부산, 6/23 광주, 6/30 전주",
+    "date": "2013/6/9",
     "year": 2013,
-    "content": "페퍼톤스 2013 CLUB TOUR",
+    "content": "페퍼톤스 2013 CLUB TOUR 대구",
+    "link": null
+  },
+  {
+    "id": "4a2cf019bdf3",
+    "tag": "live",
+    "date": "2013/6/14",
+    "year": 2013,
+    "content": "페퍼톤스 2013 CLUB TOUR 대전",
+    "link": null
+  },
+  {
+    "id": "08228f717b31",
+    "tag": "live",
+    "date": "2013/6/15",
+    "year": 2013,
+    "content": "페퍼톤스 2013 CLUB TOUR 부산",
+    "link": null
+  },
+  {
+    "id": "16f04d054cf4",
+    "tag": "live",
+    "date": "2013/6/23",
+    "year": 2013,
+    "content": "페퍼톤스 2013 CLUB TOUR 광주",
+    "link": null
+  },
+  {
+    "id": "7027a030e608",
+    "tag": "live",
+    "date": "2013/6/30",
+    "year": 2013,
+    "content": "페퍼톤스 2013 CLUB TOUR 전주",
     "link": null
   },
   {
@@ -1872,11 +2312,19 @@
     "link": null
   },
   {
-    "id": "ab0bf923bcdc",
+    "id": "a55b476f7c68",
     "tag": "live",
-    "date": "서울 2012/12/21~23, 부산 12/28~29",
+    "date": "2012/12/21~23",
     "year": 2012,
-    "content": "페퍼톤스 연말 콘서트 [Fine.]",
+    "content": "페퍼톤스 연말 콘서트 [Fine.] 서울",
+    "link": null
+  },
+  {
+    "id": "556e641f37cb",
+    "tag": "live",
+    "date": "2012/12/28~29",
+    "year": 2012,
+    "content": "페퍼톤스 연말 콘서트 [Fine.] 부산",
     "link": null
   },
   {
@@ -1984,11 +2432,51 @@
     "link": null
   },
   {
-    "id": "0daba9e0e9f2",
+    "id": "68a5393fd1d1",
     "tag": "live",
-    "date": "2012/08/11 대구, 8/12 대전, 8/25 안산, 8/26 부평, 9/1 광주, 9/2 전주",
+    "date": "2012/08/11",
     "year": 2012,
-    "content": "Beginner’s Luck Club Tour\n대구 at 클럽 헤비\n대전 at 인스카이2\n안산 at 베이스먼트\n부평 at 락캠프\n광주 at 클럽 네버마인드\n전주 at 레드제플린",
+    "content": "Beginner’s Luck Club Tour 대구 at 클럽 헤비",
+    "link": null
+  },
+  {
+    "id": "d1d663100177",
+    "tag": "live",
+    "date": "2012/8/12",
+    "year": 2012,
+    "content": "Beginner’s Luck Club Tour 대전 at 인스카이2",
+    "link": null
+  },
+  {
+    "id": "82516e77e126",
+    "tag": "live",
+    "date": "2012/8/25",
+    "year": 2012,
+    "content": "Beginner’s Luck Club Tour 안산 at 베이스먼트",
+    "link": null
+  },
+  {
+    "id": "943b32f0f1ce",
+    "tag": "live",
+    "date": "2012/8/26",
+    "year": 2012,
+    "content": "Beginner’s Luck Club Tour 부평 at 락캠프",
+    "link": null
+  },
+  {
+    "id": "af90ca6c1177",
+    "tag": "live",
+    "date": "2012/9/1",
+    "year": 2012,
+    "content": "Beginner’s Luck Club Tour 광주 at 클럽 네버마인드",
+    "link": null
+  },
+  {
+    "id": "c28689e76b94",
+    "tag": "live",
+    "date": "2012/9/2",
+    "year": 2012,
+    "content": "Beginner’s Luck Club Tour 전주 at 레드제플린",
     "link": null
   },
   {
@@ -2208,11 +2696,27 @@
     "link": null
   },
   {
-    "id": "f27ecd270605",
+    "id": "a7f5bd4f06bd",
     "tag": "live",
-    "date": "2011/4/15-17, 23-24, 30-5/1",
+    "date": "2011/4/15-17",
     "year": 2011,
-    "content": "안테나 뮤직 워리어스 '그래 우리 함께..' at 서울,부산,대구",
+    "content": "안테나 뮤직 워리어스 '그래 우리 함께..' 서울",
+    "link": null
+  },
+  {
+    "id": "e2d2f4881b0b",
+    "tag": "live",
+    "date": "2011/4/23-24",
+    "year": 2011,
+    "content": "안테나 뮤직 워리어스 '그래 우리 함께..' 부산",
+    "link": null
+  },
+  {
+    "id": "117f6d45fdd7",
+    "tag": "live",
+    "date": "2011/4/30-5/1",
+    "year": 2011,
+    "content": "안테나 뮤직 워리어스 '그래 우리 함께..' 대구",
     "link": null
   },
   {

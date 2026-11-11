@@ -85,6 +85,130 @@ def parse_chunk(chunk_html: str) -> dict | None:
     return {"tag": tag, "date": date, "year": year, "content": content, "link": link}
 
 
+# ---------------------------------------------------------------------------
+# 투어(클럽투어 등) 항목을 공연 날짜별로 분리
+#
+# 원문은 한 항목에 여러 도시/날짜를 몰아 쓴 경우가 있다. 앱에서는 날짜마다 한 줄씩
+# 보여주기 위해, 아래 규칙에 걸리는 live 항목을 날짜별 항목으로 쪼갠다.
+#   A) 날짜란에 "날짜 도시"가 여러 개:  [2018/7/7 광주, 7/8 대전, ...] / [서울 2012/12/21~23, 부산 12/28~29]
+#   B) 본문 안에 "날짜 도시 ..."가 여러 개: 페퍼톤스 클럽투어 7/11-12 서울 ..., 7/18-19 부산 ...
+#   C) 날짜 N개 + 본문 끝 "at 도시,도시,도시"(N개): 순서대로 짝지음
+#   수동) 규칙으로 못 푸는 항목은 MANUAL_SPLITS 에 직접 지정
+# ---------------------------------------------------------------------------
+
+# 원문 날짜란 -> 사용자가 지정한 [(날짜, 도시)] 매핑 (본문의 "도시 at 장소"와 결합)
+MANUAL_SPLITS: dict[str, list[tuple[str, str]]] = {
+    "2025/6/28-29, 7/5-6, 7/19-20, 7/26-27": [
+        ("6/28-29", "서울"),
+        ("7/5", "대구"),
+        ("7/6", "부산"),
+        ("7/19", "전주"),
+        ("7/20", "광주"),
+        ("7/26-27", "인천"),
+    ],
+}
+
+DATE_TOKEN_RE = re.compile(
+    r"^\s*(?P<pre>[^\d]*?)\s*(?:(?P<y>\d{4})/)?(?P<md>\d{1,2}/\d{1,2}(?:\s*[-~]\s*\d{1,2})?)\s*(?P<post>.*?)\s*$"
+)
+INLINE_DATE_RE = re.compile(r"(?:(?<=^)|(?<=[\s,]))(\d{1,2}/\d{1,2}(?:[-~]\d{1,2})?)\s+(?=\S)", re.MULTILINE)
+
+
+def _derive(item: dict, date: str, content: str) -> dict:
+    return {**item, "date": date, "content": content}
+
+
+def _split_city_dates(item: dict) -> list[dict] | None:
+    """A) 날짜란에 '날짜 도시'가 여러 개."""
+    tokens = [t for t in item["date"].split(",") if t.strip()]
+    if len(tokens) < 2:
+        return None
+    parsed = []
+    for t in tokens:
+        m = DATE_TOKEN_RE.match(t)
+        city = (m.group("pre") or m.group("post")).strip() if m else ""
+        if not m or not city:
+            return None
+        parsed.append((f"{m.group('y') or item['year']}/{m.group('md').replace(' ', '')}", city))
+
+    cities = [c for _, c in parsed]
+    lines = [l for l in item["content"].split("\n") if l.strip()]
+    city_lines = {}
+    title_lines = []
+    for line in lines:
+        city = next((c for c in cities if line.startswith(c + " ") or line == c), None)
+        if city:
+            city_lines[city] = line
+        else:
+            title_lines.append(line)
+    title = " ".join(title_lines)
+    return [_derive(item, d, f"{title} {city_lines.get(c, c)}".strip()) for d, c in parsed]
+
+
+def _split_inline(item: dict) -> list[dict] | None:
+    """B) 본문 안에 '날짜 도시 ...'가 여러 개."""
+    content = item["content"]
+    hits = list(INLINE_DATE_RE.finditer(content))
+    if len(hits) < 3:
+        return None
+    title = content[: hits[0].start()].strip()
+    result = []
+    for i, hit in enumerate(hits):
+        end = hits[i + 1].start() if i + 1 < len(hits) else len(content)
+        rest = content[hit.end():end].strip(" ,\n")
+        result.append(_derive(item, f"{item['year']}/{hit.group(1)}", f"{title} {rest}".strip()))
+    return result
+
+
+def _split_paired(item: dict) -> list[dict] | None:
+    """C) 날짜 N개 + 본문 끝 'at 도시,도시,..'(N개)를 순서대로 짝짓는다."""
+    tokens = [t.strip() for t in item["date"].split(",") if t.strip()]
+    m = re.search(r"\s+at\s+([^,\n]+(?:,[^,\n]+)+)\s*$", item["content"])
+    if len(tokens) < 2 or not m:
+        return None
+    places = [p.strip() for p in m.group(1).split(",")]
+    if len(places) != len(tokens):
+        return None
+    title = item["content"][: m.start()].strip()
+    month = ""
+    result = []
+    for token, place in zip(tokens, places):
+        # 첫 토큰에만 붙어있는 연도("2011/4/15-17")는 떼고, 월이 생략된 토큰("23-24", "30-5/1")은 직전 월을 이어받는다.
+        token = re.sub(r"^\d{4}/", "", token)
+        lead = re.match(r"^(\d{1,2})/", token)
+        if lead:
+            month = lead.group(1)
+        else:
+            token = f"{month}/{token}"
+        result.append(_derive(item, f"{item['year']}/{token}", f"{title} {place}"))
+    return result
+
+
+def _split_manual(item: dict) -> list[dict] | None:
+    mapping = MANUAL_SPLITS.get(item["date"])
+    if not mapping:
+        return None
+    m = re.search(r"\s(?=[가-힣]+ at )", item["content"])
+    if not m:
+        return None
+    title = item["content"][: m.start()].strip()
+    details = {c: f"{c} at {v}" for c, v in re.findall(r"([가-힣]+) at ([^,\n]+)", item["content"][m.start():])}
+    return [
+        _derive(item, f"{item['year']}/{d}", f"{title} {details.get(c, c)}")
+        for d, c in mapping
+    ]
+
+
+def split_tour(item: dict) -> list[dict]:
+    if item["tag"] != "live":
+        return [item]
+    for splitter in (_split_manual, _split_city_dates, _split_paired, _split_inline):
+        parts = splitter(item)
+        if parts:
+            return parts
+    return [item]
+
+
 def make_id(item: dict) -> str:
     """페이지에 고유 id가 없어서 내용 기반 해시를 id로 쓴다.
     (순서가 바뀌거나 위에 새 항목이 추가돼도 기존 항목 id는 변하지 않는다.)"""
@@ -97,15 +221,16 @@ def parse_news(html: str) -> list[dict]:
     seen: dict[str, int] = {}
     # <p>가 닫히지 않은 채 이어지는 곳이 있어서, 트리로 파싱하지 않고 <p> 시작 기준으로 먼저 잘라낸다.
     for chunk in P_SPLIT_RE.split(html)[1:]:
-        item = parse_chunk(chunk)
-        if item is None:
+        parsed = parse_chunk(chunk)
+        if parsed is None:
             continue
-        base_id = make_id(item)
-        # 완전히 같은 항목이 두 번 나오는 경우를 위한 접미사
-        count = seen.get(base_id, 0)
-        seen[base_id] = count + 1
-        item["id"] = base_id if count == 0 else f"{base_id}-{count}"
-        items.append(item)
+        for item in split_tour(parsed):
+            base_id = make_id(item)
+            # 완전히 같은 항목이 두 번 나오는 경우를 위한 접미사
+            count = seen.get(base_id, 0)
+            seen[base_id] = count + 1
+            item["id"] = base_id if count == 0 else f"{base_id}-{count}"
+            items.append(item)
     return items
 
 
