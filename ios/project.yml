@@ -36,6 +36,7 @@ targets:
           - armv7
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
+        NSPhotoLibraryAddUsageDescription: 다녀온 공연 목록 이미지를 사진 앱에 저장하기 위해 필요합니다.
         UIBackgroundModes:
           - fetch
         BGTaskSchedulerPermittedIdentifiers:
