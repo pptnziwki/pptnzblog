@@ -243,16 +243,34 @@ struct NewsView: View {
 struct NewsRowView: View {
     let item: NewsItem
     let onTapLink: () -> Void
+    @ObservedObject private var attended = AttendedStore.shared
 
     var body: some View {
-        if item.linkURL != nil {
-            Button(action: onTapLink) { rowContent }
-                .buttonStyle(.plain)
-                .listRowBackground(Color.pptnzBackground)
-        } else {
+        HStack(alignment: .center, spacing: 12) {
             rowContent
-                .listRowBackground(Color.pptnzBackground)
+                .onTapGesture {
+                    if item.linkURL != nil { onTapLink() }
+                }
+            // 다녀온 공연 체크는 공연(live) 소식에만 붙는다.
+            if item.isLive {
+                attendedCheckbox
+            }
         }
+        .listRowBackground(Color.pptnzBackground)
+    }
+
+    private var attendedCheckbox: some View {
+        let isAttended = attended.isAttended(item)
+        return Button {
+            attended.toggle(item)
+        } label: {
+            Image(systemName: isAttended ? "checkmark.square.fill" : "square")
+                .font(.title3)
+                .foregroundStyle(isAttended ? Color.pptnzCoral : Color.secondary)
+        }
+        .buttonStyle(.borderless)
+        .accessibilityLabel("다녀온 공연")
+        .accessibilityValue(isAttended ? "선택됨" : "선택 안 됨")
     }
 
     private var rowContent: some View {

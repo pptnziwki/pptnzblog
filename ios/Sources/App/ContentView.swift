@@ -7,6 +7,7 @@ struct ContentView: View {
     @State private var loadError: String?
     @State private var showsSettings = false
     @State private var showsBookmarks = false
+    @State private var showsAttended = false
     @State private var navigationPath = NavigationPath()
     @State private var collapsedYears: Set<String> = []
     @State private var section: HomeSection = .blog
@@ -116,6 +117,16 @@ struct ContentView: View {
                                 .foregroundStyle(Color.pptnzCoral)
                         }
                         .buttonStyle(.plain)
+                    } else {
+                        // NEWS에서는 북마크 대신 "다녀온 공연" 모아보기
+                        Button {
+                            showsAttended = true
+                        } label: {
+                            Image(systemName: "ticket")
+                                .foregroundStyle(Color.pptnzCoral)
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel("다녀온 공연")
                     }
                 }
                 ToolbarItem(placement: .principal) {
@@ -141,6 +152,9 @@ struct ContentView: View {
             }
             .sheet(isPresented: $showsBookmarks) {
                 BookmarksView(posts: bookmarkedPosts)
+            }
+            .sheet(isPresented: $showsAttended) {
+                AttendedView()
             }
             .refreshable { await load() }
             .task { await load() }
@@ -174,6 +188,7 @@ struct ContentView: View {
         guard notificationDelegate.pendingNewsTap else { return }
         showsSettings = false
         showsBookmarks = false
+        showsAttended = false
         navigationPath = NavigationPath()
         section = .news
         notificationDelegate.pendingNewsTap = false
