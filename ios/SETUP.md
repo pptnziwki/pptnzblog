@@ -55,7 +55,7 @@ open PPTNZBlog.xcodeproj
 
 ## 참고
 
-- `posts.json`은 GitHub Actions가 15~20분마다 갱신해서 리포지토리 루트에 커밋합니다.
+- `posts.json`은 GitHub Actions가 3시간마다(뉴스는 6시간마다) 갱신해서 리포지토리 루트에 커밋합니다.
   앱/위젯은 `https://raw.githubusercontent.com/wooyxxng-Jang/pptnzblog/main/posts.json`을 직접 읽습니다.
 - 글 상세 화면은 `post.link` 원문 페이지를 실시간으로 가져와 본문/이미지/댓글을 파싱합니다(`PostDetailLoader`).
   오프라인이거나 파싱에 실패하면 posts.json에 저장된 요약 텍스트로 자동 폴백합니다.

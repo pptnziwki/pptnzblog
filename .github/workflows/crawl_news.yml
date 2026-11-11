@@ -1,10 +1,10 @@
 name: PPTNZ 뉴스 체크
 
-# peppertones.net news 탭은 자주 바뀌지 않아서 하루에 한 번만 확인한다.
-# (블로그 글 확인은 crawl.yml에서 20분마다 따로 돈다.)
+# peppertones.net news 탭은 자주 바뀌지 않아서 6시간마다 확인한다.
+# (블로그 글 확인은 crawl.yml에서 3시간마다 따로 돈다.)
 on:
   schedule:
-    - cron: '0 1 * * *'   # 매일 1회 (01:00 UTC = 한국시간 10:00)
+    - cron: '0 */6 * * *'   # 6시간마다 (00/06/12/18시 UTC = 한국시간 09/15/21/03시)
   workflow_dispatch:       # 수동 실행 버튼도 열어둠
 
 permissions:
