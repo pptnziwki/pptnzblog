@@ -86,16 +86,8 @@ struct NewsView: View {
         .padding(.horizontal, 12)
         .padding(.vertical, 8)
         .frame(maxWidth: .infinity, alignment: .leading)
-        // 목록이 필터 뒤로 스크롤될 때 글자가 겹쳐 보이지 않도록 배경색을 깔고 아래쪽으로 옅어지게 한다.
-        .background(alignment: .top) {
-            LinearGradient(
-                colors: [Color.pptnzBackground, Color.pptnzBackground, Color.pptnzBackground.opacity(0)],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-            .padding(.bottom, -14)
-            .allowsHitTesting(false)
-        }
+        // 목록이 필터/헤더 뒤로 스크롤돼도 비쳐 보이지 않도록, 상단 네비게이션 영역까지 배경색으로 꽉 채운다.
+        .background(Color.pptnzBackground.ignoresSafeArea(edges: .top))
     }
 
     private var chipRow: some View {
@@ -174,6 +166,7 @@ struct NewsView: View {
                             Image(systemName: forcesExpansion || expandedYears.contains(group.year) ? "chevron.down" : "chevron.right")
                                 .foregroundStyle(Color.pptnzPink)
                         }
+                        .padding(.vertical, 6)
                         .contentShape(Rectangle())
                         // 스크롤하면 헤더가 상단에 붙는데, 배경이 없으면 아래 행과 글자가 겹쳐 보인다.
                         .background(Color.pptnzBackground)
