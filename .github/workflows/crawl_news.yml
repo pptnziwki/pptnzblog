@@ -1,0 +1,45 @@
+name: PPTNZ 뉴스 체크
+
+# peppertones.net news 탭은 자주 바뀌지 않아서 하루에 한 번만 확인한다.
+# (블로그 글 확인은 crawl.yml에서 20분마다 따로 돈다.)
+on:
+  schedule:
+    - cron: '0 1 * * *'   # 매일 1회 (01:00 UTC = 한국시간 10:00)
+  workflow_dispatch:       # 수동 실행 버튼도 열어둠
+
+permissions:
+  contents: write   # news.json을 커밋/푸시하려면 쓰기 권한이 필요
+
+# 블로그 워크플로(crawl.yml)와 동시에 main에 푸시하다 충돌하지 않도록 한 번에 하나씩만 실행
+concurrency:
+  group: pptnz-crawl-commit
+  cancel-in-progress: false
+
+jobs:
+  crawl-news:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - run: pip install requests beautifulsoup4
+
+      # 파싱 결과가 비정상이면(항목이 너무 적으면) 이 단계가 실패해서 실행이 빨간색으로 표시된다.
+      # 날짜별 분리 등 지금까지 정한 규칙은 크롤러(crawl_pptnz_news.py)가 모두 적용한다.
+      - name: news 탭 크롤링
+        run: python crawl_pptnz_news.py
+
+      - name: 변경사항 커밋
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add news.json
+          if git diff --staged --quiet; then
+            echo "news.json 변경 없음"
+          else
+            git commit -m "update news.json"
+            git push
+          fi
