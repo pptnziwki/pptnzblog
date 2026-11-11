@@ -9,6 +9,7 @@
 
 - **크롤러** (`crawl_pptnz_blog.py`, `.github/workflows/crawl.yml`)
   GitHub Actions가 주기적으로 블로그 목록을 파싱해 `posts.json`으로 커밋합니다.
+  같은 워크플로에서 `crawl_pptnz_news.py`가 peppertones.net의 news 탭을 파싱해 `news.json`으로 커밋합니다(iOS NEWS 탭용).
   목록/새 글 감지용 가벼운 데이터(id·제목·날짜·본문 미리보기·링크)만 담당하고,
   이미지·댓글·영상 같은 리치 콘텐츠와 알림은 각 앱이 직접 처리합니다.
 
