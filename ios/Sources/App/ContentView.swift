@@ -10,6 +10,7 @@ struct ContentView: View {
     @State private var navigationPath = NavigationPath()
     @State private var collapsedYears: Set<String> = []
     @State private var notice: Notice?
+    @State private var section: HomeSection = .blog
     @AppStorage("dismissedNoticeID") private var dismissedNoticeID = ""
     @ObservedObject private var bookmarks = BookmarksStore.shared
     @ObservedObject private var notificationDelegate = NotificationDelegate.shared
@@ -34,88 +35,98 @@ struct ContentView: View {
         posts.filter { bookmarks.isBookmarked($0) }.sorted { $0.id > $1.id }
     }
 
-    var body: some View {
-        NavigationStack(path: $navigationPath) {
-            VStack(spacing: 0) {
-                if let notice, notice.id != dismissedNoticeID {
-                    NoticeBannerView(message: notice.message) {
-                        withAnimation { dismissedNoticeID = notice.id }
-                    }
+    private var blogContent: some View {
+        VStack(spacing: 0) {
+            if let notice, notice.id != dismissedNoticeID {
+                NoticeBannerView(message: notice.message) {
+                    withAnimation { dismissedNoticeID = notice.id }
                 }
-                ScrollViewReader { proxy in
-                    Group {
-                        if posts.isEmpty && isLoading {
-                            ProgressView("불러오는 중…")
-                        } else if let loadError, posts.isEmpty {
-                            ContentUnavailableView(
-                                "글을 불러오지 못했어요",
-                                systemImage: "wifi.slash",
-                                description: Text(loadError)
-                            )
-                        } else if filteredPosts.isEmpty {
-                            ContentUnavailableView.search(text: searchText)
-                        } else {
-                            ZStack(alignment: .bottomTrailing) {
-                                List {
-                                    Color.clear.frame(height: 0)
-                                        .listRowInsets(EdgeInsets())
-                                        .listRowSeparator(.hidden)
-                                        .id(Self.topAnchor)
-                                    ForEach(groupedByYear, id: \.year) { group in
-                                        Section {
-                                            if !collapsedYears.contains(group.year) {
-                                                ForEach(group.posts) { post in
-                                                    NavigationLink(value: post) {
-                                                        PostRowView(post: post)
-                                                    }
+            }
+            ScrollViewReader { proxy in
+                Group {
+                    if posts.isEmpty && isLoading {
+                        ProgressView("불러오는 중…")
+                    } else if let loadError, posts.isEmpty {
+                        ContentUnavailableView(
+                            "글을 불러오지 못했어요",
+                            systemImage: "wifi.slash",
+                            description: Text(loadError)
+                        )
+                    } else if filteredPosts.isEmpty {
+                        ContentUnavailableView.search(text: searchText)
+                    } else {
+                        ZStack(alignment: .bottomTrailing) {
+                            List {
+                                Color.clear.frame(height: 0)
+                                    .listRowInsets(EdgeInsets())
+                                    .listRowSeparator(.hidden)
+                                    .id(Self.topAnchor)
+                                ForEach(groupedByYear, id: \.year) { group in
+                                    Section {
+                                        if !collapsedYears.contains(group.year) {
+                                            ForEach(group.posts) { post in
+                                                NavigationLink(value: post) {
+                                                    PostRowView(post: post)
                                                 }
                                             }
-                                        } header: {
-                                            Button {
-                                                withAnimation { toggleYear(group.year) }
-                                            } label: {
-                                                HStack {
-                                                    Text(group.year)
-                                                        .foregroundStyle(Color.pptnzPink)
-                                                    Spacer()
-                                                    Image(systemName: collapsedYears.contains(group.year) ? "chevron.right" : "chevron.down")
-                                                        .foregroundStyle(Color.pptnzPink)
-                                                }
-                                            }
-                                            .buttonStyle(.plain)
                                         }
+                                    } header: {
+                                        Button {
+                                            withAnimation { toggleYear(group.year) }
+                                        } label: {
+                                            HStack {
+                                                Text(group.year)
+                                                    .foregroundStyle(Color.pptnzPink)
+                                                Spacer()
+                                                Image(systemName: collapsedYears.contains(group.year) ? "chevron.right" : "chevron.down")
+                                                    .foregroundStyle(Color.pptnzPink)
+                                            }
+                                        }
+                                        .buttonStyle(.plain)
                                     }
-                                    Color.clear.frame(height: 0)
-                                        .listRowInsets(EdgeInsets())
-                                        .listRowSeparator(.hidden)
-                                        .id(Self.bottomAnchor)
                                 }
-                                .listStyle(.plain)
-                                .scrollContentBackground(.hidden)
-                                .background(Color.pptnzBackground)
-                                .contentMargins(.top, 0, for: .scrollContent)
-
-                                scrollButtons(proxy: proxy)
+                                Color.clear.frame(height: 0)
+                                    .listRowInsets(EdgeInsets())
+                                    .listRowSeparator(.hidden)
+                                    .id(Self.bottomAnchor)
                             }
+                            .listStyle(.plain)
+                            .scrollContentBackground(.hidden)
+                            .background(Color.pptnzBackground)
+                            .contentMargins(.top, 0, for: .scrollContent)
+
+                            scrollButtons(proxy: proxy)
                         }
                     }
+                }
+            }
+        }
+    }
+
+    var body: some View {
+        NavigationStack(path: $navigationPath) {
+            Group {
+                if section == .news {
+                    NewsView(searchText: searchText)
+                } else {
+                    blogContent
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button {
-                        showsBookmarks = true
-                    } label: {
-                        Image(systemName: "bookmark")
-                            .foregroundStyle(Color.pptnzCoral)
+                    if section == .blog {
+                        Button {
+                            showsBookmarks = true
+                        } label: {
+                            Image(systemName: "bookmark")
+                                .foregroundStyle(Color.pptnzCoral)
+                        }
+                        .buttonStyle(.plain)
                     }
-                    .buttonStyle(.plain)
                 }
                 ToolbarItem(placement: .principal) {
-                    Text("BLOG")
-                        .font(.system(.title, design: .default, weight: .heavy))
-                        .foregroundStyle(Color.pptnzYellow)
+                    SectionToggleView(selection: $section)
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
@@ -150,6 +161,13 @@ struct ContentView: View {
             .onChange(of: posts) { _, _ in
                 handleNotificationTap(notificationDelegate.pendingPostID)
             }
+            .onChange(of: section) { _, _ in
+                searchText = ""
+            }
+            .onChange(of: notificationDelegate.pendingNewsTap) { _, _ in
+                handleNewsNotificationTap()
+            }
+            .onAppear { handleNewsNotificationTap() }
         }
     }
 
@@ -160,6 +178,16 @@ struct ContentView: View {
         showsBookmarks = false
         navigationPath.append(post)
         notificationDelegate.pendingPostID = nil
+    }
+
+    /// 새 소식 알림을 탭해서 앱이 열렸을 때 NEWS 탭으로 전환한다.
+    private func handleNewsNotificationTap() {
+        guard notificationDelegate.pendingNewsTap else { return }
+        showsSettings = false
+        showsBookmarks = false
+        navigationPath = NavigationPath()
+        section = .news
+        notificationDelegate.pendingNewsTap = false
     }
 
     private func toggleYear(_ year: String) {

@@ -30,6 +30,7 @@ enum BackgroundRefresh {
     static func run() async {
         scheduleNext()
         await checkForNewPosts()
+        await NewsNotifier.checkForNew()
         await DailyPostNotifier.rescheduleIfNeeded()
     }
 

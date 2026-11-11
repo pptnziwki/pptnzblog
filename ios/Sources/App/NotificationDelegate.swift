@@ -8,6 +8,9 @@ final class NotificationDelegate: NSObject, ObservableObject, UNUserNotification
     /// 알림 탭으로 열어야 할 글 id. ContentView가 이 값을 관찰해서 상세 화면으로 이동시킨다.
     @Published var pendingPostID: String?
 
+    /// 새 소식(news) 알림을 탭해서 열렸는지 여부. ContentView가 관찰해서 NEWS 탭으로 전환한다.
+    @Published var pendingNewsTap = false
+
     private override init() {}
 
     func userNotificationCenter(
@@ -17,6 +20,8 @@ final class NotificationDelegate: NSObject, ObservableObject, UNUserNotification
     ) {
         if let postID = response.notification.request.content.userInfo["postID"] as? String {
             pendingPostID = postID
+        } else if response.notification.request.content.userInfo["newsID"] is String {
+            pendingNewsTap = true
         }
         completionHandler()
     }
