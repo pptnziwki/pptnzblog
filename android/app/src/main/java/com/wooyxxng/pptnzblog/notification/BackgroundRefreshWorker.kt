@@ -18,6 +18,8 @@ class BackgroundRefreshWorker(context: Context, params: WorkerParameters) : Coro
 
     override suspend fun doWork(): Result {
         val preferences = AppPreferences(applicationContext)
+        // 새 소식(news) 감지는 블로그 새 글 확인과 별개로, 실패해도 서로 영향을 주지 않게 한다.
+        runCatching { NewsNotifier.checkForNew(applicationContext) }
         if (!preferences.getNotificationsEnabled()) return Result.success()
 
         return try {

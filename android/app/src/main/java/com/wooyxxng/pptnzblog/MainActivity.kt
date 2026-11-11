@@ -32,6 +32,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.wooyxxng.pptnzblog.data.AppPreferences
+import com.wooyxxng.pptnzblog.data.AttendedStore
+import com.wooyxxng.pptnzblog.data.NewsItem
+import com.wooyxxng.pptnzblog.data.NewsRepository
+import com.wooyxxng.pptnzblog.notification.NewsNotifier
+import com.wooyxxng.pptnzblog.ui.list.AttendedScreen
+import com.wooyxxng.pptnzblog.ui.list.HomeSection
+import com.wooyxxng.pptnzblog.ui.list.NewsScreen
+import androidx.compose.runtime.saveable.rememberSaveable
 import com.wooyxxng.pptnzblog.data.BookmarksStore
 import com.wooyxxng.pptnzblog.data.Post
 import com.wooyxxng.pptnzblog.data.PostsRepository
@@ -47,6 +55,8 @@ import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     private val pendingPostId = mutableStateOf<String?>(null)
+    /** 새 소식 알림을 탭해서 열린 경우 NEWS 탭으로 전환하기 위한 플래그. */
+    private val pendingNews = mutableStateOf(false)
 
     private val requestNotificationPermission =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { }
@@ -60,10 +70,11 @@ class MainActivity : ComponentActivity() {
         }
 
         pendingPostId.value = extractPostId(intent)
+        pendingNews.value = isNewsIntent(intent)
 
         setContent {
             PptnzBlogTheme {
-                AppRoot(pendingPostId = pendingPostId)
+                AppRoot(pendingPostId = pendingPostId, pendingNews = pendingNews)
             }
         }
     }
@@ -72,7 +83,10 @@ class MainActivity : ComponentActivity() {
         super.onNewIntent(intent)
         setIntent(intent)
         extractPostId(intent)?.let { pendingPostId.value = it }
+        if (isNewsIntent(intent)) pendingNews.value = true
     }
+
+    private fun isNewsIntent(intent: Intent?): Boolean = intent?.data?.host == "news"
 
     private fun extractPostId(intent: Intent?): String? {
         val data = intent?.data ?: return null
@@ -81,7 +95,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-private fun AppRoot(pendingPostId: MutableState<String?>) {
+private fun AppRoot(pendingPostId: MutableState<String?>, pendingNews: MutableState<Boolean>) {
     val context = LocalContext.current
     val navController = rememberNavController()
     val scope = rememberCoroutineScope()
@@ -89,13 +103,21 @@ private fun AppRoot(pendingPostId: MutableState<String?>) {
     val postsRepository = remember { PostsRepository.getInstance(context) }
     val bookmarksStore = remember { BookmarksStore.getInstance(context) }
     val appPreferences = remember { AppPreferences(context) }
+    val newsRepository = remember { NewsRepository.getInstance(context) }
+    val attendedStore = remember { AttendedStore.getInstance(context) }
     val shareCardController = rememberShareCardController()
 
     var posts by remember { mutableStateOf<List<Post>>(emptyList()) }
     var isLoading by remember { mutableStateOf(true) }
     var loadError by remember { mutableStateOf<String?>(null) }
 
+    var section by rememberSaveable { mutableStateOf(HomeSection.BLOG.name) }
+    var newsItems by remember { mutableStateOf<List<NewsItem>>(emptyList()) }
+    var isNewsLoading by remember { mutableStateOf(true) }
+    var newsError by remember { mutableStateOf<String?>(null) }
+
     val bookmarkedIds by bookmarksStore.bookmarkedIdsFlow.collectAsState(initial = emptySet())
+    val attendedItems by attendedStore.itemsFlow.collectAsState(initial = emptyList())
     val notificationsEnabled by appPreferences.notificationsEnabledFlow.collectAsState(initial = true)
     val dailyTimes by appPreferences.dailyTimesFlow.collectAsState(initial = emptyList())
 
@@ -111,7 +133,29 @@ private fun AppRoot(pendingPostId: MutableState<String?>) {
         }
     }
 
+    suspend fun refreshNews() {
+        isNewsLoading = true
+        newsError = null
+        try {
+            newsItems = newsRepository.loadNews()
+            // NEWS 탭에서 본 소식은 이후 백그라운드 새로고침이 "새 소식"으로 알리지 않게 기록한다.
+            NewsNotifier.markSeen(context, newsItems)
+        } catch (e: Exception) {
+            newsError = e.message ?: "알 수 없는 오류"
+        } finally {
+            isNewsLoading = false
+        }
+    }
+
     LaunchedEffect(Unit) { refresh() }
+    LaunchedEffect(Unit) { refreshNews() }
+
+    LaunchedEffect(pendingNews.value) {
+        if (!pendingNews.value) return@LaunchedEffect
+        navController.popBackStack("list", inclusive = false)
+        section = HomeSection.NEWS.name
+        pendingNews.value = false
+    }
 
     LaunchedEffect(pendingPostId.value) {
         val id = pendingPostId.value ?: return@LaunchedEffect
@@ -128,14 +172,39 @@ private fun AppRoot(pendingPostId: MutableState<String?>) {
         popExitTransition = { fadeOut(tween(150)) },
     ) {
         composable("list") {
-            ContentScreen(
-                posts = posts,
-                isLoading = isLoading,
-                loadError = loadError,
-                onRefresh = { scope.launch { refresh() } },
-                onPostClick = { post -> navController.navigate("detail/${post.id}") },
-                onBookmarksClick = { navController.navigate("bookmarks") },
-                onSettingsClick = { navController.navigate("settings") },
+            if (section == HomeSection.NEWS.name) {
+                NewsScreen(
+                    items = newsItems,
+                    isLoading = isNewsLoading,
+                    loadError = newsError,
+                    attendedIds = attendedItems.map { it.id }.toSet(),
+                    onToggleAttended = { item -> scope.launch { attendedStore.toggle(item) } },
+                    onRefresh = { scope.launch { refreshNews() } },
+                    onAttendedClick = { navController.navigate("attended") },
+                    onSettingsClick = { navController.navigate("settings") },
+                    section = HomeSection.NEWS,
+                    onSectionChange = { section = it.name },
+                )
+            } else {
+                ContentScreen(
+                    posts = posts,
+                    isLoading = isLoading,
+                    loadError = loadError,
+                    onRefresh = { scope.launch { refresh() } },
+                    onPostClick = { post -> navController.navigate("detail/${post.id}") },
+                    onBookmarksClick = { navController.navigate("bookmarks") },
+                    onSettingsClick = { navController.navigate("settings") },
+                    section = HomeSection.BLOG,
+                    onSectionChange = { section = it.name },
+                )
+            }
+        }
+
+        composable("attended") {
+            AttendedScreen(
+                items = attendedItems,
+                onToggleAttended = { item -> scope.launch { attendedStore.toggle(item) } },
+                onDismiss = { navController.popBackStack() },
             )
         }
 

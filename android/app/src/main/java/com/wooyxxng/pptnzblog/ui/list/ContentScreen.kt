@@ -76,6 +76,8 @@ fun ContentScreen(
     onPostClick: (Post) -> Unit,
     onBookmarksClick: () -> Unit,
     onSettingsClick: () -> Unit,
+    section: HomeSection = HomeSection.BLOG,
+    onSectionChange: (HomeSection) -> Unit = {},
 ) {
     var searchText by rememberSaveable { mutableStateOf("") }
     var collapsedYears by rememberSaveable { mutableStateOf(setOf<String>()) }
@@ -106,15 +108,7 @@ fun ContentScreen(
         containerColor = PptnzBackground,
         topBar = {
             CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        "BLOG",
-                        fontSize = 26.sp,
-                        fontWeight = FontWeight.Black,
-                        letterSpacing = 1.sp,
-                        color = PptnzYellow,
-                    )
-                },
+                title = { SectionToggle(selection = section, onSelectionChange = onSectionChange) },
                 navigationIcon = {
                     IconButton(onClick = onBookmarksClick) {
                         Icon(
@@ -137,37 +131,7 @@ fun ContentScreen(
                 },
             )
         },
-        bottomBar = {
-            Surface(color = PptnzBackground, tonalElevation = 0.dp, modifier = Modifier.imePadding()) {
-                OutlinedTextField(
-                    value = searchText,
-                    onValueChange = { searchText = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp, top = 10.dp, bottom = 20.dp),
-                    placeholder = {
-                        Text(
-                            "제목·본문 검색",
-                            fontSize = 13.sp,
-                            color = PptnzInk.copy(alpha = 0.35f),
-                        )
-                    },
-                    leadingIcon = {
-                        Icon(
-                            Icons.Filled.Search,
-                            contentDescription = null,
-                            modifier = Modifier.size(22.dp),
-                        )
-                    },
-                    singleLine = true,
-                    shape = RoundedCornerShape(28.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        unfocusedBorderColor = PptnzDivider,
-                        focusedBorderColor = PptnzDivider,
-                    ),
-                )
-            }
-        },
+        bottomBar = { SearchBottomBar(searchText = searchText, onSearchTextChange = { searchText = it }) },
     ) { padding ->
         Box(modifier = Modifier.fillMaxSize().padding(padding)) {
             when {

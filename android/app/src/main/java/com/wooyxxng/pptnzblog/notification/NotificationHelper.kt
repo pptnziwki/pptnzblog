@@ -11,6 +11,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.wooyxxng.pptnzblog.MainActivity
 import com.wooyxxng.pptnzblog.R
+import com.wooyxxng.pptnzblog.data.NewsItem
 import com.wooyxxng.pptnzblog.data.Post
 
 /**
@@ -63,4 +64,42 @@ object NotificationHelper {
             NotificationManagerCompat.from(context).notify(notificationId, notification)
         }
     }
+
+    /** 새 소식(news) 알림. 탭하면 앱이 NEWS 탭으로 열린다. */
+    fun showNewsNotification(context: Context, newItems: List<NewsItem>) {
+        val first = newItems.firstOrNull() ?: return
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("pptnzblog://news/open"), context, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        }
+        val pendingIntent = PendingIntent.getActivity(
+            context,
+            NEWS_NOTIFICATION_ID,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+        )
+
+        val summary = "[${first.tag.uppercase()} ${first.date}] ${first.content.replace("\n", " ")}"
+        val body = if (newItems.size > 1) "$summary 외 ${newItems.size - 1}건" else summary
+
+        val notification = NotificationCompat.Builder(context, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_stat_notify)
+            .setContentTitle("새로운 소식이 올라왔어요!")
+            .setContentText(body)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(body))
+            .setAutoCancel(true)
+            .setContentIntent(pendingIntent)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .build()
+
+        if (Build.VERSION.SDK_INT < 33 ||
+            androidx.core.content.ContextCompat.checkSelfPermission(
+                context,
+                android.Manifest.permission.POST_NOTIFICATIONS,
+            ) == android.content.pm.PackageManager.PERMISSION_GRANTED
+        ) {
+            NotificationManagerCompat.from(context).notify(NEWS_NOTIFICATION_ID, notification)
+        }
+    }
+
+    private const val NEWS_NOTIFICATION_ID = 900001
 }

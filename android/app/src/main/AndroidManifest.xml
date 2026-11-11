@@ -34,6 +34,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="pptnzblog" android:host="post" />
+                <data android:scheme="pptnzblog" android:host="news" />
             </intent-filter>
         </activity>
 

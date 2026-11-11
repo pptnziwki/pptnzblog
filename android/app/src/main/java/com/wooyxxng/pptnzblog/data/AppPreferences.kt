@@ -38,6 +38,9 @@ class AppPreferences(context: Context) {
         val LAST_SEEN_POST_ID = intPreferencesKey("last_seen_post_id")
         val SCHEDULED_DATES = stringPreferencesKey("daily_random_post_scheduled_dates")
         val BOOKMARKED_IDS = stringSetPreferencesKey("bookmarked_post_ids")
+        val NEWS_CACHE = stringPreferencesKey("news_cache_json")
+        val SEEN_NEWS_IDS = stringSetPreferencesKey("seen_news_ids")
+        val ATTENDED_ITEMS = stringPreferencesKey("attended_news_items")
     }
 
     companion object {
@@ -105,5 +108,37 @@ class AppPreferences(context: Context) {
 
     suspend fun setBookmarkedIds(ids: Set<String>) {
         context.appDataStore.edit { it[Keys.BOOKMARKED_IDS] = ids }
+    }
+
+    // MARK: news.json 캐시
+
+    suspend fun saveNewsCache(rawJson: String) {
+        context.appDataStore.edit { it[Keys.NEWS_CACHE] = rawJson }
+    }
+
+    suspend fun loadNewsCache(): String? =
+        context.appDataStore.data.map { it[Keys.NEWS_CACHE] }.first()
+
+    // MARK: 새 소식 감지 기준점 (이미 본 소식 id 집합. 한 번도 저장한 적 없으면 null)
+
+    suspend fun getSeenNewsIds(): Set<String>? =
+        context.appDataStore.data.map { it[Keys.SEEN_NEWS_IDS] }.first()
+
+    suspend fun setSeenNewsIds(ids: Set<String>) {
+        context.appDataStore.edit { it[Keys.SEEN_NEWS_IDS] = ids }
+    }
+
+    // MARK: 다녀온 공연 (소식 내용째 저장)
+
+    val attendedItemsFlow: Flow<List<NewsItem>> = context.appDataStore.data.map { prefs ->
+        prefs[Keys.ATTENDED_ITEMS]?.let { raw ->
+            runCatching { json.decodeFromString<List<NewsItem>>(raw) }.getOrNull()
+        } ?: emptyList()
+    }
+
+    suspend fun getAttendedItems(): List<NewsItem> = attendedItemsFlow.first()
+
+    suspend fun setAttendedItems(items: List<NewsItem>) {
+        context.appDataStore.edit { it[Keys.ATTENDED_ITEMS] = json.encodeToString(items) }
     }
 }

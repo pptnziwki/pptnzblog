@@ -32,6 +32,12 @@ val PptnzPinkStrong = Color(0xFFE8628F)
 /** 헤더 "BLOG" 로고 텍스트용 크림 옐로우 */
 val PptnzYellow = Color(0xFFF0EFA3)
 
+/** 헤더 BLOG/NEWS 토글 선택 배경 등에 쓰는 하늘색 (#ACD9E9) */
+val PptnzSky = Color(0xFFACD9E9)
+
+/** 헤더 토글 글자용: 하늘색보다 살짝 진한 톤 (#92C9DE) */
+val PptnzSkyText = Color(0xFF92C9DE)
+
 /** 리스트 구분선 등에 쓰는 옅은 선 색 */
 val PptnzDivider = PptnzInk.copy(alpha = 0.08f)
 
